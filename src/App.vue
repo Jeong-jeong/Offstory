@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-4 col-lg-9"><div class="test">오프팀</div></div>
-			<div class="col-sm-4 col-lg-3"><div class="test">채팅방</div></div>
+			<div class="col-sm-4 col-lg-3"><div class="test">오프팀</div></div>
 		</div>
 		<div class="row">
 			<div class="col-lg-1"><div class="test">test</div></div>
