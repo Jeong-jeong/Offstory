@@ -21,5 +21,9 @@ function loginUser(userData) {
   return instance.post('login', userData)
 }
 
+function createPost(userData) {
+  return instance.post('_post_create', userData)
+}
+
 //loginForm
-export { registerUser, loginUser }
+export { createPost, registerUser, loginUser }

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Main from './Main'
 import Signup from '~/routes/Signup'
 import Login from './Login'
+import CreateNewPost from './CreateNewPost'
 import Example from '~/components/designs/Example'
 
 export default createRouter({
@@ -22,6 +23,11 @@ export default createRouter({
       path: '/login',
       name: 'Login',
       component: Login,
+    },
+    {
+      path: '/newpost',
+      name: 'CreateNewPost',
+      component: CreateNewPost,
     },
     {
       path: '/example',
