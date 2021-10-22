@@ -1,22 +1,47 @@
 <template>
   <div class="sign-page">
     <div class="container">
-      <Deemed />
       <div class="row">
         <div class="col-lg-8">
-          <form class="sign-form" @submit.prevent="submitSignup">
-            <input v-model="email" type="email" required />
-            <input ref="pw" v-model="password" type="password" required />
-            <input
-              ref="checkPw"
+          <Form class="sign-form" @submit="submitSignup">
+            <Field
+              v-model="email"
+              name="email"
+              type="email"
+              rules="required|email"
+              placeholder="이메일"
+            />
+            <ErrorMessage name="email" />
+
+            <Field
+              v-model="password"
+              name="password"
+              type="password"
+              rules="required|between:8,30|password"
+              placeholder="비밀번호 (영문, 숫자, 특수문자 8 ~ 30자)"
+            />
+            <ErrorMessage name="password" />
+
+            <Field
+              name="confirmation"
               type="password"
               class="checkPassword"
-              required
+              rules="required|confirmed:@password"
+              placeholder="비밀번호 확인"
             />
-            <input v-model="fullName" type="text" class="name" required />
+            <ErrorMessage name="confirmation" />
+
+            <Field
+              v-model="fullName"
+              type="text"
+              name="name"
+              rules="required|between:2,30"
+              placeholder="이름 (2 ~ 30자)"
+            />
+            <ErrorMessage name="name" />
 
             <button>회원가입</button>
-          </form>
+          </Form>
         </div>
       </div>
     </div>
@@ -25,8 +50,14 @@
 
 <script>
 import requestSignup from '~/api/requestSignup'
+import { Field, Form, ErrorMessage } from 'vee-validate'
 
 export default {
+  components: {
+    Field,
+    Form,
+    ErrorMessage,
+  },
   data() {
     return {
       email: '',

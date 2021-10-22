@@ -1,26 +1,15 @@
 <template>
-	<div class="container">
-		<div class="row">
-			<div class="col-sm-4 col-lg-9"><div class="test">오프</div></div>
-			<div class="col-sm-4 col-lg-3"><div class="test">오프1</div></div>
-		</div>
-		<div class="row">
-			<div class="col-lg-1"><div class="test">test</div></div>
-			<div class="col-lg-2"><div class="test">test</div></div>
-			<div class="col-lg-3"><div class="test">test</div></div>
-			<div class="col-lg-4"><div class="test">test</div></div>
-		</div>
-	</div>
+  <Header />
 </template>
 
 <script>
+import Header from './components/Header'
 export default {
-	components: {},
+  components: { Header },
+  mounted() {
+    this.$store.dispatch('address/initialCityFetch')
+  },
 }
 </script>
 
-<style lang="scss" scoped>
-.test {
-	background: red;
-}
-</style>
+<style lang="scss" scoped></style>
