@@ -22,6 +22,17 @@
             </div>
 
             <Field
+              v-model="fullName"
+              type="text"
+              name="nickname"
+              rules="required|between:2,30"
+              placeholder="닉네임 (2 ~ 30자)"
+            />
+            <div class="error-message-wrapper">
+              <ErrorMessage name="nickname" class="error-message" />
+            </div>
+
+            <Field
               v-model="password"
               name="password"
               type="password"
@@ -41,17 +52,6 @@
             />
             <div class="error-message-wrapper">
               <ErrorMessage name="confirmation" class="error-message" />
-            </div>
-
-            <Field
-              v-model="fullName"
-              type="text"
-              name="nickname"
-              rules="required|between:2,30"
-              placeholder="닉네임 (2 ~ 30자)"
-            />
-            <div class="error-message-wrapper">
-              <ErrorMessage name="nickname" class="error-message" />
             </div>
 
             <Button v-bind="{ width: '100%' }" class="sign-button"
