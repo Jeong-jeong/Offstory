@@ -5,46 +5,46 @@ const HtmlPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 
 module.exports = {
-	resolve: {
-		extensions: ['.vue', '.js'],
-		alias: {
-			'~': path.resolve(__dirname, 'src'),
-		},
-	},
-	entry: './src/main.js',
-	output: {
-		path: path.resolve(__dirname, 'dist'),
-		publicPath: '/',
-		clean: true,
-	},
-	module: {
-		rules: [
-			{
-				test: /\.js$/,
-				exclude: /node_modules[\\/](?!axios)/,
-				use: 'babel-loader',
-			},
-			{
-				test: /\.vue$/,
-				use: 'vue-loader',
-			},
-			{
-				test: /\.(png|jp(e*)g|gif|svg)$/,
-				loader: 'url-loader',
-				options: {
-					limit: 10000,
-				},
-			},
-			{
-				test: /\.s?css$/,
-				use: [
-					'vue-style-loader',
-					'css-loader',
-					'postcss-loader',
-					{
-						loader: 'sass-loader',
-						options: {
-							additionalData: `
+  resolve: {
+    extensions: ['.vue', '.js'],
+    alias: {
+      '~': path.resolve(__dirname, 'src'),
+    },
+  },
+  entry: './src/main.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
+    clean: true,
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules[\\/](?!axios)/,
+        use: 'babel-loader',
+      },
+      {
+        test: /\.vue$/,
+        use: 'vue-loader',
+      },
+      {
+        test: /\.(png|jp(e*)g|gif|svg)$/,
+        loader: 'url-loader',
+        options: {
+          limit: 10000,
+        },
+      },
+      {
+        test: /\.s?css$/,
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          'postcss-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              additionalData: `
                 @use "sass:color";
                 @use "sass:list";
                 @use "sass:map";
@@ -53,38 +53,39 @@ module.exports = {
                 @use "sass:selector";
                 @use "sass:string";
                 @import "~/styles/mixins/_position";
-                @import "~/styles/mixins/_responsive";
                 @import "~/styles/mixins/_flexbox";
+                @import "~/styles/mixins/_font";
+                @import "~/styles/mixins/_responsive";
                 @import "~/styles/layout/_grid";
                 @import "~/styles/_variables";
                 @import "~/styles/_reset";
               `,
-						},
-					},
-				],
-			},
-		],
-	},
-	plugins: [
-		new webpack.DefinePlugin({
-			__VUE_OPTIONS_API__: 'true',
-			__VUE_PROD_DEVTOOLS__: 'true',
-		}),
-		new VueLoaderPlugin(),
-		new HtmlPlugin({
-			template: './src/index.html',
-		}),
-		new CopyPlugin({
-			patterns: [{ from: 'static' }],
-		}),
-	],
-	devServer: {
-		port: 8080,
-		historyApiFallback: true,
-	},
-	performance: {
-		hints: false,
-		maxEntrypointSize: 512000,
-		maxAssetSize: 512000,
-	},
+            },
+          },
+        ],
+      },
+    ],
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      __VUE_OPTIONS_API__: 'true',
+      __VUE_PROD_DEVTOOLS__: 'true',
+    }),
+    new VueLoaderPlugin(),
+    new HtmlPlugin({
+      template: './src/index.html',
+    }),
+    new CopyPlugin({
+      patterns: [{ from: 'static' }],
+    }),
+  ],
+  devServer: {
+    port: 8080,
+    historyApiFallback: true,
+  },
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+  },
 }

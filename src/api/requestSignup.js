@@ -1,4 +1,4 @@
-const API_END_POINT = 'http://13.209.30.200'
+const API_END_POINT = 'http://13.209.30.200:5000'
 
 const requestSignup = async ({ email, fullName, password }) => {
   try {

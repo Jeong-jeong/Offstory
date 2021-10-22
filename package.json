@@ -28,6 +28,7 @@
   "homepage": "https://github.com/prgrms-fe-devcourse/w7-CSS_Vue#readme",
   "dependencies": {
     "axios": "^0.22.0",
+    "vee-validate": "^4.5.4",
     "vue": "^3.2.19",
     "vue-router": "^4.0.11",
     "vuex": "^4.0.2"
@@ -52,6 +53,7 @@
     "netlify-cli": "^6.10.4",
     "postcss": "^8.3.9",
     "postcss-loader": "^6.1.1",
+    "prettier": "^2.4.1",
     "sass": "^1.42.1",
     "sass-loader": "^12.1.0",
     "url-loader": "^4.1.1",
