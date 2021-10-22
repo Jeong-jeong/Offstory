@@ -12,6 +12,7 @@
 <script>
 import { loginUser } from '../api/index'
 import { validateEmail } from '../utils/validation'
+import { saveAuthToCookie, saveUserToCookie } from '../utils/cookies'
 export default {
   data() {
     return {
@@ -41,6 +42,8 @@ export default {
         this.$store.commit('Login/setUsername', data.user.fullName)
         this.$store.commit('Login/setToken', data.token)
         console.log(data.token)
+        saveAuthToCookie(data.token)
+        saveUserToCookie(data.user.fullName)
       } catch (error) {
         //에러 핸들링 코드
         console.log(error.response.data)

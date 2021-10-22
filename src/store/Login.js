@@ -1,9 +1,10 @@
+import { getAuthFromCookie, getUserFromCookie } from '../utils/cookies'
 export default {
   namespaced: true,
   state() {
     return {
-      username: '',
-      token: '',
+      username: getUserFromCookie() || '',
+      token: getAuthFromCookie() || '',
     }
   },
   getters: {
