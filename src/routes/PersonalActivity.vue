@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import Divider from '../components/Divider'
+import Divider from '../components/designs/Divider'
 
 export default {
   components: { Divider },

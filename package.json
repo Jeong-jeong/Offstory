@@ -28,6 +28,7 @@
   "homepage": "https://github.com/prgrms-fe-devcourse/w7-CSS_Vue#readme",
   "dependencies": {
     "axios": "^0.22.0",
+    "vee-validate": "^4.5.4",
     "vue": "^3.2.19",
     "vue-router": "^4.0.11",
     "vuex": "^4.0.2"

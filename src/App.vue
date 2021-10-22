@@ -1,15 +1,29 @@
 <template>
-  <div>
-    <Header />
-    <PersonalActivity />
-  </div>
+  <Header @toggleSidebar="onProfileClick" />
+  <Sidebar v-if="isSidebarShowed && isLogin" />
+  <RouterView />
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Header from './components/Header'
-import PersonalActivity from './routes/PersonalActivity.vue'
+import Sidebar from './components/Sidebar'
+
 export default {
-  components: { Header, PersonalActivity },
+  components: { Header, Sidebar },
+  data() {
+    return {
+      isSidebarShowed: true,
+    }
+  },
+  computed: {
+    ...mapGetters('Login', ['isLogin']),
+  },
+  methods: {
+    onProfileClick() {
+      this.isSidebarShowed = !this.isSidebarShowed
+    },
+  },
   mounted() {
     // this.$store.dispatch('address/initialCityFetch')
   },

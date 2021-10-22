@@ -27,7 +27,6 @@ export default {
         infoOfCity.totalCount / infoOfCity.numOfRows,
       )
 
-      console.log(totalNumOfPage)
       for (let pageNum = 1; pageNum <= totalNumOfPage; pageNum += 1) {
         const res = await $fetch(
           API_ENDPOINT_OF_AREAINFO + `&pageNo=${pageNum}`,

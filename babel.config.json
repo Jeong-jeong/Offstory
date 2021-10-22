@@ -1,4 +1,5 @@
 {
+  "sourceType": "unambiguous",
   "presets": ["@babel/preset-env"], // 변환은 해주지만 전역오염 가능성
   "plugins": [
     [

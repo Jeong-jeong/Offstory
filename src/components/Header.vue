@@ -2,7 +2,7 @@
   <div class="wrapper">
     <div class="left">
       <img src="../assets/images/symbol.svg" alt="OffStory 심볼" />
-      <button class="logo">OffStory</button>
+      <button class="logo" @click="$router.push('/')">OffStory</button>
     </div>
     <div class="middle">
       <form @submit.prevent="">
@@ -16,28 +16,46 @@
       </form>
     </div>
     <div class="right">
-      <button>
-        <i class="material-icons"> edit </i>
-      </button>
-      <button>
-        <i class="material-icons"> question_answer </i>
-      </button>
-      <button>
-        <i class="material-icons"> notifications </i>
-      </button>
-      <button>
-        <i class="material-icons"> account_circle </i>
-      </button>
+      <template v-if="isLogin">
+        <button>
+          <i class="material-icons"> edit </i>
+        </button>
+        <button>
+          <i class="material-icons"> question_answer </i>
+        </button>
+        <button>
+          <i class="material-icons"> notifications </i>
+        </button>
+        <button @click="toggleSidebar">
+          <i class="material-icons"> account_circle </i>
+        </button>
+      </template>
+      <template v-else>
+        <router-link to="/login">
+          <Button width="100px" fontSize="25px">Login</Button>
+        </router-link>
+      </template>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import Button from '~/components/designs/Button'
 
 export default {
+  props: {
+    isSidebarShowed: {
+      type: Boolean,
+      defaultValue: false,
+    },
+  },
+  components: {
+    Button,
+  },
   computed: {
     ...mapState('address', ['cityList', 'countyList']),
+    ...mapGetters('Login', ['isLogin']),
   },
   methods: {
     ...mapMutations('address', ['updateSearchedAddress']),
@@ -59,6 +77,9 @@ export default {
 
       this.updateSearchedAddress({ userCity, userCounty })
       this.$refs.input.value = ''
+    },
+    toggleSidebar() {
+      this.$emit('toggleSidebar')
     },
   },
 }
