@@ -40,24 +40,36 @@
         >참가 대기중</Tag
       >
     </div>
-    <Input
-      v-bind="{
-        width: '100%',
-        backgroundColor: '#51CF66',
-        color: '#fff',
-      }"
-      placeholder="내용을 입력하세요"
-    />
-    <Input
-      v-bind="{
-        width: '500px',
-        paddingVertical: '15px',
-        paddingHorizontal: '10px',
-        backgroundColor: '#fff',
-        color: '#343A40',
-      }"
-      placeholder="내용을 입력하세요"
-    />
+    <div class="row">
+      <Input
+        v-bind="{
+          width: '100%',
+          backgroundColor: '#51CF66',
+          color: '#fff',
+        }"
+        placeholder="내용을 입력하세요"
+      />
+      <Input
+        v-bind="{
+          width: '500px',
+          paddingVertical: '15px',
+          paddingHorizontal: '10px',
+          backgroundColor: '#fff',
+          color: '#343A40',
+        }"
+        placeholder="내용을 입력하세요"
+      />
+    </div>
+    <div class="row">
+      <Card>
+        <h2>카드 컴포넌트</h2>
+        <strong>텍스트입니다</strong>
+      </Card>
+      <Card v-bind="{ width: '400px', height: '200px' }">
+        <h2>카드 컴포넌트</h2>
+        <strong>width: 400px, height: 200px</strong>
+      </Card>
+    </div>
   </div>
 </template>
 
@@ -65,12 +77,14 @@
 import Button from '~/components/designs/Button'
 import Tag from '~/components/designs/Tag'
 import Input from '~/components/designs/Input'
+import Card from '~/components/designs/Card'
 
 export default {
   components: {
     Button,
     Tag,
     Input,
+    Card,
   },
 }
 </script>
