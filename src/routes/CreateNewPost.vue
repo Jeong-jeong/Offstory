@@ -31,6 +31,15 @@
         type="title"
         required
       />
+      <input
+        @change="uploadImage"
+        multiple
+        accept="image/*"
+        type="file"
+        id="file"
+        class="inputfile"
+      />
+
       <br /><br />
       <textarea v-model="content"></textarea>
       <button>글 작성하기</button>
@@ -46,6 +55,7 @@ export default {
     return {
       detailAdress: '',
       title: '',
+      content: '',
       image: '',
       channelId: '',
       dummy_city: [
@@ -87,9 +97,16 @@ export default {
       await this.fetchCounty(userCity.code)
       this.countyListForSelect = this.countyList
     },
+
     selectedCounty(event) {
       console.log(event.target.value)
       this.selectuserCounty = event.target.value
+    },
+
+    uploadImage(e) {
+      var file = e.target.files
+      let url = URL.createObjectURL(file[0])
+      this.image = url
     },
 
     getcitylist() {
