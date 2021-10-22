@@ -13,6 +13,7 @@ export default {
     'backgroundColor',
     'color',
     'borderRadius',
+    'boxShadow', // 사용하고싶지 않을 땐 'none'을 넣어주세욥
   ],
   computed: {
     style() {
@@ -23,6 +24,7 @@ export default {
         color: this.color,
         backgroundColor: this.backgroundColor,
         borderRadius: this.borderRadius,
+        boxShadow: this.boxShadow, // = $BUTTON_BOX_SHADOW
       }
     },
   },
@@ -39,6 +41,7 @@ export default {
   border-radius: $BORDER_RADIOUS;
   font-weight: 700;
   transition: all 300ms;
+  box-shadow: $BUTTON_BOX_SHADOW;
 
   &:hover,
   &:active {

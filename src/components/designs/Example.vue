@@ -19,6 +19,15 @@
         }"
         >보러가기</Button
       >
+      <Button
+        v-bind="{
+          height: '40px',
+          backgroundColor: '#7C7C7C',
+          color: '#fff',
+          boxShadow: 'none',
+        }"
+        >그림자가 없는 버튼</Button
+      >
     </div>
     <div class="row">
       <Tag v-bind="{ height: '25px', backgroundColor: '#51CF66' }"
@@ -65,3 +74,10 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+.container {
+  position: relative;
+  top: $LG_HEADER_HEIGHT;
+}
+</style>
