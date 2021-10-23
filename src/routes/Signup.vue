@@ -44,6 +44,7 @@
             </div>
 
             <Field
+              v-model="confirmation"
               name="confirmation"
               type="password"
               class="checkPassword"
@@ -65,7 +66,7 @@
 </template>
 
 <script>
-import requestSignup from '~/api/requestSignup'
+import { registerUser } from '~/api/index'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import Button from '~/components/designs/Button'
 
@@ -79,19 +80,33 @@ export default {
   data() {
     return {
       email: '',
-      password: '',
       fullName: '',
+      password: '',
+      confirmation: '',
     }
   },
 
   methods: {
     async submitSignup() {
-      const res = await requestSignup({
-        email: this.email,
-        password: this.password,
-        fullName: this.fullName,
-      })
-      console.log(res)
+      try {
+        const userData = {
+          email: this.email,
+          fullName: this.fullName,
+          password: this.password,
+        }
+        const { data } = await registerUser(userData)
+        console.log(data)
+        this.initForm() // submit 후 input 초기화
+      } catch (error) {
+        console.log(error.response.data)
+        alert(error.response.data)
+      }
+    },
+    initForm() {
+      this.email = ''
+      this.fullName = ''
+      this.password = ''
+      this.confirmation = ''
     },
   },
 }
