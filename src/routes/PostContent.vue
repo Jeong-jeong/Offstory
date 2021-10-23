@@ -26,7 +26,7 @@
               <div class="left">
                 <button class="user-profile">
                   <img
-                    src="../assets/images/dummy-profile.jpg"
+                    src="../assets/images/user-profile__default.svg"
                     alt="유저 프로필"
                   />
                 </button>
@@ -56,7 +56,7 @@
                 <div class="left">
                   <button class="user-profile">
                     <img
-                      src="../assets/images/dummy-profile.jpg"
+                      src="../assets/images/user-profile__default.svg"
                       alt="유저 프로필"
                     />
                   </button>
@@ -81,7 +81,7 @@
                 <div class="left">
                   <button class="user-profile">
                     <img
-                      src="../assets/images/dummy-profile.jpg"
+                      src="../assets/images/user-profile__default.svg"
                       alt="유저 프로필"
                     />
                   </button>
@@ -101,7 +101,7 @@
                 <div class="left">
                   <button class="user-profile">
                     <img
-                      src="../assets/images/dummy-profile.jpg"
+                      src="../assets/images/user-profile__default.svg"
                       alt="유저 프로필"
                     />
                   </button>
