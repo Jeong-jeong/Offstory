@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Main from './Main'
-import Signup from '~/routes/Signup'
+import Signup from './Signup'
+import PostContent from './PostContent'
 import Login from './Login'
 import Example from '~/components/designs/Example'
 
@@ -22,6 +23,11 @@ export default createRouter({
       path: '/login',
       name: 'Login',
       component: Login,
+    },
+    {
+      path: '/postContent',
+      name: 'PostContent',
+      component: PostContent,
     },
     {
       path: '/example',
