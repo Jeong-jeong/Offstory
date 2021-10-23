@@ -56,7 +56,7 @@ export default {
       detailAdress: '',
       title: '',
       content: '',
-      image: '',
+      image: null,
       channelId: '',
       dummy_city: [
         {
@@ -117,11 +117,11 @@ export default {
     async createPost() {
       try {
         const userData = {
-          title: this.title,
+          title: `${this.title} / ${this.content}`,
           image: this.image,
-          //channelId: this.channelId, //채널이 없음
-          //location: `${this.selectuserCity}+${this.selectuserCounty}`,
-          //meta: `${this.detailAdress}+${this.content}`,
+          channelId: this.channelId, //채널이 없음
+          location: `${this.selectuserCity} ${this.selectuserCounty} ${this.detailAdress}`,
+          meta: '', //만일을 위해 아껴두자!
         }
         const { data } = await createPost(userData)
         console.log(data.user)
