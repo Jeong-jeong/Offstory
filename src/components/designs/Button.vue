@@ -6,15 +6,31 @@
 
 <script>
 export default {
-  props: ['width', 'height', 'backgroundColor', 'color', 'borderRadius'],
+  props: [
+    'width',
+    'height',
+<<<<<<< HEAD
+    'backgroundColor',
+    'color',
+    'borderRadius',
+    'fontSize',
+=======
+    'fontSize',
+    'backgroundColor',
+    'color',
+    'borderRadius',
+>>>>>>> dev
+  ],
   computed: {
     style() {
       return {
         width: this.width,
         height: this.height,
+        fontSize: this.fontSize,
         color: this.color,
         backgroundColor: this.backgroundColor,
         borderRadius: this.borderRadius,
+        fontSize: this.fontSize,
       }
     },
   },
@@ -25,6 +41,7 @@ export default {
 .button {
   width: 200px;
   height: $BUTTON_HEIGHT;
+  font-size: $FONT_BASE;
   color: $COLOR_WHITE;
   background-color: $KEY_COLOR;
   border-radius: $BORDER_RADIOUS;

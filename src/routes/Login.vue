@@ -1,11 +1,13 @@
 <template>
-  <div class="Login-container">
-    <form @submit.prevent="submitForm">
-      <input v-model="email" name="email" type="text" required />
-      <input v-model="password" name="password" type="password" required />
-      <button :disabled="!isUserNameVaild || !password">로그인</button>
-    </form>
-    <button @click="isSignup">회원가입</button>
+  <div class="container">
+    <div class="wrapper">
+      <form @submit.prevent="submitForm">
+        <input v-model="email" name="email" type="text" required />
+        <input v-model="password" name="password" type="password" required />
+        <button :disabled="!isUserNameVaild || !password">로그인</button>
+      </form>
+      <button @click="isSignup">회원가입</button>
+    </div>
   </div>
 </template>
 
@@ -58,7 +60,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.test {
-  background: red;
+.container {
+  @include flexbox;
+  width: 100vw;
+  height: 100vh;
 }
 </style>

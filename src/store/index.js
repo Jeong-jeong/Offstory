@@ -4,9 +4,9 @@ import address from './address'
 import Login from './Login'
 
 export default createStore({
-	modules: {
-		post,
-		address,
-    Login
-	},
+  modules: {
+    post,
+    address,
+    Login,
+  },
 })

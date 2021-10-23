@@ -33,7 +33,7 @@ export default {
 
 <style lang="scss" scoped>
 .input {
-  @include font($sz: 20px, $color: $COLOR_PRIMARY);
+  @include font($sz: $FONT_BASE, $color: $COLOR_PRIMARY);
   width: 100%;
   padding: $INNER_PADDING_VERTICAL $INNER_PADDING_HORIZONTAL;
   border-radius: $BORDER_RADIOUS;

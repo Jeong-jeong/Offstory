@@ -5,6 +5,7 @@ const API_END_POINT = 'http://13.209.30.200:5000'
 
 function createInstance() {
   const instance = axios.create({
+    // AxiosRequestConfig = axios 공통 설정란
     baseURL: API_END_POINT, //process.env.API_ENDPOINT
   })
 
@@ -13,8 +14,9 @@ function createInstance() {
 
 const instance = createInstance()
 
-function registerUser() {
-  return axios.post(API_END_POINT) //어떤서버로 요청할지 url
+function registerUser(userData) {
+  const registerUrl = 'signup'
+  return instance.post(`${registerUrl}`, userData) //어떤서버로 요청할지 url
 }
 
 function loginUser(userData) {

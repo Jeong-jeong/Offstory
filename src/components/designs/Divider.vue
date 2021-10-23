@@ -3,6 +3,7 @@
     :style="{
       border: 'none',
       margin: dir === 'row' ? `0 ${margin}px` : `${margin}px 0`,
+      display: dir === 'row' ? 'inline-block' : 'block',
       backgroundColor: color,
       width: `${width}px`,
       height: `${height}px`,
