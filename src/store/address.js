@@ -1,5 +1,9 @@
 import { $fetch } from '../plugins/fetch.js'
-import { API_ENDPOINT_OF_AREAINFO } from '../utils/variables.js'
+import { $axios } from '../plugins/axios.js'
+import {
+  API_ENDPOINT_OF_AREAINFO,
+  API_ENDPOINT_OF_DEVCOURSE,
+} from '../utils/variables.js'
 
 export default {
   namespaced: true,
@@ -22,16 +26,13 @@ export default {
     async initialCityFetch({ state }) {
       const res = await $fetch(API_ENDPOINT_OF_AREAINFO)
       const infoOfCity = res.response.body
-
       const totalNumOfPage = Math.ceil(
         infoOfCity.totalCount / infoOfCity.numOfRows,
       )
-
       for (let pageNum = 1; pageNum <= totalNumOfPage; pageNum += 1) {
         const res = await $fetch(
           API_ENDPOINT_OF_AREAINFO + `&pageNo=${pageNum}`,
         )
-
         const cityList = res.response.body.items.item
         state.cityList.push(...cityList)
       }

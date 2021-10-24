@@ -9,17 +9,10 @@ export default {
   props: [
     'width',
     'height',
-<<<<<<< HEAD
-    'backgroundColor',
-    'color',
-    'borderRadius',
-    'fontSize',
-=======
     'fontSize',
     'backgroundColor',
     'color',
     'borderRadius',
->>>>>>> dev
   ],
   computed: {
     style() {
@@ -30,7 +23,6 @@ export default {
         color: this.color,
         backgroundColor: this.backgroundColor,
         borderRadius: this.borderRadius,
-        fontSize: this.fontSize,
       }
     },
   },
