@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  props: ['height', 'backgroundColor', 'color', 'borderRadius'],
+  props: ['width', 'height', 'color', 'backgroundColor', 'borderRadius'],
   computed: {
     style() {
       return {
