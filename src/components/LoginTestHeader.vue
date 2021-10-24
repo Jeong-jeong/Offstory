@@ -13,10 +13,14 @@
 </template>
 
 <script>
+import { deleteCookie } from '~/utils/cookies'
 export default {
   methods: {
     logoutUser() {
       this.$store.commit('Login/clearUsername')
+      this.$store.commit('clearToken')
+      deleteCookie('off_auth')
+      deleteCookie('off_user')
       this.$router.push('/')
       return alert('logout!')
     },

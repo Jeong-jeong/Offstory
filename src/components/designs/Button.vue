@@ -9,20 +9,22 @@ export default {
   props: [
     'width',
     'height',
-    'fontSize',
     'backgroundColor',
     'color',
     'borderRadius',
+    'fontSize',
+    'boxShadow', // 사용하고싶지 않을 땐 'none'을 넣어주세욥
   ],
   computed: {
     style() {
       return {
         width: this.width,
         height: this.height,
-        fontSize: this.fontSize,
-        color: this.color,
         backgroundColor: this.backgroundColor,
+        color: this.color,
         borderRadius: this.borderRadius,
+        fontSize: this.fontSize,
+        boxShadow: this.boxShadow, // = $BUTTON_BOX_SHADOW
       }
     },
   },
@@ -39,6 +41,7 @@ export default {
   border-radius: $BORDER_RADIOUS;
   font-weight: 700;
   transition: all 300ms;
+  box-shadow: $BUTTON_BOX_SHADOW;
 
   &:hover,
   &:active {
