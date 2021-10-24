@@ -5,7 +5,7 @@ export function setInterceptors(instance) {
       console.log(store.state.Login.token)
       const APITOKEN = store.state.Login.token
       console.log(config)
-      config.headers.Autorization = APITOKEN
+      config.headers.Authorization = `bearer ${APITOKEN}`
       return config
     },
     function (error) {
