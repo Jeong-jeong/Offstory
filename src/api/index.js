@@ -23,5 +23,9 @@ function loginUser(userData) {
   return instance.post('login', userData)
 }
 
-//loginForm
-export { registerUser, loginUser }
+function readPost(postId) {
+  const readPostUrl = `posts/${postId}`
+  return instance.post(readPostUrl)
+}
+
+export { registerUser, loginUser, readPost }
