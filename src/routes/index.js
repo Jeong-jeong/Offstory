@@ -3,6 +3,7 @@ import Main from './Main'
 import Signup from '~/routes/Signup'
 import Login from './Login'
 import CreateNewPost from './CreateNewPost'
+import PersonalActivity from './PersonalActivity'
 import Example from '~/components/designs/Example'
 
 export default createRouter({
@@ -20,8 +21,8 @@ export default createRouter({
       component: Signup,
     },
     {
-      path: '/login',
       name: 'Login',
+      path: '/login',
       component: Login,
     },
     {
@@ -30,9 +31,14 @@ export default createRouter({
       component: CreateNewPost,
     },
     {
-      path: '/example',
       name: 'Example',
+      path: '/example',
       component: Example,
+    },
+    {
+      name: 'PersonalActivity',
+      path: '/personalactivity',
+      component: PersonalActivity,
     },
   ],
 })

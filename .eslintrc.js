@@ -35,6 +35,7 @@ module.exports = {
     quotes: ['error', 'single'],
     'vue/html-closing-bracket-newline': 'off',
     'vue/return-in-computed-property': 'off',
+    'vue/no-multiple-template-root': 'off',
     'no-unused-vars': 'warn',
     'vue/html-self-closing': [
       'error',
