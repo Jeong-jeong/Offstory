@@ -91,7 +91,7 @@ export default {
     .item {
       @include flexbox($jc: between, $ai: stretch);
       min-height: 60px;
-      padding: ($INNER_PADDING_VERTICAL / 2) 0;
+      padding: calc($INNER_PADDING_VERTICAL / 2) 0;
 
       & {
         border-bottom: 1px solid $COLOR_BORDER;

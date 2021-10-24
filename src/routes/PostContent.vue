@@ -36,12 +36,14 @@
 <script>
 import Post from '~/components/pages/postContent/Post'
 import Comments from '~/components/pages/postContent/Comments'
+import Button from '~/components/designs/Button.vue'
 import { mapState } from 'vuex'
 import { readPost } from '~/api/index'
 export default {
   components: {
     Post,
     Comments,
+    Button,
   },
   props: {
     postId: {
