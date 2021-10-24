@@ -26,9 +26,16 @@
         <button>
           <i class="material-icons"> notifications </i>
         </button>
-        <button @click="toggleSidebar">
-          <i class="material-icons"> account_circle </i>
-        </button>
+        <template v-if="isEmptyProfileImage">
+          <button @click="toggleSidebar">
+            <i class="material-icons"> account_circle </i>
+          </button>
+        </template>
+        <template v-else>
+          <button @click="toggleSidebar">
+            <img src="getUserProfileImage" />
+          </button>
+        </template>
       </template>
       <template v-else>
         <router-link to="/login">
@@ -56,6 +63,8 @@ export default {
   computed: {
     ...mapState('address', ['cityList', 'countyList']),
     ...mapGetters('Login', ['isLogin']),
+    ...mapGetters('Login', ['isEmptyProfileImage']),
+    ...mapGetters('Login', ['getUserProfileImage']),
   },
   methods: {
     ...mapMutations('address', ['updateSearchedAddress']),
