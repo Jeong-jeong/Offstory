@@ -22,8 +22,35 @@ function loginUser(userData) {
 }
 
 function createPost(userData) {
-  return instance.post('_post_create', userData)
+  return instance.post('/posts/create', userData)
 }
 
+function createChannel(channelData) {
+  return instance.post('/channels/create', channelData)
+}
+
+function channelsList() {
+  return instance.get('/channels')
+}
+
+function getAuth() {
+  return instance.get('/auth-user')
+}
+
+// function channelsList(channelName) {
+//   if (instance.get(`/channels/${channelName}`)) {
+//     return instance.get(`/channels/${channelName}`)
+//   } else {
+
+//   }
+// }
+
 //loginForm
-export { createPost, registerUser, loginUser }
+export {
+  createPost,
+  registerUser,
+  loginUser,
+  channelsList,
+  createChannel,
+  getAuth,
+}

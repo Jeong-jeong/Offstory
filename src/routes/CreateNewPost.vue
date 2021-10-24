@@ -25,7 +25,7 @@
       />
       <br /><br />
       <input
-        placeholder="제목 작성!!"
+        placeholder="제목"
         v-model="title"
         name="title"
         type="title"
@@ -48,7 +48,7 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
-import { createPost } from '../api/index'
+import { getAuth, createPost, channelsList, createChannel } from '../api/index'
 
 export default {
   data() {
@@ -84,6 +84,10 @@ export default {
       selectuserCounty: '',
     }
   },
+  async mounted() {
+    const auth = await getAuth()
+    console.log(auth)
+  },
   computed: {
     ...mapState('address', ['cityList', 'countyList']),
   },
@@ -103,40 +107,54 @@ export default {
       this.selectuserCounty = event.target.value
     },
 
-    uploadImage(e) {
-      var file = e.target.files
+    uploadImage(event) {
+      var file = event.target.files
       let url = URL.createObjectURL(file[0])
+      console.log(url)
       this.image = url
     },
 
     getcitylist() {
-      //return this.cityList
       console.log(this.city)
       return this.city
     },
     async createPost() {
       try {
+        const channelsListData = await channelsList()
+        const selectChannelId = channelsListData.data
+          .filter(x => {
+            return x.name === this.selectuserCity
+          })
+          .map(x => x._id)
+        console.log(selectChannelId)
+        if (selectChannelId.length === 0) {
+          //채널을 새로 생성해야 되는 경우
+          const channelData = {
+            name: this.selectuserCity,
+            description: `${this.selectuserCity}의 채널입니다.`,
+          }
+          const newChannelData = await createChannel(channelData)
+          this.channelId = newChannelData._id
+        } else {
+          this.channelId = selectChannelId[0]
+        }
         const userData = {
-          title: `${this.title} / ${this.content}`,
+          title: `${this.title}/${this.content}`,
           image: this.image,
-          channelId: this.channelId, //채널이 없음
-          location: `${this.selectuserCity} ${this.selectuserCounty} ${this.detailAdress}`,
+          channelId: this.channelId,
+          location: `${this.selectuserCity}/${this.selectuserCounty}/${this.detailAdress}`,
           meta: '', //만일을 위해 아껴두자!
         }
-        const { data } = await createPost(userData)
-        console.log(data.user)
-        console.log(data.user.image)
-        this.$router.push('/')
-        // this.$store.commit('Login/setUsername', data.user.fullName)
-        // this.$store.commit('Login/setToken', data.token)
-        console.log(data.token)
+        console.log(userData)
+        const { postData } = await createPost(userData)
+        console.log(postData)
+        //this.$router.push('/')
       } catch (error) {
         //에러 핸들링 코드
         console.log(error.response.data)
         alert(error.response.data)
       }
-      this.$route.push('/')
-      alert('글 작성이 완료 되었습니다.')
+      //this.$route.push('/')
     },
   },
 }
