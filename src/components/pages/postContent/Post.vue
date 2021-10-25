@@ -4,10 +4,7 @@
       <header class="post__header">
         <div class="left">
           <button class="user__profile">
-            <img
-              src="src/assets/images/user-profile__default.svg"
-              alt="유저 프로필"
-            />
+            <img :src="profileUrl" alt="유저 프로필" />
             <!-- FIXME: webpack이 이미지 경로를 찾지 못함 
 			> depth를 3번이상 들어가면 인식을 못하는 듯.. 
 			오류만 안나게 임시로 절대경로로 바꿔놓음-->
@@ -59,6 +56,11 @@ export default {
     content: {
       type: String,
       required: true,
+    },
+  },
+  computed: {
+    profileUrl() {
+      return require('~/assets/images/user-profile__default.svg')
     },
   },
 }
