@@ -90,7 +90,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { createComment, deleteComment } from '~/api'
+import { createComment, deleteComment } from '~/api/postContent'
 import TagArea from '~/components/pages/postContent/TagArea'
 import Card from '~/components/designs/Card.vue'
 import Tag from '~/components/designs/Tag.vue'

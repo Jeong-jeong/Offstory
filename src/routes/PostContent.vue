@@ -39,7 +39,7 @@
 import Post from '~/components/pages/postContent/Post'
 import Comments from '~/components/pages/postContent/Comments'
 import Button from '~/components/designs/Button.vue'
-import { readPost } from '~/api/index'
+import { readPost } from '~/api/postContent'
 export default {
   components: {
     Post,
