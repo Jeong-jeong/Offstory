@@ -13,13 +13,14 @@
           class="button--back"
         >
           <img
-            src="../assets/images/icon-back.svg"
+            :src="iconBack"
             class="icon--back"
             alt="뒤로가기 아이콘"
             aria-hidden
           />
           <span class="button__text">목록으로</span>
         </Button>
+        <!-- TODO: postContent 컴포의 data를 전부 전달하는 방법이 있을까요? -->
         <Post
           :fullName="fullName"
           :updatedAt="updateAt"
@@ -72,6 +73,9 @@ export default {
   },
   computed: {
     ...mapState('Login', ['userId']),
+    iconBack() {
+      return require('~/assets/images/icon-back.svg')
+    },
   },
   created() {
     // this.initPostdata() // data 초기화

@@ -8,10 +8,7 @@
         <li class="item" v-for="(commentList, index) in comments" :key="index">
           <div class="left">
             <button class="user__profile">
-              <img
-                src="/src/assets/images/user-profile__default.svg"
-                alt="유저 프로필"
-              />
+              <img :src="profileUrl" alt="유저 프로필" />
             </button>
             <p>{{ commentList }}, {{ index }}</p>
             <div class="user__infos">
@@ -29,13 +26,7 @@
         <li class="item">
           <div class="left logouted">
             <button class="user__profile">
-              <img
-                src="/src/assets/images/user-profile__default.svg"
-                alt="유저 프로필"
-              />
-              <!-- FIXME: webpack이 이미지 경로를 찾지 못함 
-              > depth를 3번이상 들어가면 인식을 못하는 듯.. 
-              오류만 안나게 임시로 절대경로로 바꿔놓음-->
+              <img :src="profileUrl" alt="유저 프로필" />
             </button>
             <input
               v-if="userId"
@@ -73,6 +64,9 @@ export default {
   },
   computed: {
     ...mapState('Login', ['userId']),
+    profileUrl() {
+      return require('~/assets/images/user-profile__default.svg')
+    },
   },
 }
 </script>
