@@ -43,11 +43,11 @@ export default {
     clearUsername(state) {
       state.username = ''
     },
-    setToken(state, token) {
-      state.token = token
-    },
     clearToken(state) {
       state.token = ''
+    },
+    setToken(state, token) {
+      state.token = token
     },
   },
 

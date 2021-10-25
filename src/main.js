@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import FormValidator from './validation'
+import FormValidator from '~/utils/formValidation'
 import App from '~/App'
 import store from '~/store'
 import router from '~/routes'

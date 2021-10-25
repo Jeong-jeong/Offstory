@@ -25,20 +25,21 @@ function loginUser(userData) {
   return instance.post('login', userData)
 }
 
-// postContent
-function readPost(postId) {
-  const readPostUrl = `posts/${postId}`
-  return instance.post(readPostUrl)
+// channel
+function createChannel(channelData) {
+  return instance.post('/channels/create', channelData)
 }
 
-function createComment(userData) {
-  const createCommentUrl = 'comments/create'
-  return instance.post(createCommentUrl, userData)
+function channelsList() {
+  return instance.get('/channels')
 }
 
-function deleteComment(commentId) {
-  const deleteCommentUrl = 'comments/delete'
-  return instance.post(deleteCommentUrl, commentId)
+function getAuth() {
+  return instance.get('/auth-user')
+}
+
+function createPost(userData) {
+  return instance.post('/posts/create', userData)
 }
 
 // userDetailInfo
@@ -47,12 +48,14 @@ function userDetailInfo(userId) {
   return instance.get(`/users/${userId}`)
 }
 
-//loginForm
+export { createInstance }
+
 export {
   registerUser,
   loginUser,
-  readPost,
-  createComment,
-  deleteComment,
+  createChannel,
+  channelsList,
+  getAuth,
+  createPost,
   userDetailInfo,
 }
