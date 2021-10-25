@@ -108,10 +108,8 @@ export default {
     },
 
     uploadImage(event) {
-      var file = event.target.files
-      let url = URL.createObjectURL(file[0])
-      console.log(url)
-      this.image = url
+      this.image = event.target.files[0]
+      console.log(this.image)
     },
 
     getcitylist() {
@@ -138,15 +136,25 @@ export default {
         } else {
           this.channelId = selectChannelId[0]
         }
-        const userData = {
-          title: `${this.title}/${this.content}`,
-          image: this.image,
-          channelId: this.channelId,
-          location: `${this.selectuserCity}/${this.selectuserCounty}/${this.detailAdress}`,
-          meta: '', //만일을 위해 아껴두자!
-        }
+        const userData = new FormData()
+        userData.append('title', `${this.title}/${this.content}`)
+        userData.append('image', this.image)
+        userData.append('channelId', this.channelId)
+        userData.append(
+          'location',
+          `${this.selectuserCity}/${this.selectuserCounty}/${this.detailAdress}`,
+        )
+        userData.append('meta', '')
+
+        // const userData = {
+        //   title: `${this.title}/${this.content}`,
+        //   image: this.image,
+        //   channelId: this.channelId,
+        //   location: `${this.selectuserCity}/${this.selectuserCounty}/${this.detailAdress}`,
+        //   meta: '', //만일을 위해 아껴두자!
+        // }
         console.log(userData)
-        const { postData } = await createPost(userData)
+        const postData = await createPost(userData)
         console.log(postData)
         //this.$router.push('/')
       } catch (error) {
