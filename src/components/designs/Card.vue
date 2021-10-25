@@ -26,6 +26,7 @@ export default {
 .card {
   width: 100%;
   padding: $LG_PADDING_HORIZONTAL $LG_PADDING_VERTICAL;
+  background-color: $COLOR_WHITE;
   box-shadow: $BOX_SHADOW;
 }
 </style>
