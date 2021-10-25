@@ -24,10 +24,15 @@ function loginUser(userData) {
   return instance.post('login', userData)
 }
 
+function readPost(postId) {
+  const readPostUrl = `posts/${postId}`
+  return instance.post(readPostUrl)
+}
+
 function userDetailInfo(userId) {
   console.log('userid:', `users/${userId}`)
   return instance.get(`/users/${userId}`)
 }
 
 //loginForm
-export { registerUser, loginUser, userDetailInfo }
+export { registerUser, loginUser, readPost, userDetailInfo }

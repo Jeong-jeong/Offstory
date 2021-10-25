@@ -30,15 +30,10 @@
       >
     </div>
     <div class="row">
-      <Tag v-bind="{ height: '25px', backgroundColor: '#51CF66' }"
-        >참가 승인됨</Tag
-      >
-      <Tag v-bind="{ height: '25px', backgroundColor: '#F03E3E' }"
-        >참가 거절됨</Tag
-      >
-      <Tag v-bind="{ height: '25px', backgroundColor: '#FF8B4A' }"
-        >참가 대기중</Tag
-      >
+      <Tag v-bind="{ state: 'approve' }" />
+      <Tag v-bind="{ state: 'reject' }" />
+      <Tag />
+      <Tag v-bind="{ width: 50, height: '300px' }" />
     </div>
     <div class="row">
       <Input
