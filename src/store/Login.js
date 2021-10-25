@@ -20,7 +20,7 @@ export default {
     getUsername(state) {
       return state.username
     },
-    gerUserId(state) {
+    getUserId(state) {
       return state.userId
     },
     getUserProfileImage(state) {
@@ -43,11 +43,11 @@ export default {
     clearUsername(state) {
       state.username = ''
     },
-    setToken(state, token) {
-      state.token = token
-    },
     clearToken(state) {
       state.token = ''
+    },
+    setToken(state, token) {
+      state.token = token
     },
   },
 

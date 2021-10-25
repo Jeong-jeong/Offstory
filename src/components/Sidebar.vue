@@ -1,6 +1,12 @@
 <template>
   <div class="wrapper">
     <div class="top">
+      <button
+        class="option personal-create--newpost"
+        @click="$router.push('/newpost')"
+      >
+        글 쓰기
+      </button>
       <button class="option personal-info">내 정보</button>
       <button
         class="option personal-activity"

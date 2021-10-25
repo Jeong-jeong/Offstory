@@ -48,7 +48,7 @@ export default {
         saveUserToCookie(data.user.fullName)
 
         const userDetaildata = await userDetailInfo(
-          this.$store.getters['Login/gerUserId'],
+          this.$store.getters['Login/getUserId'],
         )
         console.log(userDetaildata)
         console.log(userDetaildata.image)
