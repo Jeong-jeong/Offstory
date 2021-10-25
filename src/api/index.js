@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '~/store/index'
 import { setInterceptors } from './common/interceptors'
 
 const API_END_POINT = 'http://13.209.30.200:5000'
@@ -23,5 +24,10 @@ function loginUser(userData) {
   return instance.post('login', userData)
 }
 
+function userDetailInfo(userId) {
+  console.log('userid:', `users/${userId}`)
+  return instance.get(`/users/${userId}`)
+}
+
 //loginForm
-export { registerUser, loginUser }
+export { registerUser, loginUser, userDetailInfo }
