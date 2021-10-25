@@ -24,6 +24,21 @@ function loginUser(userData) {
   return instance.post('login', userData)
 }
 
+function createPost(userData) {
+  return instance.post('/posts/create', userData)
+}
+
+function createChannel(channelData) {
+  return instance.post('/channels/create', channelData)
+}
+
+function channelsList() {
+  return instance.get('/channels')
+}
+
+function getAuth() {
+  return instance.get('/auth-user')
+}
 function readPost(postId) {
   const readPostUrl = `posts/${postId}`
   return instance.post(readPostUrl)
@@ -34,5 +49,6 @@ function userDetailInfo(userId) {
   return instance.get(`/users/${userId}`)
 }
 
-//loginForm
-export { registerUser, loginUser, readPost, userDetailInfo }
+
+export {   createPost, registerUser, loginUser, readPost, userDetailInfo, channelsList,createChannel,  getAuth, }
+

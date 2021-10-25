@@ -3,6 +3,7 @@ import Main from './Main'
 import Signup from './Signup'
 import PostContent from './PostContent'
 import Login from './Login'
+import CreateNewPost from './CreateNewPost'
 import PersonalActivity from './PersonalActivity'
 import Example from '~/components/designs/Example'
 
@@ -26,6 +27,12 @@ export default createRouter({
       component: Login,
     },
     {
+      path: '/newpost',
+      name: 'CreateNewPost',
+      component: CreateNewPost,
+    },
+    {
+      name: 'Example',
       path: '/postContent',
       name: 'PostContent',
       component: PostContent,

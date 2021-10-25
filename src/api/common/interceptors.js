@@ -8,7 +8,7 @@ export function setInterceptors(instance) {
       console.log(store.state.Login.token)
       const APITOKEN = store.state.Login.token
       console.log(config)
-      config.headers.Autorization = `bearer ${APITOKEN}` // header에 인증 토큰 추가
+      config.headers.Authorization = `bearer ${APITOKEN}`
       return config
     },
     function (error) {
