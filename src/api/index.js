@@ -49,6 +49,13 @@ function userDetailInfo(userId) {
   return instance.get(`/users/${userId}`)
 }
 
-
-export {   createPost, registerUser, loginUser, readPost, userDetailInfo, channelsList,createChannel,  getAuth, }
-
+export {
+  createPost,
+  registerUser,
+  loginUser,
+  readPost,
+  userDetailInfo,
+  channelsList,
+  createChannel,
+  getAuth,
+}
