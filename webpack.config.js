@@ -33,6 +33,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
+          esModule: false, // url([object Module]) 오류 해결용
         },
       },
       {

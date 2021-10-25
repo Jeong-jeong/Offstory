@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { loginUser } from '../api/index'
+import { loginUser, userDetailInfo } from '../api/index'
 import { validateEmail } from '../utils/validation'
 import { saveAuthToCookie, saveUserToCookie } from '../utils/cookies'
 export default {
@@ -39,13 +39,20 @@ export default {
         }
         const { data } = await loginUser(userData)
         console.log(data.user)
-        console.log(data.user.image)
         this.$router.push('/')
-        this.$store.commit('Login/setUsername', data.user.fullName)
         this.$store.commit('Login/setToken', data.token)
+        this.$store.commit('Login/setUsername', data.user.fullName)
+        this.$store.commit('Login/setUserId', data.user._id)
         console.log(data.token)
         saveAuthToCookie(data.token)
         saveUserToCookie(data.user.fullName)
+
+        const userDetaildata = await userDetailInfo(
+          this.$store.getters['Login/gerUserId'],
+        )
+        console.log(userDetaildata)
+        console.log(userDetaildata.image)
+        this.$store.commit('Login/setprofileImage', userDetaildata.image)
       } catch (error) {
         //에러 핸들링 코드
         console.log(error.response.data)

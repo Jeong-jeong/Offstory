@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '~/store/index'
 import { setInterceptors } from './common/interceptors'
 
 const API_END_POINT = 'http://13.209.30.200:5000'
@@ -38,21 +39,16 @@ function channelsList() {
 function getAuth() {
   return instance.get('/auth-user')
 }
-
-// function channelsList(channelName) {
-//   if (instance.get(`/channels/${channelName}`)) {
-//     return instance.get(`/channels/${channelName}`)
-//   } else {
-
-//   }
-// }
-
-//loginForm
-export {
-  createPost,
-  registerUser,
-  loginUser,
-  channelsList,
-  createChannel,
-  getAuth,
+function readPost(postId) {
+  const readPostUrl = `posts/${postId}`
+  return instance.post(readPostUrl)
 }
+
+function userDetailInfo(userId) {
+  console.log('userid:', `users/${userId}`)
+  return instance.get(`/users/${userId}`)
+}
+
+
+export {   createPost, registerUser, loginUser, readPost, userDetailInfo, channelsList,createChannel,  getAuth, }
+

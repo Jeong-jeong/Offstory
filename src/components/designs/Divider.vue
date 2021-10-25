@@ -1,17 +1,9 @@
 <template>
-  <hr
-    :style="{
-      border: 'none',
-      margin: dir === 'row' ? `0 ${margin}px` : `${margin}px 0`,
-      display: dir === 'row' ? 'inline-block' : 'block',
-      backgroundColor: color,
-      width: `${width}px`,
-      height: `${height}px`,
-    }"
-  />
+  <hr :style="{ propsStyle }" />
 </template>
 
 <script>
+import { checkUnit } from '~/utils/function'
 export default {
   props: {
     dir: {
@@ -20,7 +12,7 @@ export default {
     },
     width: {
       type: [Number, String],
-      defalut: 10,
+      default: 10,
     },
     height: {
       type: [Number, String],
@@ -34,6 +26,24 @@ export default {
       type: [Number, String],
       default: 10,
     },
+  },
+  computed: {
+    propsStyle() {
+      return {
+        border: 'none',
+        margin:
+          this.dir === 'row'
+            ? `0 ${checkUnit(this.margin)}`
+            : `${checkUnit(this.margin)} 0`,
+        display: this.dir === 'row' ? 'inline-block' : 'block',
+        backgroundColor: this.color,
+        width: checkUnit(this.width),
+        height: checkUnit(this.height),
+      }
+    },
+  },
+  methods: {
+    checkUnit,
   },
 }
 </script>
