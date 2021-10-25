@@ -8,6 +8,10 @@
 import { mapGetters } from 'vuex'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
+import {
+  API_ENDPOINT_OF_AREAINFO,
+  API_ENDPOINT_OF_DEVCOURSE,
+} from './utils/variables.js'
 
 export default {
   components: { Header, Sidebar },
@@ -23,9 +27,16 @@ export default {
     onProfileClick() {
       this.isSidebarShowed = !this.isSidebarShowed
     },
+    async getChannelList() {
+      const channelList = await this.$fetch(
+        API_ENDPOINT_OF_DEVCOURSE + 'channels',
+      )
+
+      console.log('채널 리스트', channelList)
+    },
   },
-  mounted() {
-    // this.$store.dispatch('address/initialCityFetch')
+  async mounted() {
+    await this.getChannelList()
   },
 }
 </script>
