@@ -49,22 +49,17 @@
             class="posttitle"
             required
           />
-          <label
+          <input
             @change="uploadImage"
             multiple
             accept="image/*"
             type="file"
             id="file"
             class="inputfile"
-            for="input-file"
-            >이미지 업로드</label
-          >
-          <!-- <div
-            class="d"
-            style="background-image: url(`${{this.imgurl}}`)"
-          ></div> -->
+          />
           <br />
-          <input type="file" id="input-file" style="display: none" />
+          <!-- <input type="file" id="input-file" style="display: none" /> -->
+          <!-- <img style="width: 500px" id="preview-image" src="`${this.imgurl}`" /> -->
           <br /><br />
           <div class="post-contenttext">내용</div>
           <br />
@@ -85,6 +80,7 @@
 import { mapState, mapActions } from 'vuex'
 import { getAuth, createPost, channelsList, createChannel } from '../api/index'
 import Button from '~/components/designs/Button'
+import Input from '../components/designs/Input.vue'
 
 export default {
   data() {
@@ -163,6 +159,7 @@ export default {
       this.image = event.target.files[0]
       this.imgurl = URL.createObjectURL(event.target.files[0])
       console.log(this.image)
+      console.log(this.imgurl)
     },
 
     getcitylist() {
@@ -304,6 +301,7 @@ export default {
         }
         .inputfile {
           @include font;
+          width: 45%;
           height: 100%;
           margin-left: 10px;
           padding: 6px 25px;
