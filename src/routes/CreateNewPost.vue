@@ -3,11 +3,11 @@
     <div class="row">
       <div class="col-lg-6">
         <form @submit.prevent="createPost" class="post-form">
-          <div class="logo-area">
+          <div class="post-logo-area">
             <img src="../assets/images/logo.svg" alt="로고" />
           </div>
           <div>
-            <h1 class="title">동행 구하기</h1>
+            <h1 class="post-title">동행 구하기</h1>
           </div>
           <br />
           <br />
@@ -40,12 +40,13 @@
           </div>
           <br /><br />
           <div class="post-titletext">제목</div>
-
+          <br />
           <input
             placeholder="제목"
             v-model="title"
             name="title"
             type="title"
+            class="posttitle"
             required
           />
           <label
@@ -58,15 +59,23 @@
             for="input-file"
             >이미지 업로드</label
           >
+          <!-- <div
+            class="d"
+            style="background-image: url(`${{this.imgurl}}`)"
+          ></div> -->
+          <br />
           <input type="file" id="input-file" style="display: none" />
           <br /><br />
           <div class="post-contenttext">내용</div>
+          <br />
           <textarea
             class="post-content"
             v-model="content"
             placeholder="100자 이내로 입력하세요"
           ></textarea>
-          <Button class="post-button">글 작성하기</Button>
+          <div class="buttonwrapper">
+            <Button class="post-button">글 작성하기</Button>
+          </div>
         </form>
       </div>
     </div>
@@ -84,6 +93,7 @@ export default {
       title: '',
       content: '',
       image: null,
+      imgurl: '',
       channelId: '',
       cityList: [
         '서울',
@@ -151,6 +161,7 @@ export default {
 
     uploadImage(event) {
       this.image = event.target.files[0]
+      this.imgurl = URL.createObjectURL(event.target.files[0])
       console.log(this.image)
     },
 
@@ -198,7 +209,10 @@ export default {
         console.log(userData)
         const postData = await createPost(userData)
         console.log(postData)
-        //this.$router.push('/')
+        alert(
+          `${this.selectuserCity}시 ${this.selectuserCounty} 카테고리에 등록되었습니다.`,
+        )
+        this.$router.push('/')
       } catch (error) {
         //에러 핸들링 코드
         console.log(error.response.data)
@@ -218,22 +232,20 @@ export default {
     height: calc(90vh - $LG_HEADER_HEIGHT);
     justify-content: center;
     .post {
-      &-header {
-        width: 100%;
-        .post-title {
-          font-size: $FONT_L;
-          font-weight: 700;
-        }
-
-        .logo-area {
-          display: flex;
-          justify-content: right;
-          img {
-            width: 120px;
-          }
-        }
-        margin-bottom: $LG_PADDING_VERTICAL;
+      width: 100%;
+      &-title {
+        font-size: $FONT_L;
+        font-weight: 1000;
       }
+
+      &-logo-area {
+        display: flex;
+        justify-content: right;
+        img {
+          width: 120px;
+        }
+      }
+      margin-bottom: $LG_PADDING_VERTICAL;
 
       &-form {
         flex-direction: column;
@@ -277,9 +289,10 @@ export default {
           }
         }
 
-        input {
+        .posttitle {
           @include font;
           width: 50%;
+          height: 10px;
           padding: $INNER_PADDING_VERTICAL $INNER_PADDING_HORIZONTAL;
           border-radius: $BORDER_RADIOUS;
           border: 1px solid $COLOR_GRAY_DARKEN;
@@ -318,11 +331,14 @@ export default {
             color: $COLOR_GRAY_LIGHTEN;
           }
         }
-      }
-
-      &-button {
-        margin-top: 30px;
-        margin-bottom: 10px;
+        .buttonwrapper {
+          display: flex;
+          justify-content: right;
+          .post-button {
+            margin-top: 20px;
+            margin-bottom: 10px;
+          }
+        }
       }
     }
   }
