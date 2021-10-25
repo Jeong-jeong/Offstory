@@ -32,7 +32,6 @@ export default createRouter({
       component: CreateNewPost,
     },
     {
-      name: 'Example',
       path: '/postContent',
       name: 'PostContent',
       component: PostContent,
