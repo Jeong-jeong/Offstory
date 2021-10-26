@@ -1,9 +1,20 @@
+function saveUserIdToCookie(value) {
+  document.cookie = `off_userId=${value}`
+}
+
 function saveAuthToCookie(value) {
   document.cookie = `off_auth=${value}`
 }
 
 function saveUserToCookie(value) {
   document.cookie = `off_user=${value}`
+}
+
+function getUserIdToCookie() {
+  return document.cookie.replace(
+    /(?:(?:^|.*;\s*)off_userId\s*=\s*([^;]*).*$)|^.*$/,
+    '$1',
+  )
 }
 
 function getAuthFromCookie() {
@@ -25,8 +36,10 @@ function deleteCookie(value) {
 }
 
 export {
+  saveUserIdToCookie,
   saveAuthToCookie,
   saveUserToCookie,
+  getUserIdToCookie,
   getAuthFromCookie,
   getUserFromCookie,
   deleteCookie,

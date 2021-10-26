@@ -13,8 +13,13 @@
 
 <script>
 import { loginUser, userDetailInfo } from '../api/index'
+
 import { validateEmail } from '../utils/validation'
-import { saveAuthToCookie, saveUserToCookie } from '../utils/cookies'
+import {
+  saveUserIdToCookie,
+  saveAuthToCookie,
+  saveUserToCookie,
+} from '../utils/cookies'
 export default {
   data() {
     return {
@@ -44,11 +49,12 @@ export default {
         this.$store.commit('Login/setUsername', data.user.fullName)
         this.$store.commit('Login/setUserId', data.user._id)
         console.log(data.token)
+        saveUserIdToCookie(data.user._id)
         saveAuthToCookie(data.token)
         saveUserToCookie(data.user.fullName)
 
         const userDetaildata = await userDetailInfo(
-          this.$store.getters['Login/gerUserId'],
+          this.$store.getters['Login/getUserId'],
         )
         console.log(userDetaildata)
         console.log(userDetaildata.image)

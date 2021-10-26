@@ -25,6 +25,7 @@ export default {
       this.$store.commit('Login/clearToken')
       deleteCookie('off_auth')
       deleteCookie('off_user')
+      deleteCookie('off_userId')
       this.$router.push('/')
       return alert('logout!')
     },
