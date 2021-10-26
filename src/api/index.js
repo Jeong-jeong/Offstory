@@ -15,6 +15,7 @@ function createInstance() {
 
 const instance = createInstance()
 
+// login, signup
 function registerUser(userData) {
   const registerUrl = 'signup'
   return instance.post(`${registerUrl}`, userData) //어떤서버로 요청할지 url
@@ -24,10 +25,7 @@ function loginUser(userData) {
   return instance.post('login', userData)
 }
 
-function createPost(userData) {
-  return instance.post('/posts/create', userData)
-}
-
+// channel
 function createChannel(channelData) {
   return instance.post('/channels/create', channelData)
 }
@@ -44,7 +42,11 @@ function readPost(postId) {
   const readPostUrl = `posts/${postId}`
   return instance.post(readPostUrl)
 }
+function createPost(userData) {
+  return instance.post('/posts/create', userData)
+}
 
+// userDetailInfo
 function userDetailInfo(userId) {
   console.log('userid:', `users/${userId}`)
   return instance.get(`/users/${userId}`)
@@ -63,15 +65,15 @@ function updatePassword(userData) {
 }
 
 export {
-  createPost,
+  createInstance,
   registerUser,
   loginUser,
-  readPost,
-  userDetailInfo,
-  channelsList,
   createChannel,
+  channelsList,
   getAuth,
   updateCoverImage,
   updateNickname,
   updatePassword,
+  createPost,
+  userDetailInfo,
 }

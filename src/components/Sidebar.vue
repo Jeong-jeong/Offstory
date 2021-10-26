@@ -8,6 +8,12 @@
         내 정보 변경
       </button>
       <button
+        class="option personal-create--newpost"
+        @click="$router.push('/newpost')"
+      >
+        글 쓰기
+      </button>
+      <button
         class="option personal-activity"
         @click="$router.push('/personalactivity')"
       >

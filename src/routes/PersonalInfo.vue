@@ -381,6 +381,7 @@ function isOutOfRange(string, lower, upper) {
         }
         .button-container {
           position: absolute;
+          display: flex;
           right: 0;
 
           button {

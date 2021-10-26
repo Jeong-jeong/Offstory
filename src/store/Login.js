@@ -27,7 +27,7 @@ export default {
     getUsername(state) {
       return state.username
     },
-    gerUserId(state) {
+    getUserId(state) {
       return state.userId
     },
     getUserProfileImage(state) {
