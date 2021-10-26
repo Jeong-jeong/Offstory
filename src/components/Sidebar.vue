@@ -1,7 +1,12 @@
 <template>
   <div class="wrapper">
     <div class="top">
-      <button class="option personal-info">내 정보</button>
+      <button
+        class="option personal-info"
+        @click="$router.push('/personalinfo')"
+      >
+        내 정보 변경
+      </button>
       <button
         class="option personal-activity"
         @click="$router.push('/personalactivity')"

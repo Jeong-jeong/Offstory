@@ -39,6 +39,7 @@ function channelsList() {
 function getAuth() {
   return instance.get('/auth-user')
 }
+
 function readPost(postId) {
   const readPostUrl = `posts/${postId}`
   return instance.post(readPostUrl)
@@ -47,6 +48,18 @@ function readPost(postId) {
 function userDetailInfo(userId) {
   console.log('userid:', `users/${userId}`)
   return instance.get(`/users/${userId}`)
+}
+
+function updateCoverImage(userData) {
+  return instance.post('/users/upload-photo', userData)
+}
+
+function updateNickname(userData) {
+  return instance.put('/settings/update-user', userData)
+}
+
+function updatePassword(userData) {
+  return instance.put('/settings/update-password', userData)
 }
 
 export {
@@ -58,4 +71,7 @@ export {
   channelsList,
   createChannel,
   getAuth,
+  updateCoverImage,
+  updateNickname,
+  updatePassword,
 }

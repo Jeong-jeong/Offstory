@@ -1,10 +1,3 @@
-import { $fetch } from '../plugins/fetch.js'
-import { $axios } from '../plugins/axios.js'
-import {
-  API_ENDPOINT_OF_AREAINFO,
-  API_ENDPOINT_OF_DEVCOURSE,
-} from '../utils/variables.js'
-
 export default {
   namespaced: true,
   state() {

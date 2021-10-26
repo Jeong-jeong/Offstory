@@ -6,6 +6,7 @@ import Login from './Login'
 import CreateNewPost from './CreateNewPost'
 import PersonalActivity from './PersonalActivity'
 import Example from '~/components/designs/Example'
+import PersonalInfo from './PersonalInfo'
 
 export default createRouter({
   history: createWebHistory(),
@@ -32,7 +33,6 @@ export default createRouter({
       component: CreateNewPost,
     },
     {
-      name: 'Example',
       path: '/postContent',
       name: 'PostContent',
       component: PostContent,
@@ -46,6 +46,11 @@ export default createRouter({
       name: 'PersonalActivity',
       path: '/personalactivity',
       component: PersonalActivity,
+    },
+    {
+      name: 'PersonalInfo',
+      path: '/personalinfo',
+      component: PersonalInfo,
     },
   ],
 })
