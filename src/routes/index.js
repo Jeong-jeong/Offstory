@@ -5,6 +5,7 @@ import PostContent from './PostContent'
 import Login from './Login'
 import CreateNewPost from './CreateNewPost'
 import PersonalActivity from './PersonalActivity'
+import Chat from './Chat'
 import Example from '~/components/designs/Example'
 
 export default createRouter({
@@ -46,6 +47,11 @@ export default createRouter({
       name: 'PersonalActivity',
       path: '/personalactivity',
       component: PersonalActivity,
+    },
+    {
+      name: 'Chat',
+      path: '/chat',
+      component: Chat,
     },
   ],
 })
