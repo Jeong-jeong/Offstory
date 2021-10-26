@@ -46,10 +46,10 @@ export default createRouter({
       },
     },
     {
-      name: 'Example',
       path: '/postContent',
       name: 'PostContent',
       component: PostContent,
+      props: true,
     },
     {
       path: '/example',

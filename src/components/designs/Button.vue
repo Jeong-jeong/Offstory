@@ -33,6 +33,7 @@ export default {
 
 <style lang="scss" scoped>
 .button {
+  @include flexbox;
   width: 200px;
   height: $BUTTON_HEIGHT;
   font-size: $FONT_BASE;
