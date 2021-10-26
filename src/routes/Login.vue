@@ -8,6 +8,9 @@
               <div class="logo-area">
                 <img src="../assets/images/logo.svg" alt="로고" />
               </div>
+              <h1 class="login-comment">
+                나의 오프라인 이야기, OffStory와 함께 시작해 보아요!
+              </h1>
               <h1 class="login-title">Login</h1>
             </header>
             <Field
@@ -116,7 +119,15 @@ export default {
     .login {
       &-header {
         width: 100%;
+        .login-comment {
+          margin-top: 50px;
+          font-size: $FONT_L;
+          font-weight: 700;
+          padding: 10px;
+          text-align: center;
+        }
         .login-title {
+          margin-top: 50px;
           font-size: $FONT_L;
           font-weight: 700;
         }

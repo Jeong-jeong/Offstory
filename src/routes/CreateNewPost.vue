@@ -11,18 +11,24 @@
           </div>
           <br />
           <br />
-          <div class="post-Title">주소</div>
+          <div class="post-Title">어디서 만날까요?</div>
           <br />
           <div class="post-address">
             <select @change="selectedCity($event)" class="selectcity">
               <option value="undefined" class="option">시</option>
-              <option :key="i" :value="city" v-for="(city, i) in cityList">
+              <option
+                class="citylist"
+                :key="i"
+                :value="city"
+                v-for="(city, i) in cityList"
+              >
                 {{ city }}
               </option>
             </select>
             <select @change="selectedCounty($event)" class="selectcounty">
               <option value="undefined" class="option">군,구</option>
               <option
+                class="countylist"
                 :key="i"
                 :value="data.name"
                 v-for="(data, i) in countyListForSelect"
@@ -231,8 +237,25 @@ export default {
     .post {
       width: 100%;
       &-title {
+        color: $COLOR_GRAY_DARKEN;
         font-size: $FONT_L;
         font-weight: 1000;
+      }
+      &-Title {
+        color: $KEY_COLOR;
+        margin-top: 10px;
+        font-size: $FONT_BASE;
+        font-weight: 600;
+      }
+      &-titletext {
+        color: $KEY_COLOR;
+        font-size: $FONT_BASE;
+        font-weight: 600;
+      }
+      &-contenttext {
+        color: $KEY_COLOR;
+        font-size: $FONT_BASE;
+        font-weight: 600;
       }
 
       &-logo-area {
@@ -263,11 +286,17 @@ export default {
             border-radius: $BORDER_RADIOUS;
             border: 1px solid $COLOR_GRAY_DARKEN;
             font-weight: 700;
-            color: $COLOR_GRAY_LIGHTEN;
+            color: $COLOR_GRAY_DARKEN;
+            .citylist {
+              color: $COLOR_GRAY_DARKEN;
+            }
+            .countylist {
+              color: $COLOR_GRAY_DARKEN;
+            }
 
             &::placeholder {
               font-weight: 700;
-              color: $COLOR_GRAY_LIGHTEN;
+              color: $COLOR_GRAY_DARKEN;
             }
           }
 
