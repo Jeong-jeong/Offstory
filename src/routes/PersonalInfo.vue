@@ -223,7 +223,6 @@ export default {
         event.preventDefault()
         return
       }
-      event.preventDefault()
 
       let userInfo = null
 
