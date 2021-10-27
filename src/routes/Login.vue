@@ -52,7 +52,7 @@
 
 <script>
 import Button from '~/components/designs/Button'
-import { loginUser, userDetailInfo } from '../api/index'
+import { loginUser, userDetailInfo, updateNickname } from '../api/index'
 
 import { validateEmail } from '../utils/validation'
 import { Field, Form, ErrorMessage } from 'vee-validate'
@@ -84,7 +84,7 @@ export default {
           password: this.password,
         }
         const { data } = await loginUser(userData)
-        console.log(data.user)
+        console.log('data.user', data.user)
         this.$router.push('/')
         this.$store.commit('Login/setToken', data.token)
         this.$store.commit('Login/setUsername', data.user.fullName)
@@ -102,11 +102,24 @@ export default {
 
         // 유저 데이터 storage에 저장
         this.storageSetup(data.user)
+
+        // username을 랜덤키로 초기화
+        if (!data.user.username) {
+          await this.initializeUsername(data)
+        }
       } catch (error) {
         //에러 핸들링 코드
         console.log(error.response.data)
         alert(error.response.data)
       }
+    },
+    async initializeUsername(userData) {
+      const data = {
+        fullName: userData.user.fullName,
+        username: this.makeRandomKey() + '/',
+      }
+
+      await updateNickname(data)
     },
     storageSetup(userData) {
       const dataToBeStored = {
@@ -122,6 +135,10 @@ export default {
     },
     isSignup() {
       this.$router.push('/signup')
+    },
+    makeRandomKey() {
+      const res = new Date() * Math.random()
+      return res.toString()
     },
   },
 }

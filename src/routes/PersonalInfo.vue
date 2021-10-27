@@ -71,7 +71,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { updateCoverImage, updateNickname, updatePassword } from '../api/index'
+import {
+  updateCoverImage,
+  updateNickname,
+  updatePassword,
+  userDetailInfo,
+} from '../api/index'
 import Button from '../components/designs/Button'
 
 export default {
@@ -91,6 +96,10 @@ export default {
     ...mapGetters('Login', ['getToken']),
   },
   methods: {
+    async test2() {
+      const res = await userDetailInfo(this.$storage.getItem('userData').userId)
+      console.log('res', res)
+    },
     // 화면으로 접속시에 적색 박스와 녹색 박스 화면에 표시
     initialValidCheck() {
       setSuccessFor(this.$refs.nickname)
@@ -248,7 +257,7 @@ export default {
       if (!isEqual(this.nickname, userPriorData.userFullName)) {
         const data = {
           fullName: this.nickname,
-          username: userPriorData.userIntroduction,
+          username: 'a',
         }
         await updateNickname(data)
         // const URL = 'http://13.209.30.200:5000/settings/update-user'
@@ -292,6 +301,7 @@ export default {
     },
   },
   mounted() {
+    this.test()
     this.setUserInfo()
     this.initialValidCheck()
   },
