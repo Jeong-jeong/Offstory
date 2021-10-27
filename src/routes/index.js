@@ -6,8 +6,10 @@ import PostContent from './PostContent'
 import Login from './Login'
 import CreateNewPost from './CreateNewPost'
 import PersonalActivity from './PersonalActivity'
+import Chat from './Chat'
 import Example from '~/components/designs/Example'
 import PersonalInfo from './PersonalInfo'
+import ResultOfPostList from './ResultOfPostList'
 
 export default createRouter({
   history: createWebHistory(),
@@ -66,6 +68,16 @@ export default createRouter({
       name: 'PersonalInfo',
       path: '/personalinfo',
       component: PersonalInfo,
+    },
+    {
+      name: 'ResultOfPostList',
+      path: '/ResultOfPostList',
+      component: ResultOfPostList,
+    },
+    {
+      name: 'Chat',
+      path: '/chat',
+      component: Chat,
     },
   ],
 })

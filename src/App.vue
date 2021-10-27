@@ -41,4 +41,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+html,
+body {
+  font-family: $FONT_MAIN;
+  @include font;
+}
+</style>
