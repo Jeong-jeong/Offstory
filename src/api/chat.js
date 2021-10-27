@@ -7,9 +7,14 @@ function getConversations() {
   return instance.get(getConversationsUrl)
 }
 
-function getSpecificMessage(userId) {
-  const messageUrl = 'messages'
-  return instance.get(messageUrl)
+function getSpecificMessage() {
+  const getmessageUrl = 'messages'
+  return instance.get(getmessageUrl)
 }
 
-export { getConversations, getSpecificMessage }
+function createMessage(userData) {
+  const createMessageUrl = 'messages/create'
+  return instance.post(createMessageUrl, userData)
+}
+
+export { getConversations, getSpecificMessage, createMessage }

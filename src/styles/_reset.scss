@@ -2,6 +2,11 @@
   box-sizing: border-box;
 }
 
+textarea {
+  font-family: $FONT_MAIN;
+  font-size: inherit;
+}
+
 button:disabled {
   cursor: not-allowed;
 }
