@@ -1,7 +1,11 @@
 <template>
   <div class="wrapper">
     <div class="left">
-      <img src="../assets/images/symbol.svg" alt="OffStory 심볼" />
+      <img
+        @click="$router.push('/')"
+        src="../assets/images/symbol.svg"
+        alt="OffStory 심볼"
+      />
       <button class="logo" @click="$router.push('/')">OffStory</button>
     </div>
     <div class="middle">
@@ -49,35 +53,45 @@
             placeholder="상세주소 입력!"
             @keyup.enter="searchPost"
           />
-          <button><i class="material-icons"> search </i></button>
+          <button aria-label="검색 버튼">
+            <i class="material-icons"> search </i>
+          </button>
         </form>
       </div>
     </div>
     <div class="right">
       <template v-if="isLogin">
-        <button>
+        <button aria-label="검색 버튼">
+          <i class="material-icons"> search </i>
+        </button>
+        <button aria-label="글쓰기 버튼">
           <i class="material-icons"> edit </i>
         </button>
-        <button>
+        <button aria-label="채팅 버튼">
           <i class="material-icons"> question_answer </i>
         </button>
-        <button>
+        <button aria-label="알림 버튼">
           <i class="material-icons"> notifications </i>
         </button>
         <template v-if="isEmptyProfileImage">
           <button @click="toggleSidebar">
-            <i class="material-icons"> account_circle </i>
+            <img :src="getUserProfileImage" class="profile-image" />
+            <!-- <i class="material-icons" aria-label="사이드바 버튼">
+              account_circle
+            </i> -->
           </button>
         </template>
-        <template v-else>
-          <button @click="toggleSidebar">
+        <!-- <template v-else>
+          <button @click="toggleSidebar" aria-label="사이드바 버튼">
             <img src="getUserProfileImage" />
           </button>
-        </template>
+        </template> -->
       </template>
       <template v-else>
         <router-link to="/login">
-          <Button width="100px" fontSize="25px">Login</Button>
+          <Button width="100px" fontSize="25px" aria-label="로그인 버튼"
+            >Login</Button
+          >
         </router-link>
       </template>
     </div>
@@ -86,12 +100,13 @@
 
 <script>
 import { channelsList, channelPostList } from '../api/index'
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import Button from '~/components/designs/Button'
 
 export default {
   data() {
     return {
+      userImage: null,
       detailAdress: '',
       countyList: [],
       countyListForSelect: [],
@@ -130,18 +145,28 @@ export default {
   },
   computed: {
     ...mapState('address', ['cityList', 'countyList']),
-    ...mapGetters('Login', ['isLogin']),
-    ...mapGetters('Login', ['isEmptyProfileImage']),
-    ...mapGetters('Login', ['getUserProfileImage']),
+    ...mapGetters('Login', [
+      'isLogin',
+      'isEmptyProfileImage',
+      'getUserProfileImage',
+    ]),
+    getUserProfileImage() {
+      const res = this.$storage.getItem('userData')
+      const image =
+        res.userCoverImage ||
+        require('../assets/images/user-profile__default.svg')
+      return image
+    },
   },
   methods: {
-    ...mapMutations('address', ['setUserCity']),
-    ...mapMutations('address', ['setUserCounty']),
-    ...mapMutations('address', ['setSearchChannelId']),
-    ...mapMutations('address', ['setdetailAddress']),
-    ...mapMutations('address', ['setPostListData']),
+    ...mapMutations('address', [
+      'setUserCity',
+      'setUserCounty',
+      'setSearchChannelId',
+      'setdetailAddress',
+      'setPostListData',
+    ]),
 
-    //...mapActions('address', ['fetchCounty']),
     async parseAddress() {
       // const userCity = this.cityList.find(city =>
       //   this.$refs.input.value.includes(city.name),
@@ -221,10 +246,12 @@ export default {
   position: fixed;
   width: 100%;
   height: $LG_HEADER_HEIGHT;
-  border-bottom: 0.1px solid #cccccc;
+  border-bottom: 0.05px solid #cccccc;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.9);
 
   .left {
     display: flex;
@@ -241,9 +268,10 @@ export default {
   }
 
   .middle {
+    display: flex;
+    justify-content: center;
+    margin-right: -20px;
     .search-address {
-      display: flex;
-      justify-content: center;
       form {
         position: relative;
         display: flex;
@@ -251,7 +279,7 @@ export default {
 
         select {
           @include font;
-          width: 25%;
+          width: 150px;
           padding: 0px;
           margin: 5px;
           padding: $INNER_PADDING_VERTICAL $INNER_PADDING_HORIZONTAL;
@@ -273,7 +301,8 @@ export default {
         }
         input {
           @include font;
-          width: 50%;
+          width: 200px;
+          height: 52px;
           margin: 5px;
           padding: $INNER_PADDING_VERTICAL $INNER_PADDING_HORIZONTAL;
           border-radius: $BORDER_RADIOUS;
@@ -323,6 +352,33 @@ export default {
           color: darken($KEY_COLOR, 30%);
         }
       }
+    }
+
+    button:first-child {
+      display: none;
+    }
+
+    .profile-image {
+      width: 35px;
+      height: 35p;
+      border-radius: 50%;
+      border: 1px solid $KEY_COLOR;
+    }
+  }
+
+  @media (max-width: 1095px) {
+    .logo {
+      display: none;
+    }
+  }
+
+  @media (max-width: 885px) {
+    .middle {
+      display: none;
+    }
+    .right button:first-child {
+      display: inline;
+      color: red;
     }
   }
 }
