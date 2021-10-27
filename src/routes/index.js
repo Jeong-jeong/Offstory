@@ -50,6 +50,7 @@ export default createRouter({
     },
     {
       path: '/postContent',
+      // path: '/postContent',
       name: 'PostContent',
       component: PostContent,
       props: true,
