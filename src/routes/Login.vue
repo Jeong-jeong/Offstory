@@ -53,9 +53,14 @@
 <script>
 import Button from '~/components/designs/Button'
 import { loginUser, userDetailInfo } from '../api/index'
+
 import { validateEmail } from '../utils/validation'
 import { Field, Form, ErrorMessage } from 'vee-validate'
-import { saveAuthToCookie, saveUserToCookie } from '../utils/cookies'
+import {
+  saveUserIdToCookie,
+  saveAuthToCookie,
+  saveUserToCookie,
+} from '../utils/cookies'
 export default {
   data() {
     return {
@@ -85,6 +90,7 @@ export default {
         this.$store.commit('Login/setUsername', data.user.fullName)
         this.$store.commit('Login/setUserId', data.user._id)
         console.log(data.token)
+        saveUserIdToCookie(data.user._id)
         saveAuthToCookie(data.token)
         saveUserToCookie(data.user.fullName)
 
