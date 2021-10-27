@@ -224,6 +224,8 @@ export default {
         return
       }
 
+      event.preventDefault()
+
       let userInfo = null
 
       // 유저가 이미지를 바꾸지 않았다면 프로필 사진은 업데이트할 필요가 없음.
@@ -285,6 +287,8 @@ export default {
         userInfo?.data.coverImage || userPriorData.userCoverImage
       this.$storage.setItem('userData', userPriorData)
       this.setUserInfo()
+
+      location.reload(true)
     },
   },
   mounted() {
