@@ -6,7 +6,11 @@
           <div class="user-profile">
             <div class="img-wrapper">
               <img :src="url" alt="유저 프로필 사진" ref="image" />
-              <div class="upload-container" @click="chooseFile">
+              <div
+                class="upload-container"
+                @click="chooseFile"
+                aria-label="이미지 변경"
+              >
                 <i class="material-icons"> settings </i>
                 <input
                   type="File"
@@ -230,18 +234,10 @@ export default {
 
       // 유저가 이미지를 바꾸지 않았다면 프로필 사진은 업데이트할 필요가 없음.
       if (this.uploadedFile) {
-        // const URL = 'http://13.209.30.200:5000/users/upload-photo'
         const formData = new FormData()
         formData.append('isCover', true)
         formData.append('image', this.uploadedFile)
         userInfo = await updateCoverImage(formData)
-        // userInfo = await this.$fetch(URL, {
-        //   method: 'POST',
-        //   headers: {
-        //     Authorization: `bearer ${this.getToken}`,
-        //   },
-        //   body: formData,
-        // })
       }
 
       const userPriorData = this.$storage.getItem('userData')
@@ -251,36 +247,12 @@ export default {
           username: userPriorData.userIntroduction,
         }
         await updateNickname(data)
-        // const URL = 'http://13.209.30.200:5000/settings/update-user'
-        // await this.$fetch(URL, {
-        //   method: 'PUT',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //     Authorization: `bearer ${this.getToken}`,
-        //   },
-        //   body: JSON.stringify({
-        //     fullName: this.nickname,
-        //     username: userPriorData.userIntroduction,
-        //   }),
-        // })
       }
 
       const data = {
         password: this.password,
       }
       await updatePassword(data)
-
-      // const URL = 'http://13.209.30.200:5000/settings/update-password'
-      // await this.$fetch(URL, {
-      //   method: 'PUT',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `bearer ${this.getToken}`,
-      //   },
-      //   body: JSON.stringify({
-      //     password: this.password,
-      //   }),
-      // })
 
       userPriorData.userFullName = this.nickname
       userPriorData.userCoverImage =
@@ -338,13 +310,9 @@ function isOutOfRange(string, lower, upper) {
 <style lang="scss" scoped>
 @import '../styles/variables';
 
-// reponsive web
-// Under 439px, Submit button
-// Under 404px, Small 태그 문장 설정
-
 .container {
   position: relative;
-  top: 150px;
+  top: 140px;
 
   .row {
     @include flexbox;
@@ -352,94 +320,96 @@ function isOutOfRange(string, lower, upper) {
 
   .form {
     position: relative;
-    .user-profile {
+  }
+
+  .form-control {
+    position: relative;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+
+    input {
+      display: block;
+      border: 2px solid #f0f0f0;
+      border-radius: 5px;
+      font-size: 14px;
+      padding: 10px;
       width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 50px;
-      .img-wrapper {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        width: 200px;
-        height: 200px;
+      margin-bottom: 10px;
+    }
 
-        img {
-          width: 200px;
-          height: 200px;
-          border-radius: 50%;
-          border: 0.1px solid #cccccc;
-        }
+    label {
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    i {
+      position: absolute;
+      top: 41px;
+      right: 10px;
+      visibility: hidden;
+    }
+    small {
+      visibility: hidden;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
 
-        .upload-container {
-          position: absolute;
-          right: -10px;
-          bottom: -10px;
-          cursor: pointer;
-          i {
-            color: #666666;
-            font-size: 40px;
-          }
-        }
+    &.success {
+      input {
+        border-color: #2ecc71;
+      }
+      i.success {
+        color: #2ecc71;
+        visibility: visible;
       }
     }
 
-    .form-control {
-      position: relative;
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-
+    &.error {
       input {
-        display: block;
-        border: 2px solid #f0f0f0;
-        border-radius: 5px;
-        font-size: 14px;
-        padding: 10px;
-        width: 100%;
-        margin-bottom: 10px;
+        border-color: #e74c3c;
       }
-
-      label {
-        display: inline-block;
-        margin-bottom: 10px;
-      }
-      i {
-        position: absolute;
-        top: 35px;
-        right: 10px;
-        visibility: hidden;
+      i.error {
+        color: #e74c3c;
+        visibility: visible;
       }
       small {
-        visibility: hidden;
-        position: absolute;
-        bottom: 0;
-        left: 0;
+        color: #e74c3c;
+        visibility: visible;
       }
+    }
+  }
 
-      &.success {
-        input {
-          border-color: #2ecc71;
-        }
-        i.success {
-          color: #2ecc71;
-          visibility: visible;
-        }
-      }
+  .user-profile {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+  }
 
-      &.error {
-        input {
-          border-color: #e74c3c;
-        }
-        i.error {
-          color: #e74c3c;
-          visibility: visible;
-        }
-        small {
-          color: #e74c3c;
-          visibility: visible;
-        }
-      }
+  .img-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+
+    img {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 0.1px solid #cccccc;
+    }
+  }
+
+  .upload-container {
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    cursor: pointer;
+    i {
+      color: #666666;
+      font-size: 40px;
     }
   }
 
@@ -453,7 +423,7 @@ function isOutOfRange(string, lower, upper) {
     }
   }
 
-  /* @media (max-width: 439px) {
+  @media (max-width: 590px) {
     .button-container {
       display: block;
       position: relative;
@@ -461,8 +431,9 @@ function isOutOfRange(string, lower, upper) {
       button {
         width: 100%;
         margin-left: 0;
+        margin-bottom: 15px;
       }
     }
-  } */
+  }
 }
 </style>
