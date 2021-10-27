@@ -36,6 +36,10 @@ function channelsList() {
   return instance.get('/channels')
 }
 
+function channelPostList(channelId) {
+  return instance.get(`/posts/channel/${channelId}`)
+}
+
 function getAuth() {
   return instance.get('/auth-user')
 }
@@ -56,6 +60,7 @@ export {
   readPost,
   userDetailInfo,
   channelsList,
+  channelPostList,
   createChannel,
   getAuth,
 }

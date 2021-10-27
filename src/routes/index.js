@@ -7,6 +7,7 @@ import Login from './Login'
 import CreateNewPost from './CreateNewPost'
 import PersonalActivity from './PersonalActivity'
 import Example from '~/components/designs/Example'
+import ResultOfPostList from './ResultOfPostList'
 
 export default createRouter({
   history: createWebHistory(),
@@ -60,6 +61,11 @@ export default createRouter({
       name: 'PersonalActivity',
       path: '/personalactivity',
       component: PersonalActivity,
+    },
+    {
+      name: 'ResultOfPostList',
+      path: '/ResultOfPostList',
+      component: ResultOfPostList,
     },
   ],
 })
