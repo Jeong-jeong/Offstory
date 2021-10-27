@@ -82,5 +82,4 @@ export {
   updateNickname,
   updatePassword,
   createPost,
-  userDetailInfo,
 }
