@@ -338,6 +338,10 @@ function isOutOfRange(string, lower, upper) {
 <style lang="scss" scoped>
 @import '../styles/variables';
 
+// reponsive web
+// Under 439px, Submit button
+// Under 404px, Small 태그 문장 설정
+
 .container {
   position: relative;
   top: 150px;
@@ -346,110 +350,119 @@ function isOutOfRange(string, lower, upper) {
     @include flexbox;
   }
 
-  #user-info {
-    .col {
-      .form {
+  .form {
+    position: relative;
+    .user-profile {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 50px;
+      .img-wrapper {
         position: relative;
-        .user-profile {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-bottom: 50px;
-          .img-wrapper {
-            position: relative;
-            display: flex;
-            justify-content: center;
-            width: 200px;
-            height: 200px;
+        display: flex;
+        justify-content: center;
+        width: 200px;
+        height: 200px;
 
-            img {
-              width: 200px;
-              height: 200px;
-              border-radius: 50%;
-              border: 0.1px solid #cccccc;
-            }
-
-            .upload-container {
-              position: absolute;
-              right: -10px;
-              bottom: -10px;
-              cursor: pointer;
-              i {
-                color: #666666;
-                font-size: 40px;
-              }
-            }
-          }
+        img {
+          width: 200px;
+          height: 200px;
+          border-radius: 50%;
+          border: 0.1px solid #cccccc;
         }
-        .button-container {
+
+        .upload-container {
           position: absolute;
-          display: flex;
-          right: 0;
-
-          button {
-            margin-left: 20px;
-          }
-        }
-
-        .form-control {
-          position: relative;
-          margin-bottom: 30px;
-          padding-bottom: 20px;
-
-          input {
-            display: block;
-            border: 2px solid #f0f0f0;
-            border-radius: 5px;
-            font-size: 14px;
-            padding: 10px;
-            width: 100%;
-            margin-bottom: 10px;
-          }
-
-          label {
-            display: inline-block;
-            margin-bottom: 10px;
-          }
+          right: -10px;
+          bottom: -10px;
+          cursor: pointer;
           i {
-            position: absolute;
-            top: 35px;
-            right: 10px;
-            visibility: hidden;
-          }
-          small {
-            visibility: hidden;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-          }
-
-          &.success {
-            input {
-              border-color: #2ecc71;
-            }
-            i.success {
-              color: #2ecc71;
-              visibility: visible;
-            }
-          }
-
-          &.error {
-            input {
-              border-color: #e74c3c;
-            }
-            i.error {
-              color: #e74c3c;
-              visibility: visible;
-            }
-            small {
-              color: #e74c3c;
-              visibility: visible;
-            }
+            color: #666666;
+            font-size: 40px;
           }
         }
       }
     }
+
+    .form-control {
+      position: relative;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+
+      input {
+        display: block;
+        border: 2px solid #f0f0f0;
+        border-radius: 5px;
+        font-size: 14px;
+        padding: 10px;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      label {
+        display: inline-block;
+        margin-bottom: 10px;
+      }
+      i {
+        position: absolute;
+        top: 35px;
+        right: 10px;
+        visibility: hidden;
+      }
+      small {
+        visibility: hidden;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+
+      &.success {
+        input {
+          border-color: #2ecc71;
+        }
+        i.success {
+          color: #2ecc71;
+          visibility: visible;
+        }
+      }
+
+      &.error {
+        input {
+          border-color: #e74c3c;
+        }
+        i.error {
+          color: #e74c3c;
+          visibility: visible;
+        }
+        small {
+          color: #e74c3c;
+          visibility: visible;
+        }
+      }
+    }
   }
+
+  .button-container {
+    position: absolute;
+    display: flex;
+    right: 0;
+
+    button {
+      margin-left: 20px;
+    }
+  }
+
+  /* @media (max-width: 439px) {
+    .button-container {
+      display: block;
+      position: relative;
+
+      button {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+  } */
 }
 </style>
