@@ -13,13 +13,49 @@ export default {
       countyList: [],
       searchedCityInfo: {}, // 시
       searchedCountyInfo: {}, // 군
+      userCity: '',
+      userCounty: '',
+      detailAddress: '',
+      searchChannelId: '',
+      postListData: [],
     }
   },
-  getters: {},
+  getters: {
+    getUserCity(state) {
+      return state.userCity
+    },
+    getUserCounty(state) {
+      return state.userCounty
+    },
+    getSearchChannelId(state) {
+      return state.searchChannelId
+    },
+    getdetailAddress(state) {
+      return state.detailAddress
+    },
+    getPostListData(state) {
+      return state.postListData
+    },
+  },
   mutations: {
-    updateSearchedAddress(state, searchedAddress) {
-      state.searchedCityInfo = searchedAddress.userCity
-      state.searchedCountyInfo = searchedAddress.userCounty
+    // updateSearchedAddress(state, searchedAddress) {
+    //   state.searchedCityInfo = searchedAddress.userCity
+    //   state.searchedCountyInfo = searchedAddress.userCounty
+    // },
+    setUserCity(state, userCity) {
+      state.userCity = userCity
+    },
+    setUserCounty(state, userCounty) {
+      state.userCounty = userCounty
+    },
+    setSearchChannelId(state, searchChannelId) {
+      state.searchChannelId = searchChannelId
+    },
+    setdetailAddress(state, detailAddress) {
+      state.detailAddress = detailAddress
+    },
+    setPostListData(state, postListData) {
+      state.postListData = postListData
     },
   },
   actions: {
