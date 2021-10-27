@@ -2,6 +2,15 @@
   box-sizing: border-box;
 }
 
+textarea {
+  font-family: $FONT_MAIN;
+  font-size: inherit;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
 strong {
   font-weight: 700;
 }
@@ -14,7 +23,7 @@ button {
 }
 
 *:focus {
-  outline-color: $COLOR_RED;
+  outline-color: $KEY_COLOR;
 }
 
 dt,

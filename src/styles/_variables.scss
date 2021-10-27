@@ -1,4 +1,4 @@
-$LG_BREAKPOINT: 1400px;
+$LG_BREAKPOINT: 768px;
 
 // font
 $FONT_MAIN: 'Noto Sans KR', sans-serif; 
@@ -39,15 +39,21 @@ $INNER_PADDING_SMALL: 5px;
 // component
 $LG_HEADER_HEIGHT: 100px;
 $SM_HEADER_HEIGHT: 70PX;
-$HEADER_INDEX: 100;
+
 
 $DEEMED: rgba($COLOR_BLACK, .2);
 
 $TAG_WIDTH: 100px;
 $TAG_HEIGHT: 24px;
 
+
 $BUTTON_HEIGHT: 50px;
 $BUTTON_BOX_SHADOW: 1px 2px 3px 0 rgba(black, 0.25);
+
+// index
+$LOADING_INDEX: 1000;
+$HEADER_INDEX: 100;
+$TAG_AREA_INDEX: 10;
 
 
 

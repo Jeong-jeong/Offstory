@@ -5,9 +5,6 @@
         <div class="left">
           <button class="user__profile">
             <img :src="profileUrl" alt="유저 프로필" />
-            <!-- FIXME: webpack이 이미지 경로를 찾지 못함 
-			> depth를 3번이상 들어가면 인식을 못하는 듯.. 
-			오류만 안나게 임시로 절대경로로 바꿔놓음-->
           </button>
           <div class="user__infos">
             <strong class="nickname">{{ fullName }}</strong>
@@ -28,6 +25,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Card from '~/components/designs/Card.vue'
 import Button from '~/components/designs/Button.vue'
 
@@ -37,6 +35,10 @@ export default {
     Button,
   },
   props: {
+    postId: {
+      type: String,
+      default: '',
+    },
     fullName: {
       type: String,
       required: true,
@@ -59,6 +61,7 @@ export default {
     },
   },
   computed: {
+    ...mapGetters('Login', ['getUserId']),
     profileUrl() {
       return require('~/assets/images/user-profile__default.svg')
     },

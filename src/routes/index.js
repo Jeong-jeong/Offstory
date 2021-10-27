@@ -6,6 +6,7 @@ import PostContent from './PostContent'
 import Login from './Login'
 import CreateNewPost from './CreateNewPost'
 import PersonalActivity from './PersonalActivity'
+import Chat from './Chat'
 import Example from '~/components/designs/Example'
 import ResultOfPostList from './ResultOfPostList'
 
@@ -47,10 +48,10 @@ export default createRouter({
       },
     },
     {
-      name: 'Example',
       path: '/postContent',
       name: 'PostContent',
       component: PostContent,
+      props: true,
     },
     {
       path: '/example',
@@ -63,9 +64,16 @@ export default createRouter({
       component: PersonalActivity,
     },
     {
+
       name: 'ResultOfPostList',
       path: '/ResultOfPostList',
       component: ResultOfPostList,
+    },
+    {
+    
+      name: 'Chat',
+      path: '/chat',
+      component: Chat,
     },
   ],
 })

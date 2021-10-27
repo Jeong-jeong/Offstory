@@ -22,13 +22,14 @@
         </Button>
         <!-- TODO: postContent 컴포의 data를 전부 전달하는 방법이 있을까요? -->
         <Post
+          :postId="postId"
           :fullName="fullName"
           :updatedAt="updateAt"
           :location="location"
           :title="title"
           :content="content"
         />
-        <Comments :comments="comments" />
+        <Comments :postId="postId" :comments="comments" :author="author" />
       </div>
     </div>
   </div>
@@ -38,8 +39,7 @@
 import Post from '~/components/pages/postContent/Post'
 import Comments from '~/components/pages/postContent/Comments'
 import Button from '~/components/designs/Button.vue'
-import { mapState } from 'vuex'
-import { readPost } from '~/api/index'
+import { readPost } from '~/api/postContent'
 export default {
   components: {
     Post,
@@ -48,7 +48,9 @@ export default {
   },
   props: {
     postId: {
+      // $router.push({ name: 'PostContent', params: { postId } })
       type: String,
+      default: '',
       required: true,
     },
   },
@@ -57,22 +59,53 @@ export default {
       fullName: '이름없는 사용자' || '',
       title: '제목없음' || '',
       content: '내용없음' || '',
-      comments: {},
-      /* {
-  "_id": String,
-  "comment": String,
-  "author": User,
-  "post": String, // 포스트 id
-  "createdAt": String,
-  "updatedAt": String
-} */
+      comments: [
+        {
+          _id: '01232adfdjf',
+          comment:
+            '저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요',
+          author: {
+            _id: 'authorId',
+            posts: [],
+            comments: [],
+            fullName: '한라산만 31번째',
+          },
+          post: 'postId',
+          updatedAt: '오늘',
+        },
+        {
+          _id: '01232adfdjf',
+          comment:
+            '저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요',
+          author: {
+            _id: 'authorId',
+            posts: [],
+            comments: [],
+            fullName: '한라산만 31번째',
+          },
+          post: 'postId',
+          updatedAt: '오늘',
+        },
+        {
+          _id: '01232adfdjf',
+          comment:
+            '저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요',
+          author: {
+            _id: 'authorId',
+            posts: [],
+            comments: [],
+            fullName: '한라산만 31번째',
+          },
+          post: 'postId',
+          updatedAt: '오늘',
+        },
+      ],
       image: null, // TODO: 이미지를 어디 넣을지도 생각해봐야겠음
       location: '위치없음' || '',
       updatedAt: '날짜' || '',
     }
   },
   computed: {
-    ...mapState('Login', ['userId']),
     iconBack() {
       return require('~/assets/images/icon-back.svg')
     },
@@ -91,7 +124,7 @@ export default {
         this.title = title
         this.content = content
         this.comments = data.comments
-        this.image = data.image
+        this.image = data.image // 안보임
         this.location = data.location
         this.updatedAt = data.updateAt
       } catch (error) {
