@@ -7,13 +7,15 @@
             <img :src="profileUrl" alt="유저 프로필" />
           </button>
           <div class="user__infos">
-            <strong class="nickname">{{ fullName }}</strong>
-            <div class="uploadDate">{{ updatedAt }}</div>
-            <div class="location">{{ location }}</div>
+            <strong class="nickname">{{ postData.fullName }}</strong>
+            <div class="uploadDate">{{ postData.updatedAt }}</div>
+            <div class="location">{{ postData.location }}</div>
           </div>
         </div>
         <div class="right">
-          <Button v-bind="{ width: '60px', height: '70px' }"> 찜하기 </Button>
+          <Button v-if="!checkHost" v-bind="{ width: '60px', height: '70px' }">
+            찜하기
+          </Button>
         </div>
       </header>
       <div class="editor">
@@ -34,36 +36,32 @@ export default {
     Card,
     Button,
   },
-  props: {
-    postId: {
-      type: String,
-      default: '',
-    },
-    fullName: {
-      type: String,
-      required: true,
-    },
-    updateAt: {
-      type: String,
-      required: true,
-    },
-    location: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    content: {
-      type: String,
-      required: true,
-    },
+  props: ['initialPostId', 'initialPostData', 'initialAuthor'],
+  data() {
+    return {
+      postId: this.postId,
+      postData: this.initialPostData,
+      author: this.initialAuthor,
+      // profileImg: this.hasProperty(this.author, 'image') || '',
+    }
+  },
+  methods: {
+    checkHost() {
+      this.author._id === this.userId
+    }, // 글 작성자 _id, 로그인된 userId 같은지 비교
   },
   computed: {
     ...mapGetters('Login', ['getUserId']),
+    title() {
+      return this.postData && this.postData.title.split('/')[0]
+    },
+    content() {
+      return this.postData && this.postData.title.split('/')[1]
+    },
     profileUrl() {
-      return require('~/assets/images/user-profile__default.svg')
+      return (
+        this.profileImg || require('~/assets/images/user-profile__default.svg')
+      )
     },
   },
 }

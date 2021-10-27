@@ -79,8 +79,7 @@ export default {
   font-weight: 700;
   box-shadow: $BUTTON_BOX_SHADOW;
 
-  &:hover,
-  &:active {
+  &:hover {
     filter: brightness($OPACITY);
   }
 }
