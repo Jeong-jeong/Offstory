@@ -3,13 +3,20 @@ export default {
   namespaced: true,
   state() {
     return {
+      userId: '',
+      userCoverImage: null,
+      userIntroduction: '',
+      userFullName: '',
+      userEmail: '',
       username: getUserFromCookie() || '',
       token: getAuthFromCookie() || '',
-      userId: '',
       profileImage: undefined,
     }
   },
   getters: {
+    userId(state) {
+      return state.userId
+    },
     isLogin(state) {
       return state.username !== ''
     },
@@ -50,6 +57,5 @@ export default {
       state.token = token
     },
   },
-
   actions: {},
 }

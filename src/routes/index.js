@@ -8,6 +8,7 @@ import CreateNewPost from './CreateNewPost'
 import PersonalActivity from './PersonalActivity'
 import Chat from './Chat'
 import Example from '~/components/designs/Example'
+import PersonalInfo from './PersonalInfo'
 import ResultOfPostList from './ResultOfPostList'
 
 export default createRouter({
@@ -64,13 +65,16 @@ export default createRouter({
       component: PersonalActivity,
     },
     {
-
+      name: 'PersonalInfo',
+      path: '/personalinfo',
+      component: PersonalInfo,
+    },
+    {
       name: 'ResultOfPostList',
       path: '/ResultOfPostList',
       component: ResultOfPostList,
     },
     {
-    
       name: 'Chat',
       path: '/chat',
       component: Chat,

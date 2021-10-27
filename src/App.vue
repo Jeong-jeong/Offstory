@@ -32,7 +32,7 @@ export default {
         API_ENDPOINT_OF_DEVCOURSE + 'channels',
       )
 
-      console.log('채널 리스트', channelList)
+      // console.log('채널 리스트', channelList)
     },
   },
   async mounted() {

@@ -93,18 +93,32 @@ export default {
         saveUserIdToCookie(data.user._id)
         saveAuthToCookie(data.token)
         saveUserToCookie(data.user.fullName)
-
         const userDetaildata = await userDetailInfo(
           this.$store.getters['Login/getUserId'],
         )
         console.log(userDetaildata)
         console.log(userDetaildata.image)
         this.$store.commit('Login/setprofileImage', userDetaildata.image)
+
+        // 유저 데이터 storage에 저장
+        this.storageSetup(data.user)
       } catch (error) {
         //에러 핸들링 코드
         console.log(error.response.data)
         alert(error.response.data)
       }
+    },
+    storageSetup(userData) {
+      const dataToBeStored = {
+        userId: userData._id,
+        userCoverImage: userData.coverImage || null,
+        // userIntroduction은 추후 추가 예정
+        userIntroduction: userData.username,
+        userFullName: userData.fullName,
+        userEmail: userData.email,
+      }
+
+      this.$storage.setItem('userData', dataToBeStored)
     },
     isSignup() {
       this.$router.push('/signup')
