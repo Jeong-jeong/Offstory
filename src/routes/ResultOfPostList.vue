@@ -1,65 +1,118 @@
 <template>
-  <div class="result-container">
-    <div class="list-header">
-      <h1></h1>
-      <!-- <div v-if="$store.state.movie.isLoading" class="loader"></div>
+  <div class="container">
+    <div class="searchresult-page">
+      <div class="row">
+        <div class="col-lg-13">
+          <!-- <div v-if="$store.state.movie.isLoading" class="loader"></div>
       <div v-else> -->
-      <!-- <div v-if="!isLoading && !totalresult" class="movie-result">
+          <!-- <div v-if="!isLoading && !totalresult" class="movie-result">
         검색된 영화가 없습니다. 다시 입력해주세요.
       </div> -->
-      <div class="search-results-find">
-        검색결과: {{ getUserCity }}/{{ getUserCounty }}/{{ getdetailAddress }}
+          <h1 class="searchresult-find">
+            "{{ getUserCity }} {{ getUserCounty }} {{ getdetailAddress }}"
+            <span>검색결과</span>
+          </h1>
+          <template v-if="getPostListData.length === 0">
+            <div class="searchresult-find-noresult">
+              <div class="nontext">
+                검색결과가 없습니다. 동행을 직접 모집해보세요!
+              </div>
+              <Button
+                @click="$router.push('/newpost')"
+                v-bind="{ width: '20%' }"
+                class="party"
+                >동행 모집하러가기</Button
+              >
+            </div>
+          </template>
+          <template v-else>
+            <div class="resultlist">
+              <ul class="resultlist-listcards">
+                <li v-for="i in getPostListData" :key="i">
+                  <div
+                    class="resultlist-listcard"
+                    @click="
+                      $router.push({
+                        name: 'PostContent',
+                        params: { id: i.postId },
+                      })
+                    "
+                  >
+                    <div class="resultlist-listcard-header">
+                      <div class="resultlist-listcard-createtime">
+                        {{ i.createdAt.substring(0, 10) }}
+                      </div>
+                      <div class="resultlist-listcard-timefortoday">
+                        {{ timeForToday(i.createdAt) }}
+                      </div>
+                      <div class="resultlist-listcard-location">
+                        {{ i.location }}
+                      </div>
+                    </div>
+                    <div class="postimage">
+                      <template v-if="i.image === undefined">
+                        <img
+                          class="postimage-default"
+                          src="../assets/images/not-found.png"
+                          alt=""
+                        />
+                      </template>
+                      <template v-else>
+                        <img class="postimage-user" :src="`${i.image}`" />
+                      </template>
+                    </div>
+                    <div class="resultlist-listcard-active">
+                      <div class="resultlist-listcard-like">
+                        ♡ +{{ i.likes.length }}
+                      </div>
+                      <div class="resultlist-listcardt-comment">
+                        🗨+{{ i.comments.length }}
+                      </div>
+                    </div>
+                    <div class="resultlist-listcard-userinfo">
+                      <div class="resultlist-listcard-userprofile">
+                        <template v-if="i.author.coverImage === undefined">
+                          <img
+                            class="resultlist-listcard-userprofile-basicimage"
+                            :src="imageUrl"
+                            alt=""
+                          />
+                        </template>
+                        <template v-else>
+                          <img
+                            class="resultlist-listcard-userprofile-userimage"
+                            :src="`${i.author.coverImage}`"
+                            alt=""
+                          />
+                        </template>
+                        <div class="movie-result-author">
+                          {{ i.author.fullName }}
+                        </div>
+                        <div class="resultlist-listcard-title">
+                          {{ parseTitleContent(i.title) }}
+                        </div>
+                      </div>
+                    </div>
+                    <!-- <button
+                    class="movie-result-moreinfobutton"
+                    @click="
+                      $router.push({
+                        name: 'MoreInfo',
+                        params: {
+                          id: i.imdbID,
+                        },
+                      })
+                    "
+                  >
+                    상세보기
+                  </button> -->
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </template>
+        </div>
       </div>
-
-      <button class="movie-movehome" @click="$router.push({ name: 'Home' })">
-        메인화면으로
-      </button>
-    </div>
-    <div class="movie-result">
-      <ul class="movie-result-list">
-        <li v-for="i in getPostListData" :key="i">
-          <div class="movie-result-list-item">
-            <div class="image">
-              <template v-if="i.image === undefined">
-                <img
-                  class="movie-result-poster"
-                  src="../assets/images/not-found.png"
-                  alt=""
-                />
-              </template>
-              <template v-else>
-                <img class="movie-result-poster" :src="`${i.image}`" />
-              </template>
-            </div>
-            <div class="movie-result-title">{{ i.title }}</div>
-            <div class="movie-result-location">{{ i.location }}</div>
-            <div class="movie-result-like">❤+{{ i.likes.length }}</div>
-            <div class="movie-result-comment">
-              댓글📃+{{ i.comments.length }}
-            </div>
-            <div class="movie-result-author">
-              글쓴이:{{ i.author.fullName }}
-            </div>
-            <div class="movie-result-author">
-              {{ timeForToday(i.createdAt) }}
-            </div>
-
-            <button
-              class="movie-result-moreinfobutton"
-              @click="
-                $router.push({
-                  name: 'MoreInfo',
-                  params: {
-                    id: i.imdbID,
-                  },
-                })
-              "
-            >
-              상세보기
-            </button>
-          </div>
-        </li>
-      </ul>
     </div>
   </div>
 </template>
@@ -83,8 +136,10 @@ export default {
       channelId: '',
       postList: [],
       Title: '',
+      imageUrl: require('../assets/images/user-profile__default.svg'),
     }
   },
+  components: { Button },
   computed: {
     getUserCity() {
       return this.$store.getters['address/getUserCity']
@@ -128,18 +183,19 @@ export default {
     // console.log(this.postList)
   },
   methods: {
-    parseTitleContent() {
-      const data = this.$store.getters['address/getPostListData']
-      const titledata = data.map(x => x.title)
+    parseTitleContent(titledata) {
+      //   const data = titleContent
+      //   const titledata = data.map(x => x.title)
       const titleList = []
       console.log(titledata)
-      for (let i in titledata) {
-        let titlestr = titledata[i]
-        titleList.push(titlestr.split('/')[0])
-      }
-      console.log(titleList)
+      titleList.push(titledata.split('/')[0])
+      //   for (let i in titledata) {
+      //     let titlestr = titledata[i]
+      //     titleList = titlestr.split('/')[0]
+      //   }
+      console.log(titleList[0])
 
-      return titleList
+      return titleList[0]
     },
     timeForToday(value) {
       const today = new Date()
@@ -169,166 +225,169 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.result-container {
-  @include flexbox;
-  width: 100vw;
-  height: 100vh;
+.container {
+  position: relative;
+  top: $LG_HEADER_HEIGHT;
 
-  h1 {
-    padding-top: 20px;
-    margin: 0px;
-    color: black;
-    border-bottom: solid black;
-  }
-
-  .loader {
-  }
-
-  .movie-result {
-    font-size: 30px;
-  }
-
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-
-    100% {
-      transform: rotate(360deg);
+  .row {
+    justify-content: center;
+    .col-lg-13 {
+      width: 100%;
     }
   }
-
-  .movie-rusult-find {
-    font-size: 20px;
-    padding: 10px;
-
-    .nav-page {
-      .nav-page-prev {
-        font-size: 20px;
-        border: none;
-
-        &:hover {
-          color: red;
-        }
-      }
-
-      .nav-page-next {
-        margin-left: 20px;
-        font-size: 20px;
-        border: none;
-
-        &:hover {
-          color: red;
-        }
-      }
+  .searchresult-find {
+    margin-top: 20px;
+    padding-bottom: $INNER_PADDING_HORIZONTAL;
+    color: $KEY_COLOR;
+    border-bottom: solid $KEY_COLOR;
+    font-size: $FONT_L;
+    span {
+      color: black;
     }
   }
-
-  .movie-movehome {
-    margin-left: 10px;
-    font-size: 20px;
-    border: none;
-
-    &:hover {
-      color: royalblue;
-    }
-  }
-
-  .movie-result-list {
-    display: grid;
+  .searchresult-find-noresult {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 3px;
-    margin-top: 20px;
-    padding-inline: 100px;
-
-    li {
-      margin: 10px;
-      text-align: right;
-      list-style: none;
-
-      .movie-result-list-item {
-        text-align: center;
-      }
-
-      .movie-result-poster {
-        width: 200px;
-        height: 250px;
-      }
-      .movie-result-title {
-        margin-left: 30px;
-        width: 200px;
-        font-size: 20px;
-        min-width: 200px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-
-      .movie-result-moreinfobutton {
-        font-size: 30px;
-        border: none;
-
-        &:hover {
-          border-bottom: solid blue;
-          color: blue;
-        }
-      }
+    .nontext {
+      font-size: $FONT_XXL;
+      color: $COLOR_GRAY_DARKEN;
+    }
+    .party {
+      margin-top: 20px;
     }
   }
+  .resultlist {
+    width: 100%;
+    height: 100%;
 
-  @media all and (max-width: 1020px) {
-    .movie-result-list {
-      display: grid;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      grid-template-columns: repeat(2, 210px);
-      gap: 3px;
-      margin-top: 20px;
-      padding-inline: 100px;
+    .resultlist-listcards {
+      display: flex;
+      flex-flow: wrap;
+      height: 100%;
+      width: 100%;
 
-      li {
-        margin: 10px;
-        text-align: right;
-        list-style: none;
-
-        .movie-result-list-item {
-          text-align: center;
-        }
-
-        .movie-result-poster {
-          width: 200px;
-          min-width: 200px;
-          height: 250px;
-        }
-        .movie-result-title {
-          width: 200px;
-          font-size: 20px;
-          min-width: 200px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .movie-result-moreinfobutton {
-          font-size: 30px;
-          border: none;
-
-          background-color: black;
-          color: white;
-
-          &:hover {
-            border-bottom: solid blue;
-            color: blue;
+      .resultlist-listcard {
+        cursor: pointer;
+        margin: 30px 5px 5px 10px;
+        width: 355px;
+        height: 370px;
+        border: solid 1px $COLOR_GRAY_LIGHTEN;
+        border-radius: 30px;
+        padding: 20px;
+        box-shadow: $BOX_SHADOW;
+        .resultlist-listcard-header {
+          display: flex;
+          margin-bottom: 10px;
+          .resultlist-listcard-createtime {
+            font-size: $FONT_BASE;
+            color: $COLOR_GRAY_DARKEN;
+          }
+          .resultlist-listcard-timefortoday {
+            margin: 0px;
+            padding: 0px;
+            margin-top: 4px;
+            margin-left: 6px;
+            font-size: $FONT_XS;
+            color: $COLOR_GRAY_LIGHTEN;
+          }
+          .resultlist-listcard-location {
+            width: 130px;
+            margin: 0px;
+            padding: 0px;
+            margin-left: 50px;
+            font-size: $FONT_BASE;
+            color: $COLOR_GRAY_DARKEN;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
+        .postimage {
+          border-radius: 10px;
+          overflow: hidden;
+
+          .postimage-default {
+            border-radius: 30px;
+            width: 100%;
+            height: 200px;
+          }
+          .postimage-user {
+            border-radius: 10px;
+            width: 100%;
+            height: 200px;
+            filter: brightness(65%);
+            transform: scale(1);
+            -webkit-transform: scale(1);
+            -moz-transform: scale(1);
+            -ms-transform: scale(1);
+            -o-transform: scale(1);
+            transition: all 0.3s ease-in-out;
+
+            &:hover {
+              transform: scale(1.2);
+              -webkit-transform: scale(1.2);
+              -moz-transform: scale(1.2);
+              -ms-transform: scale(1.2);
+              -o-transform: scale(1.2);
+            }
+          }
+        }
+        .resultlist-listcard-active {
+          display: flex;
+          width: 120px;
+          .resultlist-listcard-like {
+            color: $COLOR_GRAY_LIGHTEN;
+          }
+          .resultlist-listcardt-comment {
+            margin-left: 10px;
+            color: $COLOR_GRAY_LIGHTEN;
+          }
+        }
+        .resultlist-listcard-userinfo {
+          position: relative;
+          top: -50px;
+          display: flex;
+          justify-self: center;
+          //   align-content: center;
+          flex-direction: column;
+          .resultlist-listcard-userprofile {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            .resultlist-listcard-userprofile-basicimage {
+              width: 40px;
+              height: 40px;
+              background: white;
+              border-radius: 30px;
+            }
+            .resultlist-listcard-userprofile-userimage {
+              width: 40px;
+              height: 40px;
+              border-radius: 40px;
+            }
+            .movie-result-author {
+            }
+            .resultlist-listcard-title {
+              width: 300px;
+              text-align: center;
+              margin-top: 10px;
+              font-size: $FONT_L;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+        }
+        &:hover {
+          //filter: brightness(120%);
+          opacity: 0.6;
+        }
       }
     }
-  }
-  @media all and (min-width: 1021px) {
   }
 }
 </style>

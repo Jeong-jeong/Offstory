@@ -10,6 +10,7 @@ import Chat from './Chat'
 import Example from '~/components/designs/Example'
 import PersonalInfo from './PersonalInfo'
 import ResultOfPostList from './ResultOfPostList'
+import NotFound from './NotFound'
 
 export default createRouter({
   history: createWebHistory(),
@@ -78,6 +79,11 @@ export default createRouter({
       name: 'Chat',
       path: '/chat',
       component: Chat,
+    },
+
+    {
+      path: '/:notFount(.*)',
+      component: NotFound,
     },
   ],
 })
