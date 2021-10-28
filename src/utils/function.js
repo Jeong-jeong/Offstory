@@ -1,4 +1,4 @@
-export const checkUnit = value => {
+const checkUnit = value => {
   return (
     (typeof value === 'number' && `${value}px`) ||
     ((value.includes('px') || value.includes('%') || value.includes('rem')) &&
@@ -7,7 +7,7 @@ export const checkUnit = value => {
   )
 }
 
-export const timeForToday = value => {
+const timeForToday = value => {
   const today = new Date()
   const timeValue = new Date(value)
 
@@ -32,6 +32,11 @@ export const timeForToday = value => {
   return `${Math.floor(betweenTimeDay / 365)}년 전`
 }
 
-export const putBr = value => {
+const putBr = value => {
   return value.replace(/(?:\r\n|\r|\n)/g, '<br />')
 }
+const makeRandomKey = () => {
+  return (new Date() * Math.random()).toString()
+}
+
+export { checkUnit, timeForToday, putBr, makeRandomKey }

@@ -53,7 +53,7 @@
 <script>
 import Button from '~/components/designs/Button'
 import { loginUser, userDetailInfo, updateNameField } from '../api/index'
-
+import { makeRandomKey } from '~/utils/function'
 import { validateEmail } from '../utils/validation'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import {
@@ -89,24 +89,29 @@ export default {
         this.$store.commit('Login/setToken', data.token)
         this.$store.commit('Login/setUsername', data.user.fullName)
         this.$store.commit('Login/setUserId', data.user._id)
-        console.log(data.token)
+        console.log('data.token', data.token)
         saveUserIdToCookie(data.user._id)
         saveAuthToCookie(data.token)
         saveUserToCookie(data.user.fullName)
-        const userDetaildata = await userDetailInfo(
+        let userDetaildata = await userDetailInfo(
           this.$store.getters['Login/getUserId'],
         )
-        console.log(userDetaildata)
+        console.log('userDetaildata', userDetaildata)
         console.log(userDetaildata.image)
         this.$store.commit('Login/setprofileImage', userDetaildata.image)
-
-        // 유저 데이터 storage에 저장
-        this.storageSetup(data.user)
 
         // username을 랜덤키로 초기화
         if (!data.user.username) {
           await this.initializeUsername(data)
         }
+
+        // 초기화된 username 가져옴
+        userDetaildata = await userDetailInfo(
+          this.$store.getters['Login/getUserId'],
+        )
+
+        // 유저 데이터 storage에 저장
+        this.storageSetup(userDetaildata.data)
       } catch (error) {
         //에러 핸들링 코드
         console.log(error.response.data)
@@ -114,9 +119,10 @@ export default {
       }
     },
     async initializeUsername(userData) {
+      console.log('실행여부4')
       const data = {
         fullName: userData.user.fullName,
-        username: this.makeRandomKey() + '/',
+        username: makeRandomKey() + '/',
       }
 
       await updateNameField(data)
@@ -129,16 +135,13 @@ export default {
         userIntroduction: userData.username,
         userFullName: userData.fullName,
         userEmail: userData.email,
+        userName: userData.username,
       }
 
       this.$storage.setItem('userData', dataToBeStored)
     },
     isSignup() {
       this.$router.push('/signup')
-    },
-    makeRandomKey() {
-      const res = new Date() * Math.random()
-      return res.toString()
     },
   },
 }

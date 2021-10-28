@@ -1,5 +1,3 @@
-import { API_ENDPOINT_DEVCOURSE, API_ENDPOINT_AREA } from '../utils/variables'
-
 export default {
   namespaced: true,
   state() {

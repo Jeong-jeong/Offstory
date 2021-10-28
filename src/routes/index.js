@@ -12,6 +12,7 @@ import PersonalInfo from './PersonalInfo'
 import ResultOfPostList from './ResultOfPostList'
 import Editor from '~/components/pages/postContent/Editor'
 import EditPage from '~/components/pages/postContent/EditPage'
+import NotFound from './NotFound'
 
 export default createRouter({
   history: createWebHistory(),
@@ -94,6 +95,11 @@ export default createRouter({
       name: 'Chat',
       path: '/chat',
       component: Chat,
+    },
+
+    {
+      path: '/:notFount(.*)',
+      component: NotFound,
     },
   ],
 })
