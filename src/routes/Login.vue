@@ -100,6 +100,9 @@ export default {
         console.log(userDetaildata.image)
         this.$store.commit('Login/setprofileImage', userDetaildata.image)
 
+        // 이전에 남아있었을지 모르는 기록을 제거
+        this.$storage.clear()
+
         // 유저 데이터 storage에 저장
         this.storageSetup(data.user)
 

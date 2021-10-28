@@ -50,7 +50,7 @@
           <input
             class="search-detail"
             v-model="detailAdress"
-            placeholder="상세주소 입력!"
+            placeholder="상세주소 입력"
             @keyup.enter="searchPost"
           />
           <button aria-label="검색 버튼">
@@ -73,26 +73,22 @@
         <button aria-label="알림 버튼">
           <i class="material-icons"> notifications </i>
         </button>
-        <template v-if="isEmptyProfileImage">
-          <button @click="toggleSidebar">
-            <img :src="getUserProfileImage" class="profile-image" />
-            <!-- <i class="material-icons" aria-label="사이드바 버튼">
-              account_circle
-            </i> -->
-          </button>
-        </template>
-        <!-- <template v-else>
-          <button @click="toggleSidebar" aria-label="사이드바 버튼">
-            <img src="getUserProfileImage" />
-          </button>
-        </template> -->
+        <button @click="toggleSidebar">
+          <img :src="getUserProfileImage" class="profile-image" />
+        </button>
       </template>
       <template v-else>
-        <router-link to="/login">
-          <Button width="100px" fontSize="25px" aria-label="로그인 버튼"
-            >Login</Button
-          >
-        </router-link>
+        <Button
+          width="100px"
+          fontSize="25px"
+          aria-label="로그인 버튼"
+          @click="$router.push('/login')"
+          :style="{
+            display: 'block',
+          }"
+        >
+          Login
+        </Button>
       </template>
     </div>
   </div>
@@ -153,7 +149,7 @@ export default {
     getUserProfileImage() {
       const res = this.$storage.getItem('userData')
       const image =
-        res.userCoverImage ||
+        res?.userCoverImage ||
         require('../assets/images/user-profile__default.svg')
       return image
     },
