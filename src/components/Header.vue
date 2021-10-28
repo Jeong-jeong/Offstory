@@ -3,6 +3,7 @@
     <div class="left">
       <img
         @click="$router.push('/')"
+        :style="{ cursor: 'pointer' }"
         src="../assets/images/symbol.svg"
         alt="OffStory 심볼"
       />

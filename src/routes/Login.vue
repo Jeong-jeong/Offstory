@@ -89,21 +89,21 @@ export default {
         this.$store.commit('Login/setToken', data.token)
         this.$store.commit('Login/setUsername', data.user.fullName)
         this.$store.commit('Login/setUserId', data.user._id)
-        console.log(data.token)
+        console.log('data.token', data.token)
         saveUserIdToCookie(data.user._id)
         saveAuthToCookie(data.token)
         saveUserToCookie(data.user.fullName)
         const userDetaildata = await userDetailInfo(
           this.$store.getters['Login/getUserId'],
         )
-        console.log(userDetaildata)
+        console.log('userDetaildata', userDetaildata)
         console.log(userDetaildata.image)
         this.$store.commit('Login/setprofileImage', userDetaildata.image)
 
-        // 이전에 남아있었을지 모르는 기록을 제거
-        this.$storage.clear()
+        // storage 초기화
+        this.$storage.removeItem('userData')
 
-        // 유저 데이터 storage에 저장
+        // storage 셋업
         this.storageSetup(data.user)
 
         // username을 랜덤키로 초기화
@@ -117,6 +117,7 @@ export default {
       }
     },
     async initializeUsername(userData) {
+      console.log('실행여부4')
       const data = {
         fullName: userData.user.fullName,
         username: this.makeRandomKey() + '/',
