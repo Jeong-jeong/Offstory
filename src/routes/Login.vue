@@ -89,14 +89,14 @@ export default {
         this.$store.commit('Login/setToken', data.token)
         this.$store.commit('Login/setUsername', data.user.fullName)
         this.$store.commit('Login/setUserId', data.user._id)
-        console.log(data.token)
+        console.log('data.token', data.token)
         saveUserIdToCookie(data.user._id)
         saveAuthToCookie(data.token)
         saveUserToCookie(data.user.fullName)
         let userDetaildata = await userDetailInfo(
           this.$store.getters['Login/getUserId'],
         )
-        console.log(userDetaildata)
+        console.log('userDetaildata', userDetaildata)
         console.log(userDetaildata.image)
         this.$store.commit('Login/setprofileImage', userDetaildata.image)
 
@@ -119,6 +119,7 @@ export default {
       }
     },
     async initializeUsername(userData) {
+      console.log('실행여부4')
       const data = {
         fullName: userData.user.fullName,
         username: makeRandomKey() + '/',
