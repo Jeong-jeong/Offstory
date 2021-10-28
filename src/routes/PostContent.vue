@@ -2,7 +2,9 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-10">
+        {{ postId }}
         <Button
+          @click="this.$router.push('/')"
           v-bind="{
             width: '100px',
             height: '40px',
@@ -20,16 +22,16 @@
           />
           <span class="button__text">목록으로</span>
         </Button>
-        <!-- TODO: postContent 컴포의 data를 전부 전달하는 방법이 있을까요? -->
         <Post
-          :postId="postId"
-          :fullName="fullName"
-          :updatedAt="updateAt"
-          :location="location"
-          :title="title"
-          :content="content"
+          :initialPostId="postId"
+          :initialPostData="postData"
+          :initialAuthor="author"
         />
-        <Comments :postId="postId" :comments="comments" :author="author" />
+        <Comments
+          :initialPostId="postId"
+          :initialComments="comments"
+          :initialAuthor="author"
+        />
       </div>
     </div>
   </div>
@@ -50,15 +52,14 @@ export default {
     postId: {
       // $router.push({ name: 'PostContent', params: { postId } })
       type: String,
-      default: '',
+      default: '6174ec4d46af0b5b4174cc1c',
       required: true,
     },
   },
   data() {
     return {
-      fullName: '이름없는 사용자' || '',
-      title: '제목없음' || '',
-      content: '내용없음' || '',
+      postData: {},
+      author: {},
       comments: [
         {
           _id: '01232adfdjf',
@@ -100,9 +101,6 @@ export default {
           updatedAt: '오늘',
         },
       ],
-      image: null, // TODO: 이미지를 어디 넣을지도 생각해봐야겠음
-      location: '위치없음' || '',
-      updatedAt: '날짜' || '',
     }
   },
   computed: {
@@ -111,22 +109,15 @@ export default {
     },
   },
   created() {
-    // this.initPostdata() // data 초기화
+    this.initPostdata() // data 초기화
   },
   methods: {
-    async initPostdata(postId) {
+    async initPostdata() {
       try {
-        const { data } = await readPost(postId)
-        const { author } = data
-
-        const [title, content] = data.title.split('/')
-        this.fullName = author.fullName
-        this.title = title
-        this.content = content
-        this.comments = data.comments
-        this.image = data.image // 안보임
-        this.location = data.location
-        this.updatedAt = data.updateAt
+        const { data: postData } = await readPost(this.postId)
+        this.postData = postData
+        this.author = postData.author
+        this.comments = postData.comments
       } catch (error) {
         console.log(error.response.data)
         alert(error.response.data)

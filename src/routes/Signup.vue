@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { registerUser } from '~/api/index'
+import { registerUser, updateNickname } from '~/api/index'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import Button from '~/components/designs/Button'
 
@@ -96,7 +96,7 @@ export default {
         }
         const { data } = await registerUser(userData)
         console.log(data)
-        this.initForm() // submit 후 input 초기화
+        await this.initForm() // submit 후 input 초기화
       } catch (error) {
         console.log(error.response.data)
         alert(error.response.data)

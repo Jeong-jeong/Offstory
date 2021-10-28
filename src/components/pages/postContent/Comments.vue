@@ -12,7 +12,7 @@
         >
           <span
             ref="hidden"
-            class="visually-hidden"
+            class="hidden"
             :commentorId="commentList.author._id"
           >
             <!-- 댓글 작성자 id는 DOM 요소에서 보이지 않도록 display: none 처리함 -->
@@ -34,10 +34,19 @@
             </div>
           </div>
           <div class="right">
-            <div v-if="checkCommentor" class="edit-area" @click="deleteComment">
-              <button aria-label="삭제">삭제</button>
+            <div v-if="commentList.author._id === userId" class="edit-area">
+              <button @click.stop="deleteComments($event)" aria-label="삭제">
+                삭제
+              </button>
             </div>
-            <TagArea />
+            <TagArea
+              @click="checkHost"
+              v-show="checkHost"
+              :postId="postId"
+              :userId="userId"
+              :commentorId="commentList.author._id"
+              :commentorName="commentList.author.fullName"
+            />
           </div>
         </li>
         <li class="item">
@@ -45,7 +54,7 @@
             <button class="user__profile">
               <img :src="profileUrl" alt="유저 프로필" />
             </button>
-            <template v-if="getUserId">
+            <template v-if="isLogin">
               <textarea
                 v-model="comment"
                 @keyup.enter.exact="submitComment"
@@ -58,27 +67,27 @@
                 v-if="isCommentLength"
                 @click="submitComment"
                 v-bind="{
-                  width: '60px',
+                  width: '80px',
                   height: '40px',
                   boxShadow: 'none',
                 }"
-                ><i class="material-icons">play_arrow</i></Button
+                ><i class="material-icons">arrow_forward</i></Button
               >
               <Button
                 v-else
                 v-bind="{
-                  width: '60px',
+                  width: '80px',
                   height: '40px',
                   backgroundColor: '#CCCCCC',
                   boxShadow: 'none',
                 }"
                 disabled
-                ><i class="material-icons">play_arrow</i></Button
+                ><i class="material-icons">arrow_forward</i></Button
               >
             </template>
             <div v-else class="logouted" @click="this.$router.push('/login')">
               <button class="button--logouted" type="text">
-                getUserId: {{ getuserId }} 로그인 해주세요
+                로그인 해주세요
               </button>
             </div>
           </div>
@@ -90,16 +99,20 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { createComment, deleteComment } from '~/api/postContent'
+import { getUserIdToCookie } from '~/utils/cookies'
+import { readPost, createComment, deleteComment } from '~/api/postContent'
 import TagArea from '~/components/pages/postContent/TagArea'
 import Card from '~/components/designs/Card.vue'
-import Tag from '~/components/designs/Tag.vue'
 import Button from '~/components/designs/Button.vue'
 
 export default {
   data() {
     return {
       comment: '',
+      postId: this.initialPostId,
+      comments: this.initialComments,
+      author: this.initialAuthor,
+      userId: '',
     }
   },
   components: {
@@ -107,67 +120,74 @@ export default {
     Button,
     TagArea,
   },
-  props: {
-    postId: {
-      type: String,
-      default: '',
-      required: true,
-    },
-    comments: {
-      type: Array,
-      required: true,
-    },
-    author: {
-      type: Object,
-      required: true,
-    },
-  },
+  props: ['initialPostId', 'initialComments', 'initialAuthor'],
   computed: {
-    ...mapGetters('Login', ['getUserId']), // FIXME: undefined 가져옴
+    ...mapGetters('Login', ['isLogin']),
     profileUrl() {
-      return require('~/assets/images/user-profile__default.svg')
+      return (
+        this.author.image ||
+        require('~/assets/images/user-profile__default.svg')
+      )
     },
     isCommentLength() {
       return this.comment.trim().length
     },
   },
+  watch: {
+    comments: {
+      handler(newValue, oldValue) {
+        console.log(newValue, 'watch')
+        // readPost(this.postId)
+      },
+      deep: true,
+    },
+  },
   methods: {
-    submitComment() {
+    async submitComment() {
       const commentValue = this.$refs.comment.value
       if (!commentValue.trim().length) return
       const userData = {
         comment: commentValue,
         postId: this.postId,
       }
-
-      const res = createComment(userData)
+      this.$refs.comment.value = ''
+      const res = await createComment(userData)
       console.log(res, 'createComment')
       // TODO: \n을 바꿔줘야 함
+      readPost(this.postId)
     },
-    deleteComment() {
-      const commentId = this.$refs.item.getAttribute('commentId')
-      console.log(commentId)
-      const res = deleteComment(commentId)
+    async deleteComments(event) {
+      const li = event.target.closest('li')
+      const commentId = li.getAttribute('commentId')
+      const userData = {
+        id: commentId, // FIXME: 댓글작성자 ID, 댓글 ID, postID 다 안됨
+      }
+      const res = await deleteComment(userData) // FIXME: 작동안함
+      console.log(res, 'deleteComment')
+      // TODO: 삭제하고 readPost 다시 불러와야 하는지 확인하기
     },
     checkHost() {
-      this.author._id === this.getUserId
-    }, // 글 작성자 _id, getUserId가 같은지 비교
+      return this.author._id === this.userId
+    }, // 글 작성자 _id, 로그인된 userId 같은지 비교
 
-    checkCommentor() {
-      const commentorId = this.$refs.hidden.getAttribute('commentorId')
-      commentorId === this.getUserId
-      console.log(
-        commentorId,
-        this.getUserId,
-        '댓글 작성자와 로그인 유저가 같지 않음',
-      )
-    }, // 댓글 작성자 _id, getUserId가 같은지 비교
+    checkCommentor(event) {
+      const hidden = event.target.closest('.hidden')
+      const commentorId = hidden.getAttribute('commentorId')
+      // 댓글 작성자 _id, 로그인된 userId가 같은지 비교
+      commentorId === this.userId
+    },
+    getUserId() {
+      this.userId = getUserIdToCookie()
+    },
+  },
+  created() {
+    this.getUserId()
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.visually-hidden {
+.hidden {
   display: none;
 }
 .comments {
