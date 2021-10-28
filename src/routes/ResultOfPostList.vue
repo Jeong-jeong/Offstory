@@ -50,7 +50,7 @@
                 $router.push({
                   name: 'MoreInfo',
                   params: {
-                    id: i.imdbID,
+                    postId: i.imdbID,
                   },
                 })
               "
