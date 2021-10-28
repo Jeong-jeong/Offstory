@@ -75,13 +75,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import {
-  updateCoverImage,
-  updateNickname,
-  updatePassword,
-  userDetailInfo,
-} from '../api/index'
+import { updateCoverImage, updateNickname, updatePassword } from '../api/index'
 import Button from '../components/designs/Button'
+import { makeRandomKey } from '~/utils/function'
 
 export default {
   components: { Button },
@@ -100,10 +96,6 @@ export default {
     ...mapGetters('Login', ['getToken']),
   },
   methods: {
-    async test2() {
-      const res = await userDetailInfo(this.$storage.getItem('userData').userId)
-      console.log('res', res)
-    },
     // 화면으로 접속시에 적색 박스와 녹색 박스 화면에 표시
     initialValidCheck() {
       setSuccessFor(this.$refs.nickname)
@@ -239,41 +231,33 @@ export default {
 
       event.preventDefault()
 
-      let userInfo = null
+      // 프로필 사진 업데이트 로직
+      const userInfo =
+        this.uploadedFile && (await changeCoverImage(this.uploadedFile))
 
-      // 유저가 이미지를 바꾸지 않았다면 프로필 사진은 업데이트할 필요가 없음.
-      if (this.uploadedFile) {
-        const formData = new FormData()
-        formData.append('isCover', true)
-        formData.append('image', this.uploadedFile)
-        userInfo = await updateCoverImage(formData)
-      }
-
+      // fullName 및 usernmae 업데이트 로직
       const userPriorData = this.$storage.getItem('userData')
-      if (!isEqual(this.nickname, userPriorData.userFullName)) {
-        const data = {
-          fullName: this.nickname,
-          username: 'a',
-        }
-        await updateNickname(data)
-      }
+      const username =
+        !isEqual(this.nickname, userPriorData.userFullName) &&
+        (await changeNickname(this.nickname, userPriorData))
 
-      const data = {
-        password: this.password,
-      }
-      await updatePassword(data)
+      // 패스워드 변경 로직
+      await changePassword(this.password)
 
-      userPriorData.userFullName = this.nickname
-      userPriorData.userCoverImage =
-        userInfo?.data.coverImage || userPriorData.userCoverImage
-      this.$storage.setItem('userData', userPriorData)
-      this.setUserInfo()
+      // Storage 업데이트
+      const updatedUserData = updateUserData(
+        userPriorData,
+        userInfo,
+        this.nickname,
+        username,
+      )
+      this.$storage.setItem('userData', updatedUserData)
 
+      // this.setUserInfo()
       location.reload(true)
     },
   },
   mounted() {
-    this.test()
     this.setUserInfo()
     this.initialValidCheck()
   },
@@ -314,6 +298,51 @@ function isSpaceExist(string) {
 
 function isOutOfRange(string, lower, upper) {
   return string.length < lower || string.length > upper
+}
+
+function updateUserData(userPriorData, userInfo, nickname, username) {
+  const updatedUserData = { ...userPriorData }
+
+  updatedUserData.userFullName = nickname
+  updatedUserData.userCoverImage =
+    userInfo?.data.coverImage || updatedUserData.userCoverImage
+  updatedUserData.userName = username
+  return updatedUserData
+}
+
+async function changeCoverImage(uploadedFile) {
+  let userInfo = null
+
+  if (uploadedFile) {
+    const formData = new FormData()
+    formData.append('isCover', true)
+    formData.append('image', uploadedFile)
+    userInfo = await updateCoverImage(formData)
+  }
+
+  return userInfo
+}
+
+async function changePassword(password) {
+  const data = {
+    password,
+  }
+
+  await updatePassword(data)
+}
+
+async function changeNickname(nickname, userPriorData) {
+  const newKey = makeRandomKey()
+  const [_, joinState] = userPriorData.userName.split('/')
+
+  const data = {
+    fullName: nickname,
+    username: newKey + joinState || '',
+  }
+
+  await updateNickname(data)
+
+  return data.username
 }
 </script>
 
