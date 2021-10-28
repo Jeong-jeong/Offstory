@@ -412,7 +412,6 @@ async function changeNickname(nickname, userPriorData) {
       }
       small {
         color: #e74c3c;
-        color: rgb(206, 206, 206) 3;
         visibility: visible;
       }
     }
