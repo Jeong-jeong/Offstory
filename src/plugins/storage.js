@@ -18,13 +18,19 @@ const getItem = (key, defaultValue) => {
   }
 }
 
-export { setItem, getItem }
+const removeItem = key => {
+  console.log('실행여부')
+  storage.removeItem(key)
+}
+
+export { setItem, getItem, removeItem }
 
 export default {
   install(app, options = {}) {
     app.config.globalProperties[options.pluginName || '$storage'] = {
       setItem,
       getItem,
+      removeItem,
     }
   },
 }
