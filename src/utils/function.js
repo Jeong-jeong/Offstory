@@ -31,3 +31,7 @@ export const timeForToday = value => {
 
   return `${Math.floor(betweenTimeDay / 365)}년 전`
 }
+
+export const putBr = value => {
+  return value.replace(/(?:\r\n|\r|\n)/g, '<br />')
+}
