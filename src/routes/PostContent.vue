@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-lg-10">
         <Button
-          @click="this.$router.push('/')"
+          @click="this.$router.go(-1)"
           v-bind="{
             width: '100px',
             height: '40px',
@@ -25,6 +25,7 @@
           :initialPostId="postId"
           :initialPostData="postData"
           :initialAuthor="author"
+          :initialChannel="channel"
         />
         <Comments
           @rerender="rePatch"
@@ -51,7 +52,7 @@ export default {
   props: {
     postId: {
       type: String,
-      default: '6179837917a018760c7ba023',
+      default: '61762241df27527f64489e53',
       required: true,
     },
   },
@@ -60,6 +61,7 @@ export default {
       postData: {},
       author: {},
       comments: [],
+      channel: {},
     }
   },
   computed: {
@@ -74,6 +76,7 @@ export default {
         this.postData = postData
         this.author = postData.author
         this.comments = postData.comments
+        this.channel = postData.channel
       } catch (error) {
         console.log(error.response.data)
         alert(error.response.data)
