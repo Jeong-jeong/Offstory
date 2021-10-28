@@ -112,8 +112,7 @@ export default {
     setUserInfo() {
       const res = this.$storage.getItem('userData')
       this.url =
-        res.userCoverImage ||
-        require('../assets/images/user-profile__default.svg')
+        res.userCoverImage || require('../assets/images/user-profile.svg')
       this.nickname = res.userFullName
     },
     // 파일 선택 아이콘을 클릭하는 경우, input태그를 클릭함.
@@ -413,6 +412,7 @@ async function changeNickname(nickname, userPriorData) {
       }
       small {
         color: #e74c3c;
+        color: rgb(206, 206, 206) 3;
         visibility: visible;
       }
     }
