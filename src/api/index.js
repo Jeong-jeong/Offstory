@@ -42,10 +42,6 @@ function getAuth() {
   return instance.get('/auth-user')
 }
 
-function readPost(postId) {
-  const readPostUrl = `posts/${postId}`
-  return instance.post(readPostUrl)
-}
 function createPost(userData) {
   return instance.post('/posts/create', userData)
 }
@@ -54,6 +50,11 @@ function createPost(userData) {
 function userDetailInfo(userId) {
   console.log('userid:', `users/${userId}`)
   return instance.get(`/users/${userId}`)
+}
+
+function updateUserDetailInfo(userData) {
+  // console.log('userid:', `users/${userId}`)
+  return instance.put('/users/settings/update-user', userData)
 }
 
 function updateCoverImage(userData) {
@@ -72,8 +73,8 @@ export {
   createInstance,
   registerUser,
   loginUser,
-  readPost,
   userDetailInfo,
+  updateUserDetailInfo,
   channelsList,
   channelPostList,
   createChannel,

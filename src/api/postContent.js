@@ -4,7 +4,7 @@ const instance = createInstance()
 
 function readPost(postId) {
   const readPostUrl = `posts/${postId}`
-  return instance.post(readPostUrl)
+  return instance.get(readPostUrl)
 }
 
 function createComment(userData) {
@@ -12,9 +12,9 @@ function createComment(userData) {
   return instance.post(createCommentUrl, userData)
 }
 
-function deleteComment(commentId) {
+function deleteComment(userData) {
   const deleteCommentUrl = 'comments/delete'
-  return instance.post(deleteCommentUrl, commentId)
+  return instance.delete(deleteCommentUrl, userData)
 }
 
 export { readPost, createComment, deleteComment }
