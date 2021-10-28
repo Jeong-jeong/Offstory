@@ -2,9 +2,8 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-10">
-        {{ postId }}
         <Button
-          @click="this.$router.push('/')"
+          @click="this.$router.go(-1)"
           v-bind="{
             width: '100px',
             height: '40px',
@@ -26,8 +25,10 @@
           :initialPostId="postId"
           :initialPostData="postData"
           :initialAuthor="author"
+          :initialChannel="channel"
         />
         <Comments
+          @rerender="rePatch"
           :initialPostId="postId"
           :initialComments="comments"
           :initialAuthor="author"
@@ -50,9 +51,8 @@ export default {
   },
   props: {
     postId: {
-      // $router.push({ name: 'PostContent', params: { postId } })
       type: String,
-      default: '6174ec4d46af0b5b4174cc1c',
+      default: '61762241df27527f64489e53',
       required: true,
     },
   },
@@ -60,56 +60,14 @@ export default {
     return {
       postData: {},
       author: {},
-      comments: [
-        {
-          _id: '01232adfdjf',
-          comment:
-            '저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요',
-          author: {
-            _id: 'authorId',
-            posts: [],
-            comments: [],
-            fullName: '한라산만 31번째',
-          },
-          post: 'postId',
-          updatedAt: '오늘',
-        },
-        {
-          _id: '01232adfdjf',
-          comment:
-            '저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요',
-          author: {
-            _id: 'authorId',
-            posts: [],
-            comments: [],
-            fullName: '한라산만 31번째',
-          },
-          post: 'postId',
-          updatedAt: '오늘',
-        },
-        {
-          _id: '01232adfdjf',
-          comment:
-            '저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요',
-          author: {
-            _id: 'authorId',
-            posts: [],
-            comments: [],
-            fullName: '한라산만 31번째',
-          },
-          post: 'postId',
-          updatedAt: '오늘',
-        },
-      ],
+      comments: [],
+      channel: {},
     }
   },
   computed: {
     iconBack() {
       return require('~/assets/images/icon-back.svg')
     },
-  },
-  created() {
-    this.initPostdata() // data 초기화
   },
   methods: {
     async initPostdata() {
@@ -118,11 +76,19 @@ export default {
         this.postData = postData
         this.author = postData.author
         this.comments = postData.comments
+        this.channel = postData.channel
       } catch (error) {
         console.log(error.response.data)
         alert(error.response.data)
       }
     },
+    async rePatch() {
+      this.initPostdata()
+      console.log('댓글 업데이트됨. rerender')
+    },
+  },
+  created() {
+    this.initPostdata() // data 초기화
   },
 }
 </script>

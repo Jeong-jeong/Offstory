@@ -1,7 +1,6 @@
 <template>
   <div class="tags-area">
-    <Tag @click="onToggle" class="standByTag" />
-    <!-- <template v-if="this.commentorId === this.userId"> -->
+    <Tag @click="onToggle" class="standByTag" v-bind="{ state: tagState }" />
     <template v-if="checkHost()">
       <Card
         v-show="isToggle"
@@ -42,7 +41,7 @@
 </template>
 
 <script>
-import { userDetailInfo, updateUserDetailInfo } from '~/api'
+import { userDetailInfo, updateNameField } from '~/api'
 import Card from '~/components/designs/Card.vue'
 import Tag from '~/components/designs/Tag.vue'
 import Button from '~/components/designs/Button.vue'
@@ -78,6 +77,7 @@ export default {
   data() {
     return {
       isToggle: false,
+      tagState: '',
     }
   },
   methods: {
@@ -87,21 +87,60 @@ export default {
     checkHost() {
       return this.commentorId === this.userId
     }, // 글 작성자 _id, 로그인된 userId 같은지 비교
+    changeTag(state) {
+      this.tagState = state
+      this.isToggle = !this.isToggle
+    },
+    // async getCommentorState() {
+    //   const res = await userDetailInfo(this.commentorId)
+    //   console.log(res)
+    // },
+    checkHasSamePostId(array) {
+      return array.findIndex(v => v.postid === this.postId)
+    },
     async saveApprovalData(event) {
       const state = event.target.className.replace('button ', '') // approve, reject
       const stateData = {
         postId: this.postId,
         state,
       }
-      // const mixedData = JSON.stringify({
-      //   fullName: this.commentorName,
-      //   username: ,
-      // })
+      const res = await userDetailInfo(this.commentorId) // 댓작성자의 정보 불러옴
+      const [dummyData, username] = res.data.username.split('/')
+      let updateUserName = ''
 
-      const res = await userDetailInfo(this.commentorId)
-      const username = res.data.username.split('/')[1] // []
+      if (username) {
+        console.log('username이 있음')
+        const array = JSON.parse(username) // 배열로 변환
+        console.log(array, 'array')
+        const index = this.checkHasSamePostId(array) // 같은 포스트ID인지 찾음
+        if (index === -1) {
+          // 같은게 없다면 추가
+          updateUserName = [...array, stateData]
+          console.log(updateUserName, 'different postId')
+        } else {
+          // 같은게 있다면 state만 변경
+          array[index].state = state
+          const changeValue = array[index]
+          const changeArray = array.slice(index, index + 1, changeValue)
+          console.log(changeArray, 'same postId')
+          updateUserName = changeArray
+        }
+      } else {
+        updateUserName = [stateData]
+        console.log(updateUserName, 'username이 비었음')
+      }
 
-      // const userInfo = await updateUserDetailInfo()
+      const updateData = dummyData + '/' + JSON.stringify(updateUserName)
+
+      const updateUserInfo = {
+        // 유저 정보 update에 필요한 request body
+        fullName: this.commentorName,
+        username: updateData,
+      }
+      const userInfo = await updateNameField(updateUserInfo) // username 업데이트
+      console.log(userInfo.data.username, '업데이트완료')
+
+      this.changeTag(state)
     },
   },
 }

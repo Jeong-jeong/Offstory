@@ -43,7 +43,7 @@
                     @click="
                       $router.push({
                         name: 'PostContent',
-                        params: { id: i.postId },
+                        params: { postId: i._id },
                       })
                     "
                   >

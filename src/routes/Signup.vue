@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { registerUser, updateNickname } from '~/api/index'
+import { registerUser, updateNameField } from '~/api/index'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import Button from '~/components/designs/Button'
 

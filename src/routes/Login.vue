@@ -52,7 +52,7 @@
 
 <script>
 import Button from '~/components/designs/Button'
-import { loginUser, userDetailInfo, updateNickname } from '../api/index'
+import { loginUser, userDetailInfo, updateNameField } from '../api/index'
 import { makeRandomKey } from '~/utils/function'
 import { validateEmail } from '../utils/validation'
 import { Field, Form, ErrorMessage } from 'vee-validate'
@@ -125,7 +125,7 @@ export default {
         username: makeRandomKey() + '/',
       }
 
-      await updateNickname(data)
+      await updateNameField(data)
     },
     storageSetup(userData) {
       const dataToBeStored = {
