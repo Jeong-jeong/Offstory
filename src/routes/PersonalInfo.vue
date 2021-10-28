@@ -6,7 +6,11 @@
           <div class="user-profile">
             <div class="img-wrapper">
               <img :src="url" alt="유저 프로필 사진" ref="image" />
-              <div class="upload-container" @click="chooseFile">
+              <div
+                class="upload-container"
+                @click="chooseFile"
+                aria-label="이미지 변경"
+              >
                 <i class="material-icons"> settings </i>
                 <input
                   type="File"
@@ -71,13 +75,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import {
-  updateCoverImage,
-  updateNickname,
-  updatePassword,
-  userDetailInfo,
-} from '../api/index'
+import { updateCoverImage, updateNickname, updatePassword } from '../api/index'
 import Button from '../components/designs/Button'
+import { makeRandomKey } from '~/utils/function'
 
 export default {
   components: { Button },
@@ -96,10 +96,6 @@ export default {
     ...mapGetters('Login', ['getToken']),
   },
   methods: {
-    async test2() {
-      const res = await userDetailInfo(this.$storage.getItem('userData').userId)
-      console.log('res', res)
-    },
     // 화면으로 접속시에 적색 박스와 녹색 박스 화면에 표시
     initialValidCheck() {
       setSuccessFor(this.$refs.nickname)
@@ -116,8 +112,7 @@ export default {
     setUserInfo() {
       const res = this.$storage.getItem('userData')
       this.url =
-        res.userCoverImage ||
-        require('../assets/images/user-profile__default.svg')
+        res.userCoverImage || require('../assets/images/user-profile.svg')
       this.nickname = res.userFullName
     },
     // 파일 선택 아이콘을 클릭하는 경우, input태그를 클릭함.
@@ -235,73 +230,33 @@ export default {
 
       event.preventDefault()
 
-      let userInfo = null
+      // 프로필 사진 업데이트 로직
+      const userInfo =
+        this.uploadedFile && (await changeCoverImage(this.uploadedFile))
 
-      // 유저가 이미지를 바꾸지 않았다면 프로필 사진은 업데이트할 필요가 없음.
-      if (this.uploadedFile) {
-        // const URL = 'http://13.209.30.200:5000/users/upload-photo'
-        const formData = new FormData()
-        formData.append('isCover', true)
-        formData.append('image', this.uploadedFile)
-        userInfo = await updateCoverImage(formData)
-        // userInfo = await this.$fetch(URL, {
-        //   method: 'POST',
-        //   headers: {
-        //     Authorization: `bearer ${this.getToken}`,
-        //   },
-        //   body: formData,
-        // })
-      }
-
+      // fullName 및 usernmae 업데이트 로직
       const userPriorData = this.$storage.getItem('userData')
-      if (!isEqual(this.nickname, userPriorData.userFullName)) {
-        const data = {
-          fullName: this.nickname,
-          username: 'a',
-        }
-        await updateNickname(data)
-        // const URL = 'http://13.209.30.200:5000/settings/update-user'
-        // await this.$fetch(URL, {
-        //   method: 'PUT',
-        //   headers: {
-        //     'Content-Type': 'application/json',
-        //     Authorization: `bearer ${this.getToken}`,
-        //   },
-        //   body: JSON.stringify({
-        //     fullName: this.nickname,
-        //     username: userPriorData.userIntroduction,
-        //   }),
-        // })
-      }
+      const username =
+        !isEqual(this.nickname, userPriorData.userFullName) &&
+        (await changeNickname(this.nickname, userPriorData))
 
-      const data = {
-        password: this.password,
-      }
-      await updatePassword(data)
+      // 패스워드 변경 로직
+      await changePassword(this.password)
 
-      // const URL = 'http://13.209.30.200:5000/settings/update-password'
-      // await this.$fetch(URL, {
-      //   method: 'PUT',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //     Authorization: `bearer ${this.getToken}`,
-      //   },
-      //   body: JSON.stringify({
-      //     password: this.password,
-      //   }),
-      // })
+      // Storage 업데이트
+      const updatedUserData = updateUserData(
+        userPriorData,
+        userInfo,
+        this.nickname,
+        username,
+      )
+      this.$storage.setItem('userData', updatedUserData)
 
-      userPriorData.userFullName = this.nickname
-      userPriorData.userCoverImage =
-        userInfo?.data.coverImage || userPriorData.userCoverImage
-      this.$storage.setItem('userData', userPriorData)
-      this.setUserInfo()
-
+      // this.setUserInfo()
       location.reload(true)
     },
   },
   mounted() {
-    this.test()
     this.setUserInfo()
     this.initialValidCheck()
   },
@@ -343,18 +298,59 @@ function isSpaceExist(string) {
 function isOutOfRange(string, lower, upper) {
   return string.length < lower || string.length > upper
 }
+
+function updateUserData(userPriorData, userInfo, nickname, username) {
+  const updatedUserData = { ...userPriorData }
+
+  updatedUserData.userFullName = nickname
+  updatedUserData.userCoverImage =
+    userInfo?.data.coverImage || updatedUserData.userCoverImage
+  updatedUserData.userName = username
+  return updatedUserData
+}
+
+async function changeCoverImage(uploadedFile) {
+  let userInfo = null
+
+  if (uploadedFile) {
+    const formData = new FormData()
+    formData.append('isCover', true)
+    formData.append('image', uploadedFile)
+    userInfo = await updateCoverImage(formData)
+  }
+
+  return userInfo
+}
+
+async function changePassword(password) {
+  const data = {
+    password,
+  }
+
+  await updatePassword(data)
+}
+
+async function changeNickname(nickname, userPriorData) {
+  const newKey = makeRandomKey()
+  const [_, joinState] = userPriorData.userName.split('/')
+
+  const data = {
+    fullName: nickname,
+    username: newKey + joinState || '',
+  }
+
+  await updateNickname(data)
+
+  return data.username
+}
 </script>
 
 <style lang="scss" scoped>
 @import '../styles/variables';
 
-// reponsive web
-// Under 439px, Submit button
-// Under 404px, Small 태그 문장 설정
-
 .container {
   position: relative;
-  top: 150px;
+  top: 140px;
 
   .row {
     @include flexbox;
@@ -362,94 +358,97 @@ function isOutOfRange(string, lower, upper) {
 
   .form {
     position: relative;
-    .user-profile {
+  }
+
+  .form-control {
+    position: relative;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+
+    input {
+      display: block;
+      border: 2px solid #f0f0f0;
+      border-radius: 5px;
+      font-size: 14px;
+      padding: 10px;
       width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 50px;
-      .img-wrapper {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        width: 200px;
-        height: 200px;
+      margin-bottom: 10px;
+    }
 
-        img {
-          width: 200px;
-          height: 200px;
-          border-radius: 50%;
-          border: 0.1px solid #cccccc;
-        }
+    label {
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+    i {
+      position: absolute;
+      top: 41px;
+      right: 10px;
+      visibility: hidden;
+    }
+    small {
+      visibility: hidden;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
 
-        .upload-container {
-          position: absolute;
-          right: -10px;
-          bottom: -10px;
-          cursor: pointer;
-          i {
-            color: #666666;
-            font-size: 40px;
-          }
-        }
+    &.success {
+      input {
+        border-color: #2ecc71;
+      }
+      i.success {
+        color: #2ecc71;
+        visibility: visible;
       }
     }
 
-    .form-control {
-      position: relative;
-      margin-bottom: 30px;
-      padding-bottom: 20px;
-
+    &.error {
       input {
-        display: block;
-        border: 2px solid #f0f0f0;
-        border-radius: 5px;
-        font-size: 14px;
-        padding: 10px;
-        width: 100%;
-        margin-bottom: 10px;
+        border-color: #e74c3c;
       }
-
-      label {
-        display: inline-block;
-        margin-bottom: 10px;
-      }
-      i {
-        position: absolute;
-        top: 35px;
-        right: 10px;
-        visibility: hidden;
+      i.error {
+        color: #e74c3c;
+        visibility: visible;
       }
       small {
-        visibility: hidden;
-        position: absolute;
-        bottom: 0;
-        left: 0;
+        color: #e74c3c;
+        color: rgb(206, 206, 206) 3;
+        visibility: visible;
       }
+    }
+  }
 
-      &.success {
-        input {
-          border-color: #2ecc71;
-        }
-        i.success {
-          color: #2ecc71;
-          visibility: visible;
-        }
-      }
+  .user-profile {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+  }
 
-      &.error {
-        input {
-          border-color: #e74c3c;
-        }
-        i.error {
-          color: #e74c3c;
-          visibility: visible;
-        }
-        small {
-          color: #e74c3c;
-          visibility: visible;
-        }
-      }
+  .img-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 200px;
+    height: 200px;
+
+    img {
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 0.1px solid #cccccc;
+    }
+  }
+
+  .upload-container {
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    cursor: pointer;
+    i {
+      color: #666666;
+      font-size: 40px;
     }
   }
 
@@ -463,7 +462,7 @@ function isOutOfRange(string, lower, upper) {
     }
   }
 
-  /* @media (max-width: 439px) {
+  @media (max-width: 590px) {
     .button-container {
       display: block;
       position: relative;
@@ -471,8 +470,9 @@ function isOutOfRange(string, lower, upper) {
       button {
         width: 100%;
         margin-left: 0;
+        margin-bottom: 15px;
       }
     }
-  } */
+  }
 }
 </style>
