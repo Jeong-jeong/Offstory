@@ -35,7 +35,7 @@
           </div>
           <div class="right">
             <div v-if="commentList.author._id === userId" class="edit-area">
-              <button @click.stop="deleteComments($event)" aria-label="삭제">
+              <button @click="deleteComments($event)" aria-label="삭제">
                 삭제
               </button>
             </div>
@@ -179,11 +179,12 @@ export default {
       const li = event.target.closest('li')
       const commentId = li.getAttribute('commentId')
       const userData = {
-        id: commentId, // FIXME: 댓글작성자 ID, 댓글 ID, postID 다 안됨
+        id: commentId,
       }
-      const res = await deleteComment(userData) // FIXME: 작동안함
+      console.log(userData)
+      const res = await deleteComment(userData)
       console.log(res, 'deleteComment')
-      // this.$emit('rerender')
+      this.$emit('rerender')
     },
     checkHost() {
       return this.author._id === this.userId
