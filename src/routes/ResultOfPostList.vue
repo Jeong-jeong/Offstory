@@ -9,7 +9,16 @@
         검색된 영화가 없습니다. 다시 입력해주세요.
       </div> -->
           <h1 class="searchresult-find">
-            "{{ getUserCity }} {{ getUserCounty }} {{ getdetailAddress }}"
+            <template
+              v-if="
+                getUserCity === `undefined` || getUserCounty === `undefined`
+              "
+            >
+              ""
+            </template>
+            <template v-else>
+              "{{ getUserCity }} {{ getUserCounty }} {{ getdetailAddress }}"
+            </template>
             <span>검색결과</span>
           </h1>
           <template v-if="getPostListData.length === 0">
@@ -238,14 +247,15 @@ export default {
   .searchresult-find {
     margin-top: 20px;
     padding-bottom: $INNER_PADDING_HORIZONTAL;
-    color: $KEY_COLOR;
-    border-bottom: solid $KEY_COLOR;
+    color: $COLOR_GRAY_DARKEN;
+    border-bottom: solid $COLOR_GRAY_DARKEN;
     font-size: $FONT_L;
     span {
       color: black;
     }
   }
   .searchresult-find-noresult {
+    margin-top: 250px;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -275,8 +285,8 @@ export default {
         margin: 30px 5px 5px 10px;
         width: 355px;
         height: 370px;
-        border: solid 1px $COLOR_GRAY_LIGHTEN;
-        border-radius: 30px;
+        // border: solid 1px $COLOR_GRAY_LIGHTEN;
+        // border-radius: 30px;
         padding: 20px;
         box-shadow: $BOX_SHADOW;
         .resultlist-listcard-header {
@@ -292,7 +302,8 @@ export default {
             margin-top: 4px;
             margin-left: 6px;
             font-size: $FONT_XS;
-            color: $COLOR_GRAY_LIGHTEN;
+            color: $KEY_COLOR;
+            //opacity: 0.8;
           }
           .resultlist-listcard-location {
             width: 130px;
@@ -328,11 +339,11 @@ export default {
             transition: all 0.3s ease-in-out;
 
             &:hover {
-              transform: scale(1.2);
-              -webkit-transform: scale(1.2);
-              -moz-transform: scale(1.2);
-              -ms-transform: scale(1.2);
-              -o-transform: scale(1.2);
+              transform: scale(1);
+              -webkit-transform: scale(1.1);
+              -moz-transform: scale(1);
+              -ms-transform: scale(1);
+              -o-transform: scale(1.1);
             }
           }
         }
@@ -376,9 +387,10 @@ export default {
               text-align: center;
               margin-top: 10px;
               font-size: $FONT_L;
-              white-space: nowrap;
-              overflow: hidden;
-              text-overflow: ellipsis;
+              //   white-space: nowrap;
+              //   overflow: hidden;
+              @include ellipsis($line: 2) //   text-overflow: ellipsis;
+;
             }
           }
         }

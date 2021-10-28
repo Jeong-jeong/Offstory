@@ -13,13 +13,13 @@
   font-size: $FONT_XXL;
   width: 100%;
   position: absolute;
-  height: 100vh;
+  top: 400px;
   margin: 0;
-  background-color: $KEY_COLOR;
-  color: white;
+  background-color: white;
+  color: black;
   button {
     font-size: $FONT_XL;
-    color: white;
+    color: black;
     &:hover {
       opacity: 0.4;
     }

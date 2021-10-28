@@ -21,7 +21,11 @@
           @submit.prevent="searchPost"
           @submit="$router.push('/ResultOfPostList')"
         >
-          <select @change="selectedCity($event)" class="selectcity">
+          <select
+            @change="selectedCity($event)"
+            @change.prevent="initSelectcounty"
+            class="selectcity"
+          >
             <option value="undefined" class="option">시</option>
             <option
               class="citylist"
@@ -184,6 +188,14 @@ export default {
       this.channelId = selectChannelId
       this.setSearchChannelId(this.channelId)
       this.setUserCity(this.selectuserCity)
+    },
+    initSelectcounty(event) {
+      if (event) {
+        let target = document.getElementsByClassName('selectcounty')[0]
+        console.log(target.value)
+        target.value = undefined
+        this.setUserCounty('')
+      }
     },
     selectedCounty(event) {
       console.log(event.target.value)
