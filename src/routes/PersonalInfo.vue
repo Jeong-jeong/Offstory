@@ -73,7 +73,7 @@
 import { mapGetters } from 'vuex'
 import {
   updateCoverImage,
-  updateNickname,
+  updateNameField,
   updatePassword,
   userDetailInfo,
 } from '../api/index'
@@ -259,7 +259,7 @@ export default {
           fullName: this.nickname,
           username: 'a',
         }
-        await updateNickname(data)
+        await updateNameField(data)
         // const URL = 'http://13.209.30.200:5000/settings/update-user'
         // await this.$fetch(URL, {
         //   method: 'PUT',

@@ -52,16 +52,16 @@ function userDetailInfo(userId) {
   return instance.get(`/users/${userId}`)
 }
 
-function updateUserDetailInfo(userData) {
-  // console.log('userid:', `users/${userId}`)
-  return instance.put('/users/settings/update-user', userData)
-}
+// function updateUserDetailInfo(userData) {
+//   // console.log('userid:', `users/${userId}`)
+//   return instance.put('/users/settings/update-user', userData)
+// }
 
 function updateCoverImage(userData) {
   return instance.post('/users/upload-photo', userData)
 }
 
-function updateNickname(userData) {
+function updateNameField(userData) {
   return instance.put('/settings/update-user', userData)
 }
 
@@ -74,13 +74,12 @@ export {
   registerUser,
   loginUser,
   userDetailInfo,
-  updateUserDetailInfo,
+  updateNameField,
   channelsList,
   channelPostList,
   createChannel,
   getAuth,
   updateCoverImage,
-  updateNickname,
   updatePassword,
   createPost,
 }

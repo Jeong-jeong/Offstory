@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { userDetailInfo, updateUserDetailInfo } from '~/api'
+import { userDetailInfo, updateNameField } from '~/api'
 import Card from '~/components/designs/Card.vue'
 import Tag from '~/components/designs/Tag.vue'
 import Button from '~/components/designs/Button.vue'
@@ -137,7 +137,7 @@ export default {
         fullName: this.commentorName,
         username: updateData,
       }
-      const userInfo = await updateUserDetailInfo(updateUserInfo) // username 업데이트
+      const userInfo = await updateNameField(updateUserInfo) // username 업데이트
       console.log(userInfo.data.username, '업데이트완료')
 
       this.changeTag(state)
