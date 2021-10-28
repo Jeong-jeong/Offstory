@@ -6,8 +6,8 @@
         <li
           ref="item"
           class="item"
-          v-for="(commentList, index) in comments"
-          :key="index"
+          v-for="(commentList, _id) in comments"
+          :key="_id"
           :commentId="commentList._id"
         >
           <span
@@ -25,7 +25,7 @@
               <strong class="nickname"
                 >{{ commentList.author.fullName }}
                 <span class="uploadDate">{{
-                  commentList.updatedAt
+                  timeForToday(commentList.updatedAt)
                 }}</span></strong
               >
               <p class="content">
@@ -85,6 +85,21 @@
                 ><i class="material-icons">arrow_forward</i></Button
               >
             </template>
+            <template v-else-if="checkReject">
+              <textarea class="reject" type="text" disabled>
+참가가 거절되어 댓글을 다실 수 없어요</textarea
+              >
+              <Button
+                v-bind="{
+                  width: '80px',
+                  height: '40px',
+                  backgroundColor: '#CCCCCC',
+                  boxShadow: 'none',
+                }"
+                disabled
+                ><i class="material-icons">arrow_forward</i></Button
+              >
+            </template>
             <div v-else class="logouted" @click="this.$router.push('/login')">
               <button class="button--logouted" type="text">
                 로그인 해주세요
@@ -100,6 +115,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getUserIdToCookie } from '~/utils/cookies'
+import { timeForToday } from '~/utils/function'
+import { userDetailInfo } from '~/api'
 import { readPost, createComment, deleteComment } from '~/api/postContent'
 import TagArea from '~/components/pages/postContent/TagArea'
 import Card from '~/components/designs/Card.vue'
@@ -109,9 +126,9 @@ export default {
   data() {
     return {
       comment: '',
-      postId: this.initialPostId,
-      comments: this.initialComments,
-      author: this.initialAuthor,
+      // postId: this.initialPostId,
+      // comments: this.initialComments,
+      // author: this.initialAuthor,
       userId: '',
     }
   },
@@ -123,6 +140,15 @@ export default {
   props: ['initialPostId', 'initialComments', 'initialAuthor'],
   computed: {
     ...mapGetters('Login', ['isLogin']),
+    postId() {
+      return this.initialPostId
+    },
+    comments() {
+      return this.initialComments
+    },
+    author() {
+      return this.initialAuthor
+    },
     profileUrl() {
       return (
         this.author.image ||
@@ -135,6 +161,7 @@ export default {
   },
   watch: {
     comments: {
+      // FIXME: 작동 안함
       handler(newValue, oldValue) {
         console.log(newValue, 'watch')
         // readPost(this.postId)
@@ -150,11 +177,11 @@ export default {
         comment: commentValue,
         postId: this.postId,
       }
-      this.$refs.comment.value = ''
       const res = await createComment(userData)
       console.log(res, 'createComment')
+      await this.$emit('rerender')
+      this.comment = ''
       // TODO: \n을 바꿔줘야 함
-      readPost(this.postId)
     },
     async deleteComments(event) {
       const li = event.target.closest('li')
@@ -164,7 +191,7 @@ export default {
       }
       const res = await deleteComment(userData) // FIXME: 작동안함
       console.log(res, 'deleteComment')
-      // TODO: 삭제하고 readPost 다시 불러와야 하는지 확인하기
+      this.$emit('rerender')
     },
     checkHost() {
       return this.author._id === this.userId
@@ -176,9 +203,20 @@ export default {
       // 댓글 작성자 _id, 로그인된 userId가 같은지 비교
       commentorId === this.userId
     },
+    async checkReject() {
+      const res = await userDetailInfo(this.commentorId) // 댓작성자의 정보 불러옴
+      const username = res.data.username.split('/')[1]
+      const array = JSON.parse(username)
+      const result = array.some(
+        v => v.postid === this.postId && v.state === 'reject',
+      )
+      console.log(result, 'checkReject')
+      return result
+    },
     getUserId() {
       this.userId = getUserIdToCookie()
     },
+    timeForToday,
   },
   created() {
     this.getUserId()
@@ -189,6 +227,10 @@ export default {
 <style lang="scss" scoped>
 .hidden {
   display: none;
+}
+
+textarea:disabled {
+  color: $COLOR_RED;
 }
 .comments {
   min-height: 160px;
@@ -217,16 +259,20 @@ export default {
 
         .user__infos {
           .nickname {
-            display: inline-block;
+            word-break: keep-all;
+            @include flexbox;
+            flex-grow: 1;
+            flex-wrap: nowrap;
             margin-bottom: $INNER_PADDING_SMALL;
           }
 
           .uploadDate {
             width: 100%;
             color: $KEY_COLOR;
-            font-size: $FONT_S;
-            text-align: end;
-            margin-bottom: $INNER_PADDING_SMALL;
+            font-size: $FONT_XS;
+            font-weight: 400;
+            text-align: start;
+            margin-left: $INNER_PADDING_SMALL;
           }
 
           .content {

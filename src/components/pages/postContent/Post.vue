@@ -7,8 +7,8 @@
             <img :src="profileUrl" alt="유저 프로필" />
           </button>
           <div class="user__infos">
-            <strong class="nickname">{{ postData.fullName }}</strong>
-            <div class="uploadDate">{{ postData.updatedAt }}</div>
+            <strong class="nickname">{{ author.fullName }}</strong>
+            <div class="uploadDate">{{ timeForToday(postData.createdAt) }}</div>
             <div class="location">{{ postData.location }}</div>
           </div>
         </div>
@@ -28,6 +28,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { timeForToday } from '~/utils/function'
 import Card from '~/components/designs/Card.vue'
 import Button from '~/components/designs/Button.vue'
 
@@ -46,6 +47,7 @@ export default {
     }
   },
   methods: {
+    timeForToday,
     checkHost() {
       this.author._id === this.userId
     }, // 글 작성자 _id, 로그인된 userId 같은지 비교
@@ -53,10 +55,10 @@ export default {
   computed: {
     ...mapGetters('Login', ['getUserId']),
     title() {
-      return this.postData && this.postData.title.split('/')[0]
+      return this.postData.title.split('/')[0]
     },
     content() {
-      return this.postData && this.postData.title.split('/')[1]
+      return this.postData.title.split('/')[1]
     },
     profileUrl() {
       return (
@@ -104,10 +106,11 @@ export default {
 
           .uploadDate,
           .location {
+            color: inherit;
             font-size: $FONT_S;
           }
 
-          .location {
+          .uploadDate {
             color: $KEY_COLOR;
           }
         }
