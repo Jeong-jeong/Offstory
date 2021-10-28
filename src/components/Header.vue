@@ -3,7 +3,6 @@
     <div class="left">
       <img
         @click="$router.push('/')"
-        :style="{ cursor: 'pointer' }"
         src="../assets/images/symbol.svg"
         alt="OffStory 심볼"
       />
@@ -150,8 +149,7 @@ export default {
     getUserProfileImage() {
       const res = this.$storage.getItem('userData')
       const image =
-        res?.userCoverImage ||
-        require('../assets/images/user-profile__default.svg')
+        res?.userCoverImage || require('../assets/images/user-profile.svg')
       return image
     },
   },
@@ -255,6 +253,10 @@ export default {
     justify-content: center;
     align-items: center;
     margin-left: 40px;
+
+    img {
+      cursor: pointer;
+    }
 
     .logo {
       font-size: 35px;
