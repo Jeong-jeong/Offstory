@@ -117,7 +117,7 @@ import { mapGetters } from 'vuex'
 import { getUserIdToCookie } from '~/utils/cookies'
 import { timeForToday } from '~/utils/function'
 import { userDetailInfo } from '~/api'
-import { readPost, createComment, deleteComment } from '~/api/postContent'
+import { createComment, deleteComment } from '~/api/postContent'
 import TagArea from '~/components/pages/postContent/TagArea'
 import Card from '~/components/designs/Card.vue'
 import Button from '~/components/designs/Button.vue'
@@ -126,9 +126,7 @@ export default {
   data() {
     return {
       comment: '',
-      // postId: this.initialPostId,
-      // comments: this.initialComments,
-      // author: this.initialAuthor,
+      isSubmit: false,
       userId: '',
     }
   },
@@ -159,18 +157,12 @@ export default {
       return this.comment.trim().length
     },
   },
-  watch: {
-    comments: {
-      // FIXME: 작동 안함
-      handler(newValue, oldValue) {
-        console.log(newValue, 'watch')
-        // readPost(this.postId)
-      },
-      deep: true,
-    },
-  },
   methods: {
     async submitComment() {
+      if (this.doubleSubmitCHeck()) {
+        this.isSubmit = false
+        return
+      }
       const commentValue = this.$refs.comment.value
       if (!commentValue.trim().length) return
       const userData = {
@@ -191,7 +183,7 @@ export default {
       }
       const res = await deleteComment(userData) // FIXME: 작동안함
       console.log(res, 'deleteComment')
-      this.$emit('rerender')
+      // this.$emit('rerender')
     },
     checkHost() {
       return this.author._id === this.userId
@@ -215,6 +207,14 @@ export default {
     },
     getUserId() {
       this.userId = getUserIdToCookie()
+    },
+    doubleSubmitCHeck() {
+      if (this.isSubmit) {
+        return this.isSubmit
+      } else {
+        this.isSubmit = true
+        return false
+      }
     },
     timeForToday,
   },
