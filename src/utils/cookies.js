@@ -10,6 +10,10 @@ function saveUserToCookie(value) {
   document.cookie = `off_user=${value}`
 }
 
+function saveUserImageToCookie(value) {
+  document.cookie = `off_userprofileImage=${value}`
+}
+
 function getUserIdToCookie() {
   return document.cookie.replace(
     /(?:(?:^|.*;\s*)off_userId\s*=\s*([^;]*).*$)|^.*$/,
@@ -31,6 +35,13 @@ function getUserFromCookie() {
   )
 }
 
+function getImageFromCookie() {
+  return document.cookie.replace(
+    /(?:(?:^|.*;\s*)off_userprofileImage\s*=\s*([^;]*).*$)|^.*$/,
+    '$1',
+  )
+}
+
 function deleteCookie(value) {
   document.cookie = `${value}=; expires=Thu, 01 Jan 1970 00:00:01 GMT;`
 }
@@ -39,8 +50,10 @@ export {
   saveUserIdToCookie,
   saveAuthToCookie,
   saveUserToCookie,
+  saveUserImageToCookie,
   getUserIdToCookie,
   getAuthFromCookie,
   getUserFromCookie,
+  getImageFromCookie,
   deleteCookie,
 }

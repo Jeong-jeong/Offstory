@@ -43,7 +43,7 @@
                     @click="
                       $router.push({
                         name: 'PostContent',
-                        params: { id: i.postId },
+                        params: { postId: i._id },
                       })
                     "
                   >
@@ -62,7 +62,7 @@
                       <template v-if="i.image === undefined">
                         <img
                           class="postimage-default"
-                          src="../assets/images/not-found.png"
+                          src="../assets/images/non_postimage.png"
                           alt=""
                         />
                       </template>
@@ -72,10 +72,20 @@
                     </div>
                     <div class="resultlist-listcard-active">
                       <div class="resultlist-listcard-like">
-                        ♡ +{{ i.likes.length }}
+                        <img
+                          class="resultlist-listcard-likeimage"
+                          :src="heartImageUrl"
+                          alt=""
+                        />
+                        +{{ i.likes.length }}
                       </div>
                       <div class="resultlist-listcardt-comment">
-                        🗨+{{ i.comments.length }}
+                        <img
+                          class="resultlist-listcard-commentimage"
+                          :src="commentImageUrl"
+                          alt=""
+                        />
+                        +{{ i.comments.length }}
                       </div>
                     </div>
                     <div class="resultlist-listcard-userinfo">
@@ -146,6 +156,8 @@ export default {
       postList: [],
       Title: '',
       imageUrl: require('../assets/images/user-profile__default.svg'),
+      heartImageUrl: require('../assets/images/postlist_cil_heart.svg'),
+      commentImageUrl: require('../assets/images/comment.svg'),
     }
   },
   components: { Button },
@@ -235,6 +247,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .container {
+  z-index: 2;
   position: relative;
   top: $LG_HEADER_HEIGHT;
 
@@ -350,12 +363,25 @@ export default {
         .resultlist-listcard-active {
           display: flex;
           width: 120px;
+          padding-left: 5px;
           .resultlist-listcard-like {
             color: $COLOR_GRAY_LIGHTEN;
+            .resultlist-listcard-likeimage {
+              color: $COLOR_GRAY_LIGHTEN;
+              width: 15px;
+              height: 15px;
+              opacity: 0.6;
+            }
           }
           .resultlist-listcardt-comment {
             margin-left: 10px;
             color: $COLOR_GRAY_LIGHTEN;
+            .resultlist-listcard-commentimage {
+              color: $COLOR_GRAY_LIGHTEN;
+              width: 13px;
+              height: 13px;
+              opacity: 0.5;
+            }
           }
         }
         .resultlist-listcard-userinfo {

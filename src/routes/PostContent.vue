@@ -2,9 +2,8 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-10">
-        {{ postId }}
         <Button
-          @click="this.$router.push('/')"
+          @click="this.$router.go(-1)"
           v-bind="{
             width: '100px',
             height: '40px',
@@ -23,11 +22,14 @@
           <span class="button__text">목록으로</span>
         </Button>
         <Post
-          :initialPostId="postId"
-          :initialPostData="postData"
-          :initialAuthor="author"
+          @rerender="rePatch"
+          :postId="postId"
+          :postData="postData"
+          :author="author"
+          :channel="channel"
         />
         <Comments
+          @rerender="rePatch"
           :initialPostId="postId"
           :initialComments="comments"
           :initialAuthor="author"
@@ -50,57 +52,18 @@ export default {
   },
   props: {
     postId: {
-      // $router.push({ name: 'PostContent', params: { postId } })
       type: String,
-      default: '6174ec4d46af0b5b4174cc1c',
+      default: '',
       required: true,
     },
   },
   data() {
     return {
+      initialPostId: this.postId,
       postData: {},
       author: {},
-      comments: [
-        {
-          _id: '01232adfdjf',
-          comment:
-            '저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요',
-          author: {
-            _id: 'authorId',
-            posts: [],
-            comments: [],
-            fullName: '한라산만 31번째',
-          },
-          post: 'postId',
-          updatedAt: '오늘',
-        },
-        {
-          _id: '01232adfdjf',
-          comment:
-            '저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요',
-          author: {
-            _id: 'authorId',
-            posts: [],
-            comments: [],
-            fullName: '한라산만 31번째',
-          },
-          post: 'postId',
-          updatedAt: '오늘',
-        },
-        {
-          _id: '01232adfdjf',
-          comment:
-            '저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요저도 끼워주세요',
-          author: {
-            _id: 'authorId',
-            posts: [],
-            comments: [],
-            fullName: '한라산만 31번째',
-          },
-          post: 'postId',
-          updatedAt: '오늘',
-        },
-      ],
+      comments: [],
+      channel: {},
     }
   },
   computed: {
@@ -108,21 +71,27 @@ export default {
       return require('~/assets/images/icon-back.svg')
     },
   },
-  created() {
-    this.initPostdata() // data 초기화
-  },
   methods: {
     async initPostdata() {
       try {
-        const { data: postData } = await readPost(this.postId)
+        const { data: postData } = await readPost(this.initialPostId)
         this.postData = postData
         this.author = postData.author
         this.comments = postData.comments
+        this.channel = postData.channel
+        console.log(postData, '데이터 초기화')
       } catch (error) {
         console.log(error.response.data)
         alert(error.response.data)
       }
     },
+    async rePatch() {
+      this.initPostdata()
+      console.log('댓글 업데이트됨. rerender')
+    },
+  },
+  created() {
+    this.initPostdata() // data 초기화
   },
 }
 </script>

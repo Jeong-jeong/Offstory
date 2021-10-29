@@ -75,7 +75,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { updateCoverImage, updateNickname, updatePassword } from '../api/index'
+import {
+  updateCoverImage,
+  updateNameField,
+  updatePassword,
+  userDetailInfo,
+} from '../api/index'
 import Button from '../components/designs/Button'
 import { makeRandomKey } from '~/utils/function'
 
@@ -339,7 +344,7 @@ async function changeNickname(nickname, userPriorData) {
     username: newKey + joinState || '',
   }
 
-  await updateNickname(data)
+  await updateNameField(data)
 
   return data.username
 }

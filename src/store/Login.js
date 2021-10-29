@@ -10,7 +10,7 @@ export default {
       userEmail: '',
       username: getUserFromCookie() || '',
       token: getAuthFromCookie() || '',
-      profileImage: undefined,
+      profileImage: '',
     }
   },
   getters: {
