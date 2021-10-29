@@ -60,6 +60,7 @@ import {
   saveUserIdToCookie,
   saveAuthToCookie,
   saveUserToCookie,
+  saveUserImageToCookie,
 } from '../utils/cookies'
 export default {
   data() {
@@ -93,12 +94,21 @@ export default {
         saveUserIdToCookie(data.user._id)
         saveAuthToCookie(data.token)
         saveUserToCookie(data.user.fullName)
+        saveUserImageToCookie(data.user.coverImage)
         let userDetaildata = await userDetailInfo(
           this.$store.getters['Login/getUserId'],
         )
-        console.log('userDetaildata', userDetaildata)
-        console.log(userDetaildata.image)
-        this.$store.commit('Login/setprofileImage', userDetaildata.image)
+
+        console.log(userDetaildata)
+        console.log(userDetaildata.data.coverImage)
+        this.$store.commit(
+          'Login/setprofileImage',
+          userDetaildata.data.coverImage,
+        )
+        //console.log(this.$store.getters['Login/getUserProfileImage'])
+        console.log(this.$store.state.Login.profileImage)
+
+
 
         // username을 랜덤키로 초기화
         if (!data.user.username) {
@@ -112,6 +122,7 @@ export default {
 
         // 유저 데이터 storage에 저장
         this.storageSetup(userDetaildata.data)
+        this.$router.go()
       } catch (error) {
         //에러 핸들링 코드
         console.log(error.response.data)

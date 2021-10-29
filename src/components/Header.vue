@@ -77,6 +77,17 @@
         <button aria-label="알림 버튼">
           <i class="material-icons"> notifications </i>
         </button>
+
+        <template v-if="getUserProfileImage === `undefined`">
+          <button @click="toggleSidebar">
+            <i class="material-icons"> account_circle </i>
+          </button>
+        </template>
+        <template v-else>
+          <button @click="toggleSidebar">
+            <img class="userprofile-image" :src="getUserProfileImage" />
+          </button>
+        </template>
         <button @click="toggleSidebar">
           <img :src="getUserProfileImage" class="profile-image" />
         </button>
@@ -102,6 +113,7 @@
 import { channelsList, channelPostList } from '../api/index'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import Button from '~/components/designs/Button'
+import { getImageFromCookie } from '~/utils/cookies'
 
 export default {
   data() {
@@ -145,16 +157,15 @@ export default {
   },
   computed: {
     ...mapState('address', ['cityList', 'countyList']),
+    getUserProfileImage() {
+      const profileImage = getImageFromCookie()
+      console.log(profileImage)
+      return profileImage
     ...mapGetters('Login', [
       'isLogin',
       'isEmptyProfileImage',
       'getUserProfileImage',
     ]),
-    getUserProfileImage() {
-      const res = this.$storage.getItem('userData')
-      const image =
-        res?.userCoverImage || require('../assets/images/user-profile.svg')
-      return image
     },
   },
   methods: {
@@ -182,13 +193,21 @@ export default {
       const userInputAdress = this.$refs.input.value
       userInputAdress.split(' ')
     },
+
     toggleSidebar() {
       this.$emit('toggleSidebar')
     },
     async selectedCity(event) {
       console.log(event.target.value)
       this.selectuserCity = event.target.value
+      if (this.selectuserCity === 'undefined') {
+        this.selectuserCity = ''
+      }
       const userCity = event.target.value //선택한 도시 넘겨줌
+      let target = document.getElementsByClassName('selectcounty')[0]
+      console.log(target.value)
+      target.value = undefined
+      this.setUserCounty('')
       const channelsListData = await channelsList() //채널리스트를 불러옴
 
       //선택한 city와 같은 name의 채널을 찾음
@@ -212,22 +231,37 @@ export default {
     initSelectcounty(event) {
       if (event) {
         let target = document.getElementsByClassName('selectcounty')[0]
-        console.log(target.value)
+        this.selectuserCounty = ''
         target.value = undefined
         this.setUserCounty('')
+        console.log('도시선택했을때 구', this.setUserCounty)
+        console.log(this.selectuserCounty)
       }
     },
     selectedCounty(event) {
-      console.log(event.target.value)
-      this.selectuserCounty = event.target.value
-      this.setUserCounty(this.selectuserCounty)
+      let valueCheck = event.target.value
+      console.log(valueCheck)
+      if (valueCheck === 'undefined') {
+        this.selectuserCounty = ''
+        this.setUserCounty('')
+        return
+      } else {
+        this.selectuserCounty = event.target.value
+        this.setUserCounty(this.selectuserCounty)
+      }
     },
     async searchPost() {
       console.log(this.detailAdress)
       this.setdetailAddress(this.detailAdress)
       const postListdata = await channelPostList(this.channelId)
+      // if (this.selectuserCounty === undefined) {
+      //   console.log('시만 선택 했을때', postListdata.data)
+      //   this.setPostListData(this.postListdata.data)
+      //   this.$router.push('/ResultOfPostList')
+      // } else {
       this.CountydataList = []
       console.log(postListdata.data)
+      console.log('county', this.selectuserCounty)
       const filteredDataOfCounty = postListdata.data.map(x =>
         x.location.includes(`/${this.selectuserCounty}`),
       )
@@ -237,10 +271,11 @@ export default {
           this.CountydataList.push(postListdata.data[i])
         }
       }
-      console.log(this.CountydataList)
+      console.log('군까지 선택했을때', this.CountydataList)
       console.log(filteredDataOfCounty)
       this.setPostListData(this.CountydataList)
       this.$router.push('/ResultOfPostList')
+      // }
     },
   },
 }
@@ -356,6 +391,11 @@ export default {
     button {
       margin-left: 25px;
 
+      .userprofile-image {
+        width: 35px;
+        height: 35px;
+        border-radius: 30px;
+      }
       i {
         font-size: 35px;
         color: darken($KEY_COLOR, 0%);
