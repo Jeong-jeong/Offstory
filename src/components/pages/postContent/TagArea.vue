@@ -1,7 +1,7 @@
 <template>
   <div class="tags-area">
     <Tag @click="onToggle" class="standByTag" v-bind="{ state: tagState }" />
-    <template v-if="checkHost()">
+    <template v-if="checkHost">
       <Card
         v-show="isToggle"
         class="tags-choice"
@@ -63,6 +63,11 @@ export default {
       default: '',
       required: true,
     },
+    authorId: {
+      type: String,
+      default: '',
+      required: true,
+    },
     commentorId: {
       type: String,
       default: '',
@@ -80,13 +85,15 @@ export default {
       tagState: '',
     }
   },
+  computed: {
+    checkHost() {
+      return this.authorId === this.userId
+    }, // 글 작성자 _id, 로그인된 userId 같은지 비교
+  },
   methods: {
     onToggle() {
       this.isToggle = !this.isToggle
     },
-    checkHost() {
-      return this.commentorId === this.userId
-    }, // 글 작성자 _id, 로그인된 userId 같은지 비교
     changeTag(state) {
       this.tagState = state
       this.isToggle = !this.isToggle
@@ -105,10 +112,13 @@ export default {
         state,
       }
       const res = await userDetailInfo(this.commentorId) // 댓작성자의 정보 불러옴
+      console.log(res.data.username, '댓작성자 정보')
       const [dummyData, username] = res.data.username.split('/')
+      console.log(username.length) // 2 ""
       let updateUserName = ''
 
-      if (username) {
+      if (username.length > 2) {
+        // username이 있으면
         console.log('username이 있음')
         const array = JSON.parse(username) // 배열로 변환
         console.log(array, 'array')

@@ -13,9 +13,9 @@
           </div>
         </div>
         <div class="right">
-          <Button v-if="!checkHost" v-bind="{ width: '60px', height: '70px' }">
+          <!-- <Button v-if="!checkHost" v-bind="{ width: '60px', height: '70px' }">
             찜하기
-          </Button>
+          </Button> -->
           <div v-if="checkHost" class="edit-area">
             <button v-if="!isEdit" @click="changeToEdit" class="edit">
               편집
@@ -28,18 +28,20 @@
         </div>
       </header>
       <template v-if="!isEdit">
-        <Editor :title="title" :content="content" />
+        <Editor :title="title" :content="content" :postImgUrl="postImgUrl" />
       </template>
       <template v-else>
         <!-- TODO: 이벤트 올리기 -->
         <EditPage
-          @rerender="provideRerender"
+          @rerender="rerender"
+          @saveEdit="saveEdit"
           @cancelEdit="cancelEdit"
           v-show="changeToEdit"
-          :initialPostId="postId"
+          :postId="postId"
+          :channel="channel"
           :initialTitle="title"
           :initialContent="content"
-          :initialChannel="channel"
+          :initialPostImgUrl="postImgUrl"
         />
       </template>
     </section>
@@ -49,6 +51,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { timeForToday } from '~/utils/function'
+import { getUserIdToCookie } from '~/utils/cookies'
 import { deletePost } from '~/api/postContent'
 import Card from '~/components/designs/Card'
 import Button from '~/components/designs/Button'
@@ -62,29 +65,32 @@ export default {
     Editor,
     EditPage,
   },
-  props: [
-    'initialPostId',
-    'initialPostData',
-    'initialAuthor',
-    'initialChannel',
-  ],
+  props: ['postId', 'postData', 'author', 'channel'],
+  watch: {
+    postData: {
+      deep: true,
+      handler(newValue, oldValue) {
+        console.log(newValue, 'postData watch')
+      },
+    },
+  },
   data() {
     return {
-      postId: this.initialPostId,
-      postData: this.initialPostData,
-      author: this.initialAuthor,
-      channel: this.initialChannel,
+      userId: this.getUserIdToCookie(),
+      // postId: this.initialPostId,
+      // postData: this.initialPostData,
+      // author: this.author,
+      // channel: this.initialChannel,
       isEdit: false,
-      // profileImg: this.hasProperty(this.author, 'image') || '',
     }
   },
   methods: {
     timeForToday,
-    checkHost() {
-      this.author._id === this.userId
-    }, // 글 작성자 _id, 로그인된 userId 같은지 비교
     changeToEdit() {
       this.isEdit = true
+    },
+    saveEdit() {
+      this.isEdit = false
     },
     cancelEdit() {
       this.isEdit = false
@@ -93,9 +99,20 @@ export default {
       const userData = {
         id: this.postId,
       }
-
-      deletePost()
+      // deletePost(userData)
     },
+    getProfileImg() {
+      const result = Object.keys(this.author).some(v => v === 'coverImage')
+      return result ? this.author.coverImage : ''
+    },
+    getPostImg() {
+      const result = Object.keys(this.postData).some(v => v === 'image')
+      return result ? this.postData.image : ''
+    },
+    async rerender() {
+      await this.$emit('rerender')
+    },
+    getUserIdToCookie,
   },
   computed: {
     ...mapGetters('Login', ['getUserId']),
@@ -107,9 +124,16 @@ export default {
     },
     profileUrl() {
       return (
-        this.profileImg || require('~/assets/images/user-profile__default.svg')
+        this.getProfileImg() ||
+        require('~/assets/images/user-profile__default.svg')
       )
     },
+    postImgUrl() {
+      return this.getPostImg() || ''
+    },
+    checkHost() {
+      return this.author._id === this.userId
+    }, // 글 작성자 _id, 로그인된 userId 같은지 비교
   },
 }
 </script>
@@ -136,7 +160,7 @@ export default {
             @include flexbox;
             width: 40px;
             height: 40px;
-            object-fit: contain; // 일단은 contain으로 해놓음
+            object-fit: cover; // 일단은 contain으로 해놓음
           }
         }
 
