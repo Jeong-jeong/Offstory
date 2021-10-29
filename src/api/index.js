@@ -46,6 +46,10 @@ function createPost(userData) {
   return instance.post('/posts/create', userData)
 }
 
+function getPost(id) {
+  return instance.get(`/posts/${id}`)
+}
+
 // userDetailInfo
 function userDetailInfo(userId) {
   console.log('userid:', `users/${userId}`)
@@ -69,6 +73,14 @@ function updatePassword(userData) {
   return instance.put('/settings/update-password', userData)
 }
 
+function likePost(postId) {
+  return instance.post('/likes/create', { postId })
+}
+
+function cancleLikePost(id) {
+  return instance.delete('/likes/delete', { data: { id } })
+}
+
 export {
   createInstance,
   registerUser,
@@ -83,4 +95,7 @@ export {
   updateNickname,
   updatePassword,
   createPost,
+  getPost,
+  likePost,
+  cancleLikePost,
 }

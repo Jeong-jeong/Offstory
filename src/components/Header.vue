@@ -389,7 +389,6 @@ export default {
     }
     .right button:first-child {
       display: inline;
-      color: red;
     }
   }
 }

@@ -12,6 +12,7 @@ export function setInterceptors(instance) {
       return config
     },
     function (error) {
+      console.log('error 확인', error)
       // error 처리
       return Promise.reject(error)
     },
@@ -23,6 +24,8 @@ export function setInterceptors(instance) {
       return response
     },
     function (error) {
+      console.log('error 확인', error)
+
       return Promise.reject(error)
     },
   )

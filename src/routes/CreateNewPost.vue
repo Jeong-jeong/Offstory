@@ -211,7 +211,7 @@ export default {
         // }
         console.log(userData)
         const postData = await createPost(userData)
-        console.log(postData)
+        console.log('postData afer write', postData)
         alert(
           `${this.selectuserCity}시 ${this.selectuserCounty} 카테고리에 등록되었습니다.`,
         )
