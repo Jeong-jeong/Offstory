@@ -88,9 +88,6 @@
             <img class="userprofile-image" :src="getUserProfileImage" />
           </button>
         </template>
-        <button @click="toggleSidebar">
-          <img :src="getUserProfileImage" class="profile-image" />
-        </button>
       </template>
       <template v-else>
         <Button
@@ -157,15 +154,16 @@ export default {
   },
   computed: {
     ...mapState('address', ['cityList', 'countyList']),
-    getUserProfileImage() {
-      const profileImage = getImageFromCookie()
-      console.log(profileImage)
-      return profileImage
+
     ...mapGetters('Login', [
       'isLogin',
       'isEmptyProfileImage',
       'getUserProfileImage',
     ]),
+    getUserProfileImage() {
+      const profileImage = getImageFromCookie()
+      console.log(profileImage)
+      return profileImage
     },
   },
   methods: {
