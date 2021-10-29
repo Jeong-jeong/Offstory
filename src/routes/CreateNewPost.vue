@@ -45,24 +45,31 @@
             />
           </div>
           <br /><br />
-          <div class="post-titletext">제목</div>
+          <div class="post-titletext">제목을 작성하세요</div>
           <br />
-          <input
-            placeholder="제목"
-            v-model="title"
-            name="title"
-            type="title"
-            class="posttitle"
-            required
-          />
-          <input
-            @change="uploadImage"
-            multiple
-            accept="image/*"
-            type="file"
-            id="file"
-            class="inputfile"
-          />
+          <div class="titlearea">
+            <input
+              placeholder="제목"
+              v-model="title"
+              name="title"
+              type="title"
+              class="posttitle"
+              required
+            />
+            <img :src="url" ref="image" />
+            <div class="buttonwrapper">
+              <Button class="uploadbutton" @click="chooseFile"
+                >이미지 첨부하기</Button
+              >
+            </div>
+            <input
+              type="File"
+              accept="image/*"
+              @change="previewImage"
+              ref="imageInput"
+              :style="{ display: 'none' }"
+            />
+          </div>
           <br />
           <!-- <input type="file" id="input-file" style="display: none" /> -->
           <!-- <img style="width: 500px" id="preview-image" src="`${this.imgurl}`" /> -->
@@ -155,7 +162,23 @@ export default {
       console.log(selectChannelId)
       this.channelId = selectChannelId
     },
+    chooseFile() {
+      this.$refs.imageInput.click()
+    },
+    previewImage(event) {
+      this.uploadedFile = event.target.files[0]
 
+      if (this.uploadedFile) {
+        const reader = new FileReader()
+        const img = this.$refs.image
+
+        reader.addEventListener('load', function () {
+          img.setAttribute('src', this.result)
+        })
+
+        reader.readAsDataURL(this.uploadedFile)
+      }
+    },
     selectedCounty(event) {
       console.log(event.target.value)
       this.selectuserCounty = event.target.value
@@ -314,30 +337,40 @@ export default {
             }
           }
         }
-
-        .posttitle {
-          @include font;
-          width: 50%;
-          height: 10px;
-          padding: $INNER_PADDING_VERTICAL $INNER_PADDING_HORIZONTAL;
-          border-radius: $BORDER_RADIOUS;
-          border: 1px solid $COLOR_GRAY_DARKEN;
-
-          &::placeholder {
-            font-weight: 700;
-            color: $COLOR_GRAY_LIGHTEN;
+        .titlearea {
+          img {
+            margin-left: 135px;
+            width: 50px;
+            height: 30px;
           }
-        }
-        .inputfile {
-          @include font;
-          width: 45%;
-          height: 100%;
-          margin-left: 10px;
-          padding: 6px 25px;
-          background-color: $KEY_COLOR;
-          border-radius: 4px;
-          color: white;
-          cursor: pointer;
+          width: 100%;
+          .posttitle {
+            @include font;
+            width: 50%;
+            height: 10px;
+            padding: $INNER_PADDING_VERTICAL $INNER_PADDING_HORIZONTAL;
+            border-radius: $BORDER_RADIOUS;
+            border: 1px solid $COLOR_GRAY_DARKEN;
+            &::placeholder {
+              font-weight: 700;
+              color: $COLOR_GRAY_LIGHTEN;
+            }
+
+            .uploadbutton {
+              width: 10px;
+            }
+          }
+          .post {
+            @include font;
+            width: 45%;
+            height: 100%;
+            margin-left: 10px;
+            padding: 6px 25px;
+            background-color: $KEY_COLOR;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+          }
         }
         .post-contenttext {
           margin-bottom: 13px;
