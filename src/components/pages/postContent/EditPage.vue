@@ -5,28 +5,27 @@
       <button>저장</button>
     </div>
     <input
+      v-focus
       @change="loadFile($event)"
       multiple
       accept="image/*"
       type="file"
       class="inputfile"
     />
-    <strong ref="imageName" class="image-name"></strong>
     <input
+      v-focus
       ref="title"
       class="editor__title"
       :value="title"
       @input="changeTitle"
     />
-    <p>{{ this.title }}</p>
+    <img v-if="postImgUrl" class="postImg" :src="postImgUrl" alt="" />
     <textarea
       ref="content"
       class="content"
       type="text"
       :value="content"
-      @input="changeContent"
     ></textarea>
-    <p>{{ this.content }}</p>
   </form>
 </template>
 
@@ -34,10 +33,22 @@
 import { updatePost } from '~/api/postContent'
 import { putBr } from '~/utils/function'
 export default {
+  directives: {
+    focus: {
+      mounted(el) {
+        el.focus()
+      },
+    },
+  },
   props: {
-    initialPostId: {
+    postId: {
       type: String,
       default: '',
+      required: true,
+    },
+    channel: {
+      type: Object,
+      default: () => {},
       required: true,
     },
     initialTitle: {
@@ -50,60 +61,50 @@ export default {
       default: '',
       required: true,
     },
-    initialChannel: {
+    initialPostImgUrl: {
       type: String,
       default: '',
       required: true,
     },
   },
   data() {
+    // 수정할 값들은 props에서 data로 받아옴
     return {
-      postId: this.initialPostId,
       title: this.initialTitle,
       content: this.initialContent,
-      channel: this.initialChannel,
-      image: null,
+      image: '',
+      postImgUrl: this.initialPostImgUrl,
     }
   },
   methods: {
     changeTitle(event) {
       this.title = event.target.value
     },
-
-    changeContent(event) {
-      let str = event.target.value
-      const result = putBr(str)
-
+    changeContent() {
+      const result = putBr(this.$refs.content.value)
       this.content = result
     },
     async submitInfo() {
-      // const new formData()
+      this.changeContent()
+
       const userData = new FormData()
       userData.append('postId', this.postId)
       userData.append('title', `${this.title}/${this.content}`)
-      userData.append('image', this.image)
+      userData.append('image', this.image || null)
       userData.append('channelId', this.channel._id)
 
       const res = await updatePost(userData)
       console.log(res, 'update 완료')
-      this.$emit('rerender')
+      await this.$emit('rerender')
+      this.$emit('saveEdit')
     },
     loadFile(event) {
       const file = event.target.files[0]
-      this.$refs.imageName.textContent = file.name
-
-      const newImage = document.createElement('img')
-      newImage.setAttribute('class', 'new-image')
 
       const newImageSrc = URL.createObjectURL(file)
-      newImage.src = newImageSrc
+      console.log(newImageSrc, 'changeImg')
+      this.postImgUrl = newImageSrc
       this.image = file
-      newImage.style.width = '200px'
-      newImage.style.height = '200px'
-      newImage.style.objectFit = 'contain'
-
-      this.$refs.imageName.appendChild(newImage)
-      console.log(newImage)
     },
     putBr,
   },
@@ -121,6 +122,14 @@ export default {
     font-size: $FONT_XL;
     border: transparent;
     font-weight: 700;
+  }
+
+  .postImg {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: $UPLOAD_IMAGE_SIZE;
+    height: $UPLOAD_IMAGE_SIZE;
   }
 
   .content {

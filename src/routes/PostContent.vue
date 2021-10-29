@@ -22,10 +22,11 @@
           <span class="button__text">목록으로</span>
         </Button>
         <Post
-          :initialPostId="postId"
-          :initialPostData="postData"
-          :initialAuthor="author"
-          :initialChannel="channel"
+          @rerender="rePatch"
+          :postId="postId"
+          :postData="postData"
+          :author="author"
+          :channel="channel"
         />
         <Comments
           @rerender="rePatch"
@@ -52,12 +53,13 @@ export default {
   props: {
     postId: {
       type: String,
-      default: '61762241df27527f64489e53',
+      default: '',
       required: true,
     },
   },
   data() {
     return {
+      initialPostId: this.postId,
       postData: {},
       author: {},
       comments: [],
@@ -72,11 +74,12 @@ export default {
   methods: {
     async initPostdata() {
       try {
-        const { data: postData } = await readPost(this.postId)
+        const { data: postData } = await readPost(this.initialPostId)
         this.postData = postData
         this.author = postData.author
         this.comments = postData.comments
         this.channel = postData.channel
+        console.log(postData, '데이터 초기화')
       } catch (error) {
         console.log(error.response.data)
         alert(error.response.data)

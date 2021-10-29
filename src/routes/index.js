@@ -52,7 +52,7 @@ export default createRouter({
       },
     },
     {
-      path: '/postContent',
+      path: '/postContent/:postId',
       name: 'PostContent',
       component: PostContent,
       props: true,
