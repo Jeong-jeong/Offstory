@@ -83,7 +83,7 @@ import {
 } from '../api/index'
 import Button from '../components/designs/Button'
 import { makeRandomKey } from '~/utils/function'
-
+import { deleteCookie, saveUserImageToCookie } from '../utils/cookies'
 export default {
   components: { Button },
   data() {
@@ -255,6 +255,9 @@ export default {
         this.nickname,
         username,
       )
+
+      deleteCookie('off_userprofileImage')
+      saveUserImageToCookie(updatedUserData.userCoverImage)
       this.$storage.setItem('userData', updatedUserData)
 
       // this.setUserInfo()
