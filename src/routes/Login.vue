@@ -52,7 +52,7 @@
 
 <script>
 import Button from '~/components/designs/Button'
-import { loginUser, userDetailInfo, updateNickname } from '../api/index'
+import { loginUser, userDetailInfo, updateNameField } from '../api/index'
 import { makeRandomKey } from '~/utils/function'
 import { validateEmail } from '../utils/validation'
 import { Field, Form, ErrorMessage } from 'vee-validate'
@@ -90,7 +90,7 @@ export default {
         this.$store.commit('Login/setToken', data.token)
         this.$store.commit('Login/setUsername', data.user.fullName)
         this.$store.commit('Login/setUserId', data.user._id)
-        console.log(data.token)
+        console.log('data.token', data.token)
         saveUserIdToCookie(data.user._id)
         saveAuthToCookie(data.token)
         saveUserToCookie(data.user.fullName)
@@ -98,6 +98,7 @@ export default {
         let userDetaildata = await userDetailInfo(
           this.$store.getters['Login/getUserId'],
         )
+
         console.log(userDetaildata)
         console.log(userDetaildata.data.coverImage)
         this.$store.commit(
@@ -106,6 +107,8 @@ export default {
         )
         //console.log(this.$store.getters['Login/getUserProfileImage'])
         console.log(this.$store.state.Login.profileImage)
+
+
 
         // username을 랜덤키로 초기화
         if (!data.user.username) {
@@ -127,12 +130,13 @@ export default {
       }
     },
     async initializeUsername(userData) {
+      console.log('실행여부4')
       const data = {
         fullName: userData.user.fullName,
         username: makeRandomKey() + '/',
       }
 
-      await updateNickname(data)
+      await updateNameField(data)
     },
     storageSetup(userData) {
       const dataToBeStored = {

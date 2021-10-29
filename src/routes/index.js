@@ -10,6 +10,8 @@ import Chat from './Chat'
 import Example from '~/components/designs/Example'
 import PersonalInfo from './PersonalInfo'
 import ResultOfPostList from './ResultOfPostList'
+import Editor from '~/components/pages/postContent/Editor'
+import EditPage from '~/components/pages/postContent/EditPage'
 import NotFound from './NotFound'
 
 export default createRouter({
@@ -50,11 +52,24 @@ export default createRouter({
       },
     },
     {
-      path: '/postContent',
-      // path: '/postContent',
+      path: '/postContent/:postId',
       name: 'PostContent',
       component: PostContent,
       props: true,
+      // children: [
+      //   {
+      //     path: '/',
+      //     name: 'default',
+      //     component: Editor,
+      //     props: true,
+      //   },
+      //   {
+      //     path: 'edit',
+      //     name: 'edit',
+      //     component: EditPage,
+      //     props: true,
+      //   },
+      // ],
     },
     {
       path: '/example',
