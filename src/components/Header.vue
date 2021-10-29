@@ -80,7 +80,7 @@
 
         <template v-if="getUserProfileImage === `undefined`">
           <button @click="toggleSidebar">
-            <i class="material-icons"> account_circle </i>
+            <img class="default-image" :src="this.defaultImageUrl" />
           </button>
         </template>
         <template v-else>
@@ -115,6 +115,7 @@ import { getImageFromCookie } from '~/utils/cookies'
 export default {
   data() {
     return {
+      defaultImageUrl: require('../assets/images/user-profile__default.svg'),
       userImage: null,
       detailAdress: '',
       countyList: [],
