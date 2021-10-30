@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <div>Main</div>
-    <BoxSkeleton />
+    <!-- <BoxSkeleton />
     <CircleSkeleton />
-    <ParagraphSkeleton />
+    <ParagraphSkeleton /> -->
   </div>
 </template>
 
