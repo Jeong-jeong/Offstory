@@ -4,7 +4,7 @@
       <header class="post__header">
         <div class="left">
           <button class="user__profile">
-            <img :src="profileUrl" alt="유저 프로필" />
+            <img :src="HostProfileUrl" alt="유저 프로필" />
           </button>
           <div class="user__infos">
             <strong class="nickname">{{ author.fullName }}</strong>
@@ -51,7 +51,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import { timeForToday } from '~/utils/function'
-import { getUserIdToCookie } from '~/utils/cookies'
 import { deletePost } from '~/api/postContent'
 import Card from '~/components/designs/Card'
 import Editor from '~/components/pages/postContent/Editor'
@@ -63,10 +62,9 @@ export default {
     Editor,
     EditPage,
   },
-  props: ['postId', 'postData', 'author', 'channel'],
+  props: ['postId', 'postData', 'author', 'channel', 'userId'],
   data() {
     return {
-      userId: this.getUserIdToCookie(),
       isEdit: false,
     }
   },
@@ -91,7 +89,7 @@ export default {
         this.$router.push('/')
       }
     },
-    getProfileImg() {
+    getHostProfileImg() {
       const result = Object.keys(this.author).some(v => v === 'coverImage')
       return result ? this.author.coverImage : ''
     },
@@ -102,7 +100,6 @@ export default {
     async rerender() {
       await this.$emit('rerender')
     },
-    getUserIdToCookie,
   },
   computed: {
     ...mapGetters('Login', ['getUserId']),
@@ -112,9 +109,9 @@ export default {
     content() {
       return this.postData.title.split('/')[1]
     },
-    profileUrl() {
+    HostProfileUrl() {
       return (
-        this.getProfileImg() ||
+        this.getHostProfileImg() ||
         require('~/assets/images/user-profile__default.svg')
       )
     },
@@ -123,7 +120,7 @@ export default {
     },
     checkHost() {
       return this.author._id === this.userId
-    }, // 글 작성자 _id, 로그인된 userId 같은지 비교
+    },
   },
 }
 </script>
