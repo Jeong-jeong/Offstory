@@ -112,9 +112,6 @@ export default {
       event.target.style.height = '1px'
       event.target.style.height = 20 + event.target.scrollHeight + 'px'
     },
-    preventSubmit(event) {
-      event.preventDefault()
-    },
   },
 }
 </script>
