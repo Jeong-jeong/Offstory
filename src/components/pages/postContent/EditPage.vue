@@ -18,9 +18,11 @@
       class="editor__title"
       :value="title"
       @input="changeTitle"
+      @keyup.enter="submitInfo"
     />
     <img v-if="postImgUrl" class="postImg" :src="postImgUrl" alt="" />
     <textarea
+      @keyup="resizeContent($event)"
       ref="content"
       class="content"
       type="text"
@@ -31,7 +33,6 @@
 
 <script>
 import { updatePost } from '~/api/postContent'
-import { putBr } from '~/utils/function'
 export default {
   directives: {
     focus: {
@@ -81,10 +82,11 @@ export default {
       this.title = event.target.value
     },
     changeContent() {
-      const result = putBr(this.$refs.content.value)
+      const result = this.$refs.content.value
       this.content = result
     },
     async submitInfo() {
+      console.log('submit')
       this.changeContent()
 
       const userData = new FormData()
@@ -106,7 +108,13 @@ export default {
       this.postImgUrl = newImageSrc
       this.image = file
     },
-    putBr,
+    resizeContent(event) {
+      event.target.style.height = '1px'
+      event.target.style.height = 20 + event.target.scrollHeight + 'px'
+    },
+    preventSubmit(event) {
+      event.preventDefault()
+    },
   },
 }
 </script>
@@ -128,12 +136,13 @@ export default {
     position: relative;
     left: 50%;
     transform: translateX(-50%);
-    width: $UPLOAD_IMAGE_SIZE;
-    height: $UPLOAD_IMAGE_SIZE;
+    width: $EDIT_BASE_SIZE;
+    height: $EDIT_BASE_SIZE;
   }
 
   .content {
     flex-grow: 1;
+    min-height: $EDIT_BASE_SIZE;
     padding: $INNER_PADDING_VERTICAL 0;
     border: transparent;
     font-size: $FONT_L;
