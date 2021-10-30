@@ -64,7 +64,9 @@ export default {
     },
     getUsername() {
       //this.$store.state.Login.username
-      const username = this.$store.state.Login.username
+      const res = this.$storage.getItem('userData')
+      const username = res.userFullName
+      //const username = this.$store.state.Login.username
       return username
     },
   },
@@ -116,8 +118,8 @@ export default {
       border-radius: 20px;
     }
     .message {
+      display: flex;
       .username {
-        width: 45px;
         color: $KEY_COLOR;
       }
       display: flex;
