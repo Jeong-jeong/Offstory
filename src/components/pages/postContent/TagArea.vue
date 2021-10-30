@@ -179,4 +179,11 @@ export default {
     width: 100%;
   }
 }
+
+@include responsive('sm') {
+  .tag {
+    width: $SM_TAG_WIDTH !important;
+    font-size: $FONT_XXS !important;
+  }
+}
 </style>

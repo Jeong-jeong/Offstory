@@ -2,6 +2,7 @@ $LG_BREAKPOINT: 768px;
 
 // font
 $FONT_MAIN: 'Noto Sans KR', sans-serif; 
+$FONT_XXS: 10px;
 $FONT_XS: 12px;
 $FONT_S: 14px;
 $FONT_BASE: 16px;
@@ -40,16 +41,19 @@ $INNER_PADDING_SMALL: 5px;
 $LG_HEADER_HEIGHT: 100px;
 $SM_HEADER_HEIGHT: 70PX;
 
+$SM_PROFILE_SIZE: 30px;
 
 $DEEMED: rgba($COLOR_BLACK, .2);
 
 $TAG_WIDTH: 100px;
+$SM_TAG_WIDTH: 70px;
 $TAG_HEIGHT: 24px;
 
 $BUTTON_HEIGHT: 50px;
 $BUTTON_BOX_SHADOW: 1px 2px 3px 0 rgba(black, 0.25);
 
 $EDIT_BASE_SIZE: 200px;
+
 
 // index
 $LOADING_INDEX: 1000;

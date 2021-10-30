@@ -189,4 +189,30 @@ export default {
     }
   }
 }
+
+@include responsive('sm') {
+  .post {
+    &__header {
+      .left {
+        .user {
+          &__profile {
+            img {
+              width: 30px;
+              height: 30px;
+            }
+          }
+          &__infos {
+            .nickname {
+              font-size: $FONT_BASE;
+            }
+            .uploadDate,
+            .location {
+              font-size: $FONT_XS;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 </style>

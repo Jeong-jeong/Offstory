@@ -61,4 +61,15 @@ export default {
     font-size: $FONT_L;
   }
 }
+@include responsive('sm') {
+  .editor {
+    &__title {
+      font-size: $FONT_BASE;
+    }
+
+    .content {
+      font-size: $FONT_S;
+    }
+  }
+}
 </style>
