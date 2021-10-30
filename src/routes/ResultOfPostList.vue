@@ -285,9 +285,9 @@ export default {
 
         .resultlist-listcard {
           cursor: pointer;
-          margin: 30px 5px 5px 10px;
-          width: 355px;
-          height: 370px;
+          margin: 30px 10px 0px 10px;
+          width: 300px;
+          height: 350px;
           // border: solid 1px $COLOR_GRAY_LIGHTEN;
           // border-radius: 30px;
           padding: 20px;
@@ -296,15 +296,16 @@ export default {
             display: flex;
             margin-bottom: 10px;
             .resultlist-listcard-createtime {
+              width: 30%;
               font-size: $FONT_S;
               color: $COLOR_GRAY_DARKEN;
             }
             .resultlist-listcard-timefortoday {
+              width: 20%;
               margin: 0px;
               padding: 0px;
-              margin-top: 4px;
-              margin-left: 6px;
-              font-size: 10px;
+              margin-top: 5px;
+              font-size: 5px;
               color: $KEY_COLOR;
               //opacity: 0.8;
             }
@@ -312,7 +313,7 @@ export default {
               width: 130px;
               margin: 0px;
               padding: 0px;
-              margin-left: 80px;
+              margin-left: 10px;
               font-size: $FONT_S;
               color: $COLOR_GRAY_DARKEN;
               white-space: nowrap;
@@ -471,7 +472,7 @@ export default {
 
         .resultlist-listcard {
           cursor: pointer;
-          margin: 30px 5px 5px 10px;
+          margin: 30px 8px 0px 10px;
           width: 355px;
           height: 370px;
           // border: solid 1px $COLOR_GRAY_LIGHTEN;
