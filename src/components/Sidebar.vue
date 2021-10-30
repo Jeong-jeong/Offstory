@@ -36,8 +36,10 @@
       </button>
     </div>
     <div class="bottom">
-      <img @click="logout" :src="logoutImageUrl" alt="" class="logoutimg" />
-      <button class="optionlogout" @click="logout">로그아웃</button>
+      <button @click="logout" class="logout-wrapper">
+        <img :src="logoutImageUrl" alt="" class="logoutimg" />
+        <button class="optionlogout">로그아웃</button>
+      </button>
     </div>
   </div>
 </template>
@@ -86,12 +88,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../styles/variables';
-
 .wrapper {
   transition: all 0.3s;
   z-index: 100;
-  width: 20%;
+  width: 250px;
   position: fixed;
   top: 70px; //($LG_HEADER_HEIGHT-(10px));;
   right: 30px;
@@ -106,23 +106,24 @@ export default {
     display: flex;
     flex-direction: column;
     padding: 10px;
-    border-bottom: solid $COLOR_GRAY_LIGHTEN;
+    border-bottom: 1px solid $COLOR_GRAY_LIGHTEN;
 
     .basicimage {
-      width: 40px;
-      height: 40px;
+      width: $LG_PROFILE_SIZE;
+      height: $LG_PROFILE_SIZE;
     }
     .userimage {
-      width: 40px;
-      height: 40px;
+      width: $LG_PROFILE_SIZE;
+      height: $LG_PROFILE_SIZE;
       border-radius: 20px;
+      border: 1px solid $COLOR_BORDER;
+      margin-bottom: $INNER_PADDING_SMALL;
     }
     .message {
       display: flex;
       .username {
         color: $KEY_COLOR;
       }
-      display: flex;
     }
   }
 
@@ -141,21 +142,21 @@ export default {
     }
   }
   .bottom {
-    text-align: right;
-
-    .logoutimg {
-      cursor: pointer;
-      width: 20px;
-      height: 20px;
-    }
-    .optionlogout {
-      color: $COLOR_GRAY_DARKEN;
-      font-family: 'Noto Sans KR', sans-serif;
-      font-size: $FONT_S;
-      margin-left: 2px;
-    }
-    &:hover {
-      opacity: 0.6;
+    @include flexbox($jc: end);
+    .logout-wrapper {
+      @include flexbox;
+      .logoutimg {
+        width: 20px;
+        height: 20px;
+      }
+      .optionlogout {
+        color: $COLOR_GRAY_DARKEN;
+        font-size: $FONT_S;
+        margin-left: 2px;
+      }
+      &:hover {
+        opacity: 0.6;
+      }
     }
   }
 }
