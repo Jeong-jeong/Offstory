@@ -56,9 +56,15 @@
               class="posttitle"
               required
             />
-            <img :src="url" ref="image" />
+            <template v-if="this.url === ''">
+              <img :src="this.url" ref="image" style="display: none" />
+            </template>
+            <template v-else>
+              <img :src="url" ref="image" @click="deleteImage" />
+              <button class="deletebutton" @click="deleteImage">x</button>
+            </template>
             <div class="buttonwrapper">
-              <Button class="uploadbutton" @click="chooseFile"
+              <Button class="uploadbutton" @click.prevent="chooseFile"
                 >이미지 첨부하기</Button
               >
             </div>
@@ -98,6 +104,7 @@ import Input from '../components/designs/Input.vue'
 export default {
   data() {
     return {
+      url: '',
       detailAdress: '',
       title: '',
       content: '',
@@ -166,17 +173,18 @@ export default {
       this.$refs.imageInput.click()
     },
     previewImage(event) {
-      this.uploadedFile = event.target.files[0]
+      this.image = event.target.files[0]
 
-      if (this.uploadedFile) {
+      if (this.image) {
         const reader = new FileReader()
         const img = this.$refs.image
 
         reader.addEventListener('load', function () {
           img.setAttribute('src', this.result)
         })
+        this.url = window.URL.createObjectURL(this.image)
 
-        reader.readAsDataURL(this.uploadedFile)
+        reader.readAsDataURL(this.image)
       }
     },
     selectedCounty(event) {
@@ -190,10 +198,21 @@ export default {
       console.log(this.image)
       console.log(this.imgurl)
     },
+    deleteImage() {
+      this.image = null
+      this.url = ''
+    },
 
     getcitylist() {
       console.log(this.city)
       return this.city
+    },
+    hover(element) {
+      element.setAttribute('src', 'http://dummyimage.com/100x100/eb00eb/fff')
+    },
+
+    unhover(element) {
+      element.setAttribute('src', 'http://dummyimage.com/100x100/000/fff')
     },
     async createPost() {
       try {
@@ -339,9 +358,26 @@ export default {
         }
         .titlearea {
           img {
+            border: none;
             margin-left: 135px;
             width: 50px;
             height: 30px;
+            cursor: pointer;
+            &:hover {
+              filter: brightness(30%);
+              //opacity: 0.3;
+            }
+          }
+          .deletebutton {
+            padding: 0px;
+            height: 13px;
+            color: white;
+            background-color: black;
+            opacity: 0.6;
+
+            &:hover {
+              opacity: 0.3;
+            }
           }
           width: 100%;
           .posttitle {
