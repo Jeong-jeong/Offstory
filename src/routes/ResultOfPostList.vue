@@ -3,11 +3,6 @@
     <div class="searchresult-page">
       <div class="row">
         <div class="col-lg-13">
-          <!-- <div v-if="$store.state.movie.isLoading" class="loader"></div>
-      <div v-else> -->
-          <!-- <div v-if="!isLoading && !totalresult" class="movie-result">
-        검색된 영화가 없습니다. 다시 입력해주세요.
-      </div> -->
           <h1 class="searchresult-find">
             <template
               v-if="
@@ -112,19 +107,6 @@
                         </div>
                       </div>
                     </div>
-                    <!-- <button
-                    class="movie-result-moreinfobutton"
-                    @click="
-                      $router.push({
-                        name: 'MoreInfo',
-                        params: {
-                          id: i.imdbID,
-                        },
-                      })
-                    "
-                  >
-                    상세보기
-                  </button> -->
                   </div>
                 </li>
               </ul>
@@ -246,183 +228,379 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.container {
-  z-index: 2;
-  position: relative;
-  top: $LG_HEADER_HEIGHT;
+@include responsive('sm') {
+  .container {
+    z-index: 2;
+    position: relative;
+    top: $LG_HEADER_HEIGHT;
 
-  .row {
-    justify-content: center;
-    .col-lg-13 {
-      width: 100%;
+    .row {
+      justify-content: center;
+      .col-lg-13 {
+        width: 100%;
+      }
     }
-  }
-  .searchresult-find {
-    margin-top: 20px;
-    padding-bottom: $INNER_PADDING_HORIZONTAL;
-    color: $COLOR_GRAY_DARKEN;
-    border-bottom: solid $COLOR_GRAY_DARKEN;
-    font-size: $FONT_L;
-    span {
-      color: black;
-    }
-  }
-  .searchresult-find-noresult {
-    margin-top: 250px;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    text-align: center;
-    align-items: center;
-    justify-content: center;
-    .nontext {
-      font-size: $FONT_XXL;
-      color: $COLOR_GRAY_DARKEN;
-    }
-    .party {
+    .searchresult-find {
       margin-top: 20px;
+      padding-bottom: $INNER_PADDING_HORIZONTAL;
+      color: $COLOR_GRAY_DARKEN;
+      border-bottom: solid $COLOR_GRAY_DARKEN;
+      font-size: $FONT_BASE;
+      span {
+        color: black;
+      }
     }
-  }
-  .resultlist {
-    width: 100%;
-    height: 100%;
-
-    .resultlist-listcards {
+    .searchresult-find-noresult {
+      margin-top: 250px;
       display: flex;
-      flex-flow: wrap;
-      height: 100%;
+      flex-direction: column;
       width: 100%;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      .nontext {
+        font-size: $FONT_L;
+        color: $COLOR_GRAY_DARKEN;
+      }
+      .party {
+        min-width: 100px;
+        margin-top: 20px;
+      }
+    }
+    .resultlist {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      text-align: center;
+      align-items: center;
+      height: 100%;
 
-      .resultlist-listcard {
-        cursor: pointer;
-        margin: 30px 5px 5px 10px;
-        width: 355px;
-        height: 370px;
-        // border: solid 1px $COLOR_GRAY_LIGHTEN;
-        // border-radius: 30px;
-        padding: 20px;
-        box-shadow: $BOX_SHADOW;
-        .resultlist-listcard-header {
-          display: flex;
-          margin-bottom: 10px;
-          .resultlist-listcard-createtime {
-            font-size: $FONT_BASE;
-            color: $COLOR_GRAY_DARKEN;
-          }
-          .resultlist-listcard-timefortoday {
-            margin: 0px;
-            padding: 0px;
-            margin-top: 4px;
-            margin-left: 6px;
-            font-size: $FONT_XS;
-            color: $KEY_COLOR;
-            //opacity: 0.8;
-          }
-          .resultlist-listcard-location {
-            width: 130px;
-            margin: 0px;
-            padding: 0px;
-            margin-left: 50px;
-            font-size: $FONT_BASE;
-            color: $COLOR_GRAY_DARKEN;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-        }
-        .postimage {
-          border-radius: 10px;
-          overflow: hidden;
+      .resultlist-listcards {
+        display: flex;
+        height: 100%;
+        width: 100%;
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
 
-          .postimage-default {
-            border-radius: 30px;
-            width: 100%;
-            height: 200px;
+        .resultlist-listcard {
+          cursor: pointer;
+          margin: 30px 10px 0px 10px;
+          width: 300px;
+          height: 350px;
+          // border: solid 1px $COLOR_GRAY_LIGHTEN;
+          // border-radius: 30px;
+          padding: 20px;
+          box-shadow: $BOX_SHADOW;
+          .resultlist-listcard-header {
+            display: flex;
+            margin-bottom: 10px;
+            .resultlist-listcard-createtime {
+              width: 30%;
+              font-size: $FONT_S;
+              color: $COLOR_GRAY_DARKEN;
+            }
+            .resultlist-listcard-timefortoday {
+              width: 20%;
+              margin: 0px;
+              padding: 0px;
+              margin-top: 5px;
+              font-size: 5px;
+              color: $KEY_COLOR;
+              //opacity: 0.8;
+            }
+            .resultlist-listcard-location {
+              width: 130px;
+              margin: 0px;
+              padding: 0px;
+              margin-left: 10px;
+              font-size: $FONT_S;
+              color: $COLOR_GRAY_DARKEN;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
           }
-          .postimage-user {
+          .postimage {
             border-radius: 10px;
-            width: 100%;
-            height: 200px;
-            filter: brightness(65%);
-            transform: scale(1);
-            -webkit-transform: scale(1);
-            -moz-transform: scale(1);
-            -ms-transform: scale(1);
-            -o-transform: scale(1);
-            transition: all 0.3s ease-in-out;
+            overflow: hidden;
 
-            &:hover {
+            .postimage-default {
+              border-radius: 30px;
+              width: 100%;
+              height: 200px;
+            }
+            .postimage-user {
+              border-radius: 10px;
+              width: 100%;
+              height: 200px;
+              filter: brightness(65%);
               transform: scale(1);
-              -webkit-transform: scale(1.1);
+              -webkit-transform: scale(1);
               -moz-transform: scale(1);
               -ms-transform: scale(1);
-              -o-transform: scale(1.1);
+              -o-transform: scale(1);
+              transition: all 0.3s ease-in-out;
+
+              &:hover {
+                transform: scale(1);
+                -webkit-transform: scale(1.1);
+                -moz-transform: scale(1);
+                -ms-transform: scale(1);
+                -o-transform: scale(1.1);
+              }
             }
           }
-        }
-        .resultlist-listcard-active {
-          display: flex;
-          width: 120px;
-          padding-left: 5px;
-          .resultlist-listcard-like {
-            color: $COLOR_GRAY_LIGHTEN;
-            .resultlist-listcard-likeimage {
-              color: $COLOR_GRAY_LIGHTEN;
-              width: 15px;
-              height: 15px;
-              opacity: 0.6;
-            }
-          }
-          .resultlist-listcardt-comment {
-            margin-left: 10px;
-            color: $COLOR_GRAY_LIGHTEN;
-            .resultlist-listcard-commentimage {
-              color: $COLOR_GRAY_LIGHTEN;
-              width: 13px;
-              height: 13px;
-              opacity: 0.5;
-            }
-          }
-        }
-        .resultlist-listcard-userinfo {
-          position: relative;
-          top: -50px;
-          display: flex;
-          justify-self: center;
-          //   align-content: center;
-          flex-direction: column;
-          .resultlist-listcard-userprofile {
+          .resultlist-listcard-active {
             display: flex;
-            align-items: center;
-            flex-direction: column;
-            .resultlist-listcard-userprofile-basicimage {
-              width: 40px;
-              height: 40px;
-              background: white;
-              border-radius: 30px;
+            width: 120px;
+            padding-left: 5px;
+            .resultlist-listcard-like {
+              color: $COLOR_GRAY_LIGHTEN;
+              font-size: 12px;
+              .resultlist-listcard-likeimage {
+                color: $COLOR_GRAY_LIGHTEN;
+                width: 12px;
+                height: 12px;
+                opacity: 0.6;
+              }
             }
-            .resultlist-listcard-userprofile-userimage {
-              width: 40px;
-              height: 40px;
-              border-radius: 40px;
-            }
-            .movie-result-author {
-            }
-            .resultlist-listcard-title {
-              width: 300px;
-              text-align: center;
-              margin-top: 10px;
-              font-size: $FONT_L;
-              //   white-space: nowrap;
-              //   overflow: hidden;
-              @include ellipsis($line: 2) //   text-overflow: ellipsis;
-;
+            .resultlist-listcardt-comment {
+              margin-left: 10px;
+              font-size: 12px;
+              color: $COLOR_GRAY_LIGHTEN;
+              .resultlist-listcard-commentimage {
+                color: $COLOR_GRAY_LIGHTEN;
+                width: 10px;
+                height: 10px;
+                opacity: 0.5;
+              }
             }
           }
+          .resultlist-listcard-userinfo {
+            position: relative;
+            top: -50px;
+            display: flex;
+            justify-self: center;
+            //   align-content: center;
+            flex-direction: column;
+            .resultlist-listcard-userprofile {
+              display: flex;
+              align-items: center;
+              flex-direction: column;
+              .resultlist-listcard-userprofile-basicimage {
+                width: 40px;
+                height: 40px;
+                background: white;
+                border-radius: 30px;
+              }
+              .resultlist-listcard-userprofile-userimage {
+                width: 40px;
+                height: 40px;
+                border-radius: 40px;
+              }
+              .movie-result-author {
+              }
+              .resultlist-listcard-title {
+                width: 300px;
+                text-align: center;
+                margin-top: 10px;
+                font-size: $FONT_BASE;
+                //   white-space: nowrap;
+                //   overflow: hidden;
+                @include ellipsis($line: 2) //   text-overflow: ellipsis;
+;
+              }
+            }
+          }
+          &:hover {
+            //filter: brightness(120%);
+            opacity: 0.6;
+          }
         }
-        &:hover {
-          //filter: brightness(120%);
-          opacity: 0.6;
+      }
+    }
+  }
+}
+@media screen and (min-width: 769px) {
+  .container {
+    z-index: 2;
+    position: relative;
+    top: $LG_HEADER_HEIGHT;
+
+    .row {
+      justify-content: center;
+      .col-lg-13 {
+        width: 100%;
+      }
+    }
+    .searchresult-find {
+      margin-top: 20px;
+      padding-bottom: $INNER_PADDING_HORIZONTAL;
+      color: $COLOR_GRAY_DARKEN;
+      border-bottom: solid $COLOR_GRAY_DARKEN;
+      font-size: $FONT_L;
+      span {
+        color: black;
+      }
+    }
+    .searchresult-find-noresult {
+      margin-top: 250px;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      .nontext {
+        font-size: $FONT_XXL;
+        color: $COLOR_GRAY_DARKEN;
+      }
+      .party {
+        margin-top: 20px;
+      }
+    }
+    .resultlist {
+      width: 100%;
+      height: 100%;
+
+      .resultlist-listcards {
+        display: flex;
+        flex-flow: wrap;
+        height: 100%;
+        width: 100%;
+
+        .resultlist-listcard {
+          cursor: pointer;
+          margin: 30px 8px 0px 10px;
+          width: 355px;
+          height: 370px;
+          // border: solid 1px $COLOR_GRAY_LIGHTEN;
+          // border-radius: 30px;
+          padding: 20px;
+          box-shadow: $BOX_SHADOW;
+          .resultlist-listcard-header {
+            display: flex;
+            margin-bottom: 10px;
+            .resultlist-listcard-createtime {
+              font-size: $FONT_BASE;
+              color: $COLOR_GRAY_DARKEN;
+            }
+            .resultlist-listcard-timefortoday {
+              margin: 0px;
+              padding: 0px;
+              margin-top: 4px;
+              margin-left: 6px;
+              font-size: $FONT_XS;
+              color: $KEY_COLOR;
+              //opacity: 0.8;
+            }
+            .resultlist-listcard-location {
+              width: 130px;
+              margin: 0px;
+              padding: 0px;
+              margin-left: 50px;
+              font-size: $FONT_BASE;
+              color: $COLOR_GRAY_DARKEN;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+          }
+          .postimage {
+            border-radius: 10px;
+            overflow: hidden;
+
+            .postimage-default {
+              border-radius: 30px;
+              width: 100%;
+              height: 200px;
+            }
+            .postimage-user {
+              border-radius: 10px;
+              width: 100%;
+              height: 200px;
+              filter: brightness(65%);
+              transform: scale(1);
+              -webkit-transform: scale(1);
+              -moz-transform: scale(1);
+              -ms-transform: scale(1);
+              -o-transform: scale(1);
+              transition: all 0.3s ease-in-out;
+
+              &:hover {
+                transform: scale(1);
+                -webkit-transform: scale(1.1);
+                -moz-transform: scale(1);
+                -ms-transform: scale(1);
+                -o-transform: scale(1.1);
+              }
+            }
+          }
+          .resultlist-listcard-active {
+            display: flex;
+            width: 120px;
+            padding-left: 5px;
+            .resultlist-listcard-like {
+              color: $COLOR_GRAY_LIGHTEN;
+              .resultlist-listcard-likeimage {
+                color: $COLOR_GRAY_LIGHTEN;
+                width: 15px;
+                height: 15px;
+                opacity: 0.6;
+              }
+            }
+            .resultlist-listcardt-comment {
+              margin-left: 10px;
+              color: $COLOR_GRAY_LIGHTEN;
+              .resultlist-listcard-commentimage {
+                color: $COLOR_GRAY_LIGHTEN;
+                width: 13px;
+                height: 13px;
+                opacity: 0.5;
+              }
+            }
+          }
+          .resultlist-listcard-userinfo {
+            position: relative;
+            top: -50px;
+            display: flex;
+            justify-self: center;
+            //   align-content: center;
+            flex-direction: column;
+            .resultlist-listcard-userprofile {
+              display: flex;
+              align-items: center;
+              flex-direction: column;
+              .resultlist-listcard-userprofile-basicimage {
+                width: 40px;
+                height: 40px;
+                background: white;
+                border-radius: 30px;
+              }
+              .resultlist-listcard-userprofile-userimage {
+                width: 40px;
+                height: 40px;
+                border-radius: 40px;
+              }
+              .movie-result-author {
+              }
+              .resultlist-listcard-title {
+                width: 300px;
+                text-align: center;
+                margin-top: 10px;
+                font-size: $FONT_L;
+                //   white-space: nowrap;
+                //   overflow: hidden;
+                @include ellipsis($line: 2) //   text-overflow: ellipsis;
+;
+              }
+            }
+          }
+          &:hover {
+            //filter: brightness(120%);
+            opacity: 0.6;
+          }
         }
       }
     }

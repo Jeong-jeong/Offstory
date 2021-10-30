@@ -47,4 +47,8 @@ body {
   font-family: $FONT_MAIN;
   @include font;
 }
+
+input {
+  font-family: $FONT_MAIN;
+}
 </style>
