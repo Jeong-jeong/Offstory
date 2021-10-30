@@ -51,8 +51,8 @@ export default {
     position: relative;
     left: 50%;
     transform: translateX(-50%);
-    width: $UPLOAD_IMAGE_SIZE;
-    height: $UPLOAD_IMAGE_SIZE;
+    width: $EDIT_BASE_SIZE;
+    height: $EDIT_BASE_SIZE;
   }
 
   .content {
