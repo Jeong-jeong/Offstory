@@ -22,9 +22,7 @@
                   timeForToday(commentList.updatedAt)
                 }}</span></strong
               >
-              <p class="content">
-                {{ commentList.comment }}
-              </p>
+              <p v-html="putBr(commentList.comment)" class="content"></p>
             </div>
           </div>
           <div class="right">
@@ -52,6 +50,7 @@
                 {{ loginedUserName }}
               </strong>
               <template v-if="isLogin">
+                <!-- FIXME: getCheckReject 작동안됨-->
                 <template v-if="getCheckReject === true">
                   <p class="reject" type="text">
                     참가가 거절되어 댓글을 다실 수 없어요
@@ -75,7 +74,7 @@
               </div>
             </div>
           </div>
-          <div class="right">
+          <div v-show="getCheckReject" class="right">
             <Button
               v-if="isCommentLength"
               @click="submitComment"
@@ -107,7 +106,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getUserIdToCookie, getUserFromCookie } from '~/utils/cookies'
-import { timeForToday } from '~/utils/function'
+import { timeForToday, putBr } from '~/utils/function'
 import { userDetailInfo } from '~/api'
 import { createComment, deleteComment } from '~/api/postContent'
 import TagArea from '~/components/pages/postContent/TagArea'
@@ -222,6 +221,7 @@ export default {
       }
     },
     timeForToday,
+    putBr,
   },
   created() {
     this.getUserId(), this.getUserName()
@@ -312,7 +312,7 @@ export default {
       }
 
       .right {
-        @include flexbox;
+        @include flexbox($jc: between);
         flex-direction: column;
       }
 
@@ -339,6 +339,44 @@ export default {
           width: 35px;
           height: 35px;
           object-fit: contain; // 일단은 contain으로 해놓음
+        }
+      }
+    }
+  }
+
+  @include responsive('sm') {
+    .comments {
+      &__header {
+        font-size: $FONT_L;
+      }
+
+      /* depth가 너무 길어짐 3depth 이상 들어가지 않게 이후 수정... */
+      &__list {
+        .item {
+          .left {
+            .user {
+              &__profile {
+                img {
+                  width: $SM_PROFILE_SIZE;
+                  height: $SM_PROFILE_SIZE;
+                }
+              }
+              &__infos {
+                .content,
+                .add__comment,
+                .reject {
+                  font-size: $FONT_S;
+                }
+              }
+            }
+          }
+
+          .right {
+            justify-content: center;
+            .button {
+              width: 50px !important;
+            }
+          }
         }
       }
     }
