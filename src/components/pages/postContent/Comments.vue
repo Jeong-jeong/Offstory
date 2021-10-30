@@ -101,7 +101,7 @@
 import { mapGetters } from 'vuex'
 import { getUserIdToCookie } from '~/utils/cookies'
 import { timeForToday } from '~/utils/function'
-import { userDetailInfo } from '~/api'
+import { userDetailInfo, updateNameField } from '~/api'
 import { createComment, deleteComment } from '~/api/postContent'
 import TagArea from '~/components/pages/postContent/TagArea'
 import Card from '~/components/designs/Card.vue'
@@ -157,11 +157,43 @@ export default {
         comment: commentValue,
         postId: this.postId,
       }
+
+      console.log('유저 데이터 잘 저장되는가?', commentValue)
       const res = await createComment(userData)
       console.log(res, 'createComment')
       await this.$emit('rerender')
       this.comment = ''
       // TODO: \n을 바꿔줘야 함
+
+      this.savePostInUsername() // User의 username에 참가한 post기록
+    },
+    async savePostInUsername() {
+      const { userId: currentUserId } = this.$storage.getItem('userData')
+      const { data: priorData } = await userDetailInfo(currentUserId)
+      const [key, priorPostsThatUserJoin] = priorData.username.split('/')
+      const dataToBeStored = {
+        postid: this.initialPostId,
+        state: '',
+      }
+      let username = null
+
+      console.log('priorPostsThatUserJoin', priorPostsThatUserJoin)
+      if (priorPostsThatUserJoin.length === 0) {
+        console.log('priorPostsThatUserJoin.length === 0')
+        username = key + '/' + JSON.stringify([dataToBeStored])
+      } else {
+        console.log('priorPostsThatUserJoin.length !== 0')
+        const postsThatUserJoin = JSON.parse(priorPostsThatUserJoin)
+        postsThatUserJoin.push(dataToBeStored)
+        username = key + '/' + JSON.stringify(postsThatUserJoin)
+      }
+
+      const data = {
+        fullName: priorData.fullName,
+        username,
+      }
+
+      const res = await updateNameField(data)
     },
     async deleteComments(event) {
       const li = event.target.closest('li')

@@ -23,10 +23,10 @@
     </div>
     <div id="activity-filter" class="row">
       <div class="col col-sm-4 col-lg-8">
-        <div class="activity-filter">
+        <div class="activity-filter" @click="filterPost($event)">
           <button class="admitted">날짜 순</button>
-          <button class="admitted">참가 승인됨</button>
-          <button class="denied">참가 거절됨</button>
+          <button class="approve">참가 승인됨</button>
+          <button class="reject">참가 거절됨</button>
           <button class="waiting">참가 대기중</button>
         </div>
       </div>
@@ -34,84 +34,12 @@
     <div id="activity-list" class="row">
       <div class="col col-sm-4 col-lg-8">
         <div class="activity-list">
-          <ul>
+          <ul ref="postContainer">
             <Post
-              v-for="post in postsThatUserJoinTest"
+              v-for="post in postsThatUserLike"
               :key="post._id"
               :post="post"
             />
-            <!-- <li v-for="(post, index) in postData" :key="post._id">
-              <div class="post-container">
-                <div class="top">
-                  <div class="user-profile">
-                    <img
-                      :src="
-                        post.author.coverImage ||
-                        require('../assets/images/user-profile.svg')
-                      "
-                      alt=""
-                    />
-                    <div class="text-profile">
-                      <div class="nickname">{{ post.author.fullName }}</div>
-                      <div class="address">
-                        {{ post.location.replace(/[/]/g, ' ') }}
-                      </div>
-                    </div>
-                  </div>
-                  <Tag class="join-state" :fontSize="'15px'" />
-                </div>
-                <Divider :margin="`13`" />
-                <div class="mid">
-                  <div class="title">{{ post.title.split('/')[0] }}</div>
-                  <div
-                    class="content"
-                    v-html="getPostContent(post.title)"
-                  ></div>
-                </div>
-                <div class="bot">
-                  <div class="interest">
-                    <div class="like">
-                      <template v-if="doesUserLikePost(post)">
-                        <i
-                          class="material-icons"
-                          @click="event => changeLike(event, post)"
-                        >
-                          favorite
-                        </i>
-                      </template>
-                      <template v-else>
-                        <i
-                          class="material-icons"
-                          @click="event => changeLike(event, post)"
-                        >
-                          favorite_border
-                        </i>
-                      </template>
-                      <span class="like-number">{{
-                        post.likes.length > 100 ? '100+' : post.likes.length
-                      }}</span>
-                    </div>
-                    <div class="comments">
-                      <i class="material-icons"> chat_bubble </i>
-                      <div class="comment-number">
-                        {{
-                          post.comments.length > 0
-                            ? '100+'
-                            : post.comments.length
-                        }}
-                      </div>
-                    </div>
-                  </div>
-                  <div class="time">
-                    <div class="day">{{ getTime(post.createdAt)[0] }}</div>
-                    <div class="seperator">/</div>
-                    <div class="before">
-                      {{ pastTimeFrom(post.createdAt) }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </li> -->
           </ul>
         </div>
       </div>
@@ -141,8 +69,6 @@ export default {
         author: '',
         location: '',
       },
-      postsThatUserJoin: [],
-      postsThatUserJoinTest: [],
       postsThatUserLike: [],
       onlyLikeDataInPost: [],
       postContent: '',
@@ -156,10 +82,20 @@ export default {
     },
   },
   mounted() {
-    this.getPostsThatUserJoin()
-    this.getPostsThatUserJoinTest()
+    this.getPostsThatUserLike()
   },
   methods: {
+    filterPost(event) {
+      const filterState = event.target.className
+      console.log('실행여부', filterState)
+      const posts = [...this.$refs.postContainer.children]
+      console.log('실행여부2', posts[0])
+      const filteredPosts = posts.filter(post => {
+        console.log('post', post)
+        return post.classList.contains(filterState)
+      })
+      console.log('filteredPosts', filteredPosts)
+    },
     async changeLike(event, pos) {},
     doesUserLikePost(post) {
       return this.getOnlyLikeDataInPost(post).includes(
@@ -207,52 +143,23 @@ export default {
         new Date(time).toTimeString().split(' ')[0],
       ]
     },
-    async getPostsThatUserJoin() {
+    async getPostsThatUserLike() {
       const { userId: currentUserId } = this.$storage.getItem('userData')
       const { data } = await userDetailInfo(currentUserId)
-      const [_, postsStr] = data.username.split('/')
+      const likes = data.likes
 
-      if (postsStr !== '') {
-        const posts = JSON.parse(postsStr)
-        posts.forEach(async post => {
-          const { data: detailOfPost } = await getPost(post.id)
-          detailOfPost.state = post.state
-          this.postsThatUserJoin.push(detailOfPost)
-        })
+      for (let i = 0; i < likes.length; i += 1) {
+        const { post: postId } = likes[i]
+        const { data } = await getPost(postId)
+        likes[i] = data
       }
+
+      this.postsThatUserLike = likes
     },
-    async getPostsThatUserJoinTest() {
+    async getpostsThatUserLikeTest() {
       const { data } = await getPost('617b8a28c63ff72877a2277c')
       data.state = 'approve'
-      this.postsThatUserJoinTest.push(data)
-      console.log('테스트입니다', this.postsThatUserJoinTest)
-    },
-    // updatePostLike(postArray) {
-    //   const res = []
-    //   for (let i = 0; i < postArray.length; i++) {
-    //     if (
-    //       postArray[i].likes.some(like => {
-    //         console.log('like.user', like.user)
-    //         console.log('userId', this.$storage.getItem('userData').userId)
-    //         return like.user === this.$storage.getItem('userData').userId
-    //       })
-    //     ) {
-    //       res.push(true)
-    //     } else {
-    //       res.push(false)
-    //     }
-    //   }
-    //   console.log('res결과는?', res)
-
-    //   this.doesUserLikePost = res
-    // },
-    async getPartiesThatUserJoin() {
-      const { data } = await userDetailInfo(
-        this.$storage.getItem('userData').userId,
-      )
-      const [_, party] = data.username.split('/')
-
-      return JSON.parse(party)
+      this.postsThatUserLikeTest.push(data)
     },
     async likeUpdate(postId) {
       const data = {

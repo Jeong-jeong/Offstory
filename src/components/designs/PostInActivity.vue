@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="post-wrapper">
     <div class="top">
       <div class="user-profile">
         <img
@@ -16,7 +16,7 @@
           </div>
         </div>
       </div>
-      <Tag class="join-state" :fontSize="'15px'" />
+      <Tag :state="post.state" class="join-state" :fontSize="'15px'" />
     </div>
     <Divider :margin="`13`" />
     <div class="mid">
@@ -28,13 +28,11 @@
     <div class="bot">
       <div class="interest">
         <div class="like">
-          <template v-if="doesUserLike">
-            <i class="material-icons" @click="cancleLike()"> favorite </i>
-          </template>
-          <template v-else>
-            <i class="material-icons" @click="like()"> favorite_border </i>
-          </template>
-          <span class="like-number">{{ likeCount }}</span>
+          <Like
+            :likeCount="likeCount"
+            :post="post"
+            :doesUserLike="doesUserLike"
+          />
         </div>
         <div class="comments">
           <i class="material-icons"> chat_bubble </i>
@@ -64,6 +62,7 @@ import {
 } from '~/api'
 import Divider from './Divider'
 import Tag from './Tag'
+import Like from './Like'
 
 export default {
   data() {
@@ -76,6 +75,7 @@ export default {
   components: {
     Divider,
     Tag,
+    Like,
   },
   props: {
     post: {
@@ -100,7 +100,9 @@ export default {
       return this.post.title.split('/')[1].replace(/\n/g, '<br/>')
     },
     commentCount() {
-      return this.post.comments.length > 0 ? '100+' : this.post.comments.length
+      return this.post.comments.length > 100
+        ? '100+'
+        : this.post.comments.length
     },
   },
   methods: {
@@ -158,7 +160,7 @@ export default {
     },
     likeUpdate() {
       const { userId: currentUserId } = this.$storage.getItem('userData')
-      const likes = this.post.likes || []
+      const likes = this.post.likes
       const likeUserIds = likes.map(like => like.user) // user is userId
       this.doesUserLike = likeUserIds.includes(currentUserId)
       this.likeCount = likes.length
@@ -171,14 +173,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.wrapper {
+.post-wrapper {
   padding: 20px 40px 15px;
+  margin-bottom: 20px;
   border: none;
   border-radius: 10px;
   box-shadow: 5px 5px 10px 3px rgba(224, 224, 224, 0.95);
-  transition: transform 0.5s;
+  transition: all 0.5s ease;
+
   &:hover {
     transform: scale(1.05);
+  }
+
+  .delete {
+    width: 0%;
+    transition: all 0.5s ease;
   }
 }
 
@@ -231,7 +240,7 @@ export default {
     text-overflow: ellipsis;
 
     line-height: 1.2;
-    height: 60px;
+    height: 65px;
     white-space: normal;
     text-align: left;
     word-wrap: break-word;
