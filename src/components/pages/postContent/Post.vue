@@ -54,33 +54,19 @@ import { timeForToday } from '~/utils/function'
 import { getUserIdToCookie } from '~/utils/cookies'
 import { deletePost } from '~/api/postContent'
 import Card from '~/components/designs/Card'
-import Button from '~/components/designs/Button'
 import Editor from '~/components/pages/postContent/Editor'
 import EditPage from '~/components/pages/postContent/EditPage'
 
 export default {
   components: {
     Card,
-    Button,
     Editor,
     EditPage,
   },
   props: ['postId', 'postData', 'author', 'channel'],
-  watch: {
-    postData: {
-      deep: true,
-      handler(newValue, oldValue) {
-        console.log(newValue, 'postData watch')
-      },
-    },
-  },
   data() {
     return {
       userId: this.getUserIdToCookie(),
-      // postId: this.initialPostId,
-      // postData: this.initialPostData,
-      // author: this.author,
-      // channel: this.initialChannel,
       isEdit: false,
     }
   },
@@ -95,11 +81,15 @@ export default {
     cancelEdit() {
       this.isEdit = false
     },
-    submitDelete() {
-      const userData = {
-        id: this.postId,
+    async submitDelete() {
+      if (window.confirm('포스트를 삭제하시겠어요?')) {
+        const userData = {
+          id: this.postId,
+        }
+        const res = await deletePost({ data: userData })
+        await window.alert('포스트가 삭제되었어요')
+        this.$router.push('/')
       }
-      // deletePost(userData)
     },
     getProfileImg() {
       const result = Object.keys(this.author).some(v => v === 'coverImage')
@@ -160,7 +150,7 @@ export default {
             @include flexbox;
             width: 40px;
             height: 40px;
-            object-fit: cover; // 일단은 contain으로 해놓음
+            object-fit: cover;
           }
         }
 
@@ -194,6 +184,32 @@ export default {
         }
         .edit {
           margin-right: $INNER_PADDING_HORIZONTAL;
+        }
+      }
+    }
+  }
+}
+
+@include responsive('sm') {
+  .post {
+    &__header {
+      .left {
+        .user {
+          &__profile {
+            img {
+              width: 30px;
+              height: 30px;
+            }
+          }
+          &__infos {
+            .nickname {
+              font-size: $FONT_BASE;
+            }
+            .uploadDate,
+            .location {
+              font-size: $FONT_XS;
+            }
+          }
         }
       }
     }

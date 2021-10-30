@@ -2,11 +2,13 @@
   <div class="editor">
     <h1 class="editor__title">{{ title }}</h1>
     <img v-if="postImgUrl" class="postImg" :src="postImgUrl" alt="" />
-    <p v-html="content" class="content" type="text"></p>
+    <p v-html="replacedContent" class="content" type="text"></p>
   </div>
 </template>
 
 <script>
+import { putBr } from '~/utils/function'
+
 export default {
   props: {
     title: {
@@ -23,6 +25,11 @@ export default {
       type: String,
       default: '',
       required: true,
+    },
+  },
+  computed: {
+    replacedContent() {
+      return putBr(this.content)
     },
   },
 }
@@ -44,14 +51,25 @@ export default {
     position: relative;
     left: 50%;
     transform: translateX(-50%);
-    width: $UPLOAD_IMAGE_SIZE;
-    height: $UPLOAD_IMAGE_SIZE;
+    width: $EDIT_BASE_SIZE;
+    height: $EDIT_BASE_SIZE;
   }
 
   .content {
     flex-grow: 1;
     padding: $INNER_PADDING_VERTICAL 0;
     font-size: $FONT_L;
+  }
+}
+@include responsive('sm') {
+  .editor {
+    &__title {
+      font-size: $FONT_BASE;
+    }
+
+    .content {
+      font-size: $FONT_S;
+    }
   }
 }
 </style>
