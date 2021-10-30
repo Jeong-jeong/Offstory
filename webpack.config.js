@@ -37,6 +37,13 @@ module.exports = {
         },
       },
       {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        loader: 'file-loader',
+        options: {
+          name: 'assets/fonts/[name].[hash:8].[ext]',
+        },
+      },
+      {
         test: /\.s?css$/,
         use: [
           'vue-style-loader',
