@@ -8,8 +8,11 @@
         <img class="userimage" :src="getUserProfileImage" alt="" />
       </template>
       <div class="message">
-        <div class="username">{{ getUserName }}</div>
-        <span>님, 우리 동행할까요?</span>
+        <div class="username">
+          {{ getUserName }} <span class="sir">님</span>
+          <span class="sir">님</span>
+        </div>
+        <p>우리 동행할까요?</p>
       </div>
     </div>
     <div class="top">
@@ -122,8 +125,12 @@ export default {
     }
     .message {
       display: flex;
+      flex-direction: column;
       .username {
         color: $KEY_COLOR;
+      }
+      .sir {
+        color: $COLOR_PRIMARY;
       }
     }
   }
