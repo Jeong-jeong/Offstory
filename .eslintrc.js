@@ -36,6 +36,7 @@ module.exports = {
     'vue/html-closing-bracket-newline': 'off',
     'vue/return-in-computed-property': 'off',
     'vue/no-multiple-template-root': 'off',
+    'vue/no-mutating-props': 'off',
     'no-unused-vars': 'warn',
     'vue/html-self-closing': [
       'error',

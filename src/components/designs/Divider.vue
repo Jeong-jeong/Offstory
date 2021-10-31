@@ -1,5 +1,5 @@
 <template>
-  <hr :style="{ propsStyle }" />
+  <hr :style="propsStyle" />
 </template>
 
 <script>
@@ -12,7 +12,7 @@ export default {
     },
     width: {
       type: [Number, String],
-      default: 10,
+      default: '100%',
     },
     height: {
       type: [Number, String],
