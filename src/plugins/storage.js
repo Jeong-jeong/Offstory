@@ -19,7 +19,7 @@ const getItem = (key, defaultValue) => {
 }
 
 const removeItem = key => {
-  console.log('실행여부')
+  console.log('세션에서 삭제됨')
   storage.removeItem(key)
 }
 

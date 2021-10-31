@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="sidebar-wrapper">
     <div class="header">
       <template v-if="getUserProfileImage === `undefined`">
         <img class="basicimage" :src="imageUrl" alt="" />
@@ -8,7 +8,7 @@
         <img class="userimage" :src="getUserProfileImage" alt="" />
       </template>
       <div class="message">
-        <div class="username">{{ getUsername }}</div>
+        <div class="username">{{ getUserName }}</div>
         <span>님, 우리 동행할까요?</span>
       </div>
     </div>
@@ -49,8 +49,8 @@ import { deleteCookie, getImageFromCookie } from '~/utils/cookies'
 export default {
   data() {
     return {
-      imageUrl: require('../assets/images/user-profile__default.svg'),
-      logoutImageUrl: require('../assets/images/logout-black.svg'),
+      imageUrl: require('~/assets/images/user-profile__default.svg'),
+      logoutImageUrl: require('~/assets/images/logout-black.svg'),
     }
   },
   computed: {
@@ -64,7 +64,7 @@ export default {
       console.log(profileImage)
       return profileImage
     },
-    getUsername() {
+    getUserName() {
       //this.$store.state.Login.username
       const res = this.$storage.getItem('userData')
       const username = res.userFullName
@@ -80,6 +80,7 @@ export default {
       deleteCookie('off_user')
       deleteCookie('off_userId')
       deleteCookie('off_userprofileImage')
+      this.$storage.removeItem('userData')
       this.$router.push('/')
       return alert('logout!')
     },
@@ -88,15 +89,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.wrapper {
+.sidebar-wrapper {
   transition: all 0.3s;
-  z-index: 100;
+  z-index: $HEADER_INDEX;
   width: 250px;
   position: fixed;
-  top: 70px; //($LG_HEADER_HEIGHT-(10px));;
-  right: 30px;
+  top: calc($LG_HEADER_HEIGHT - $INNER_PADDING_VERTICAL);
+  right: $HEADER_MARGIN;
   box-shadow: $BOX_SHADOW;
-  background-color: white;
+  background-color: $COLOR_WHITE;
   padding: 10px;
 
   .header {
@@ -132,7 +133,6 @@ export default {
     flex-direction: column;
     margin-top: 10px;
     button {
-      font-family: 'Noto Sans KR', sans-serif;
       margin: 0 10px 10px 10px;
       font-size: $FONT_BASE;
       color: $COLOR_GRAY_DARKEN;
