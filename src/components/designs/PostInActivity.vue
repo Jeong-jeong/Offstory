@@ -1,5 +1,5 @@
 <template>
-  <div class="post-wrapper">
+  <div class="post">
     <div class="top">
       <div class="user-profile">
         <img
@@ -16,7 +16,6 @@
           </div>
         </div>
       </div>
-      <Tag :state="post.state" class="join-state" :fontSize="'15px'" />
     </div>
     <Divider :margin="`13`" />
     <div class="mid">
@@ -27,19 +26,12 @@
     </div>
     <div class="bot">
       <div class="interest">
-        <div class="like">
-          <Like
-            :likeCount="likeCount"
-            :post="post"
-            :doesUserLike="doesUserLike"
-          />
-        </div>
-        <div class="comments">
-          <i class="material-icons"> chat_bubble </i>
-          <div class="comment-number">
-            {{ commentCount }}
-          </div>
-        </div>
+        <Like
+          :likeCount="likeCount"
+          :post="post"
+          :doesUserLike="doesUserLike"
+        />
+        <Comment :post="post" />
       </div>
       <div class="time">
         <div class="day">{{ getTime(post.createdAt)[0] }}</div>
@@ -53,16 +45,10 @@
 </template>
 
 <script>
-import {
-  likePost,
-  cancelLikePost,
-  userDetailInfo,
-  cancleLikePost,
-  getPost,
-} from '~/api'
+import { likePost, cancleLikePost } from '~/api'
 import Divider from './Divider'
-import Tag from './Tag'
 import Like from './Like'
+import Comment from './Comment'
 
 export default {
   data() {
@@ -74,8 +60,8 @@ export default {
   },
   components: {
     Divider,
-    Tag,
     Like,
+    Comment,
   },
   props: {
     post: {
@@ -173,13 +159,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.post-wrapper {
+.post {
   padding: 20px 40px 15px;
   margin-bottom: 20px;
   border: none;
   border-radius: 10px;
   box-shadow: 5px 5px 10px 3px rgba(224, 224, 224, 0.95);
   transition: all 0.5s ease;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.05);
@@ -188,6 +175,12 @@ export default {
   .delete {
     width: 0%;
     transition: all 0.5s ease;
+  }
+
+  @media (max-width: 430px) {
+    .post {
+      padding: 0px 0px 15px;
+    }
   }
 }
 
@@ -205,12 +198,18 @@ export default {
     }
 
     .text-profile {
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
       margin-left: 15px;
 
+      .address {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       .nickname {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-weight: 700;
         font-size: 1.1rem;
         line-height: 0.95rem;
@@ -227,6 +226,9 @@ export default {
 
 .mid {
   .title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-weight: 700;
     font-size: 1.4rem;
   }
@@ -251,7 +253,10 @@ export default {
 }
 
 .bot {
+  display: flex;
+  align-items: center;
   position: relative;
+
   margin-top: 20px;
 
   i {
@@ -260,40 +265,29 @@ export default {
 
   .interest {
     display: flex;
+    flex-grow: 1;
 
-    .like {
-      display: flex;
-      align-items: center;
-
-      i {
-        cursor: pointer;
-      }
-
-      .like-number {
-        font-size: 1.1rem;
-        margin-left: 8px;
-      }
-    }
-    .comments {
-      display: flex;
-      align-items: center;
-      margin-left: 50px;
-
-      .comment-number {
-        font-size: 1.1rem;
-        margin-left: 8px;
-      }
+    .comment {
+      margin-left: 20px;
     }
   }
+
   .time {
-    position: absolute;
     display: flex;
-    top: 0;
-    right: 0;
 
     div {
       font-size: 1.1rem;
       margin-left: 10px;
+    }
+
+    @media (max-width: 430px) {
+      .before {
+        display: none;
+      }
+
+      .seperator {
+        display: none;
+      }
     }
   }
 }

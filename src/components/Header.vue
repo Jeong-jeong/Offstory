@@ -1,20 +1,14 @@
 <template>
-  <div class="header-wrapper">
-    <div class="left" @click="$router.push('/')">
-      <img src="../assets/images/symbol.svg" alt="OffStory 심볼" />
-      <button class="logo">OffStory</button>
+  <div class="wrapper">
+    <div class="left">
+      <img
+        @click="$router.push('/')"
+        src="../assets/images/symbol.svg"
+        alt="OffStory 심볼"
+      />
+      <button class="logo" @click="$router.push('/')">OffStory</button>
     </div>
-    <div ref="middle" class="middle">
-      <!-- <form @submit.prevent="">
-        <input
-          :value="userAddress"
-          placeholder="'서울 강남'을 입력해 보세요"
-          ref="input"
-          @keyup.enter="parseAddress"
-        />
-        <button><i class="material-icons"> search </i></button>
-      </form> -->
-      <!-- <div class="search-Title">어디서 만날까요?</div> -->
+    <div class="middle">
       <br />
       <div class="search-address">
         <form
@@ -47,60 +41,43 @@
               {{ data }}
             </option>
           </select>
-          <!-- TODO: sm이랑 lg의 input, button 이벤트가 달라야 해서 2개씩 만듦 -->
           <input
-            class="search-detail lg"
+            class="search-detail"
             v-model="detailAdress"
             placeholder="상세주소 입력"
             @keyup.enter="searchPost"
           />
-          <input
-            class="search-detail sm"
-            v-model="detailAdress"
-            placeholder="상세주소 입력"
-            @keyup.enter="searchPost(), closeSearch()"
-          />
-          <button class="lg-search-button" aria-label="검색 버튼">
-            <i class="material-icons"> search </i>
-          </button>
-          <button
-            class="sm-search-button"
-            aria-label="검색 버튼"
-            @click="closeSearch"
-          >
+          <button aria-label="검색 버튼">
             <i class="material-icons"> search </i>
           </button>
         </form>
       </div>
-      <button ref="close" class="cancel-button" @click="closeSearch">
-        <span class="material-icons"> close </span>
-      </button>
     </div>
     <div class="right">
       <template v-if="isLogin">
-        <button @click="openSearch" aria-label="검색 버튼">
+        <button aria-label="검색 버튼">
           <i class="material-icons"> search </i>
         </button>
-        <button
-          aria-label="글쓰기 버튼"
-          @click="this.$router.push({ name: 'CreateNewPost' })"
-        >
+        <button aria-label="글쓰기 버튼">
           <i class="material-icons"> edit </i>
         </button>
-        <!-- <button aria-label="채팅 버튼">
+        <button aria-label="채팅 버튼">
           <i class="material-icons"> question_answer </i>
         </button>
         <button aria-label="알림 버튼">
           <i class="material-icons"> notifications </i>
-        </button> -->
-
-        <button @click.stop="toggleSidebar">
-          <img
-            ref="userProfile"
-            class="userprofile-image onToggle"
-            :src="getUserProfileImage"
-          />
         </button>
+
+        <template v-if="getUserProfileImage === `undefined`">
+          <button @click="toggleSidebar">
+            <img class="default-image" :src="this.defaultImageUrl" />
+          </button>
+        </template>
+        <template v-else>
+          <button @click="toggleSidebar">
+            <img class="userprofile-image" :src="getUserProfileImage" />
+          </button>
+        </template>
       </template>
       <template v-else>
         <Button
@@ -128,7 +105,7 @@ import { getImageFromCookie } from '~/utils/cookies'
 export default {
   data() {
     return {
-      defaultImageUrl: require('~/assets/images/user-profile__default.svg'),
+      defaultImageUrl: require('../assets/images/user-profile__default.svg'),
       userImage: null,
       detailAdress: '',
       countyList: [],
@@ -160,7 +137,7 @@ export default {
   props: {
     isSidebarShowed: {
       type: Boolean,
-      required: true,
+      defaultValue: false,
     },
   },
   components: {
@@ -176,7 +153,8 @@ export default {
     ]),
     getUserProfileImage() {
       const profileImage = getImageFromCookie()
-      return profileImage === 'undefined' ? this.defaultImageUrl : profileImage
+      console.log(profileImage)
+      return profileImage
     },
   },
   methods: {
@@ -206,12 +184,6 @@ export default {
     },
 
     toggleSidebar() {
-      if (this.isSidebarShowed === false) {
-        // FIXME: 실제 isSodebarShowed는 true인데 false일 때 작동;;
-        this.$refs.userProfile.classList.add('onToggle')
-      } else {
-        this.$refs.userProfile.classList.remove('onToggle')
-      }
       this.$emit('toggleSidebar')
     },
     async selectedCity(event) {
@@ -294,74 +266,76 @@ export default {
       this.$router.push('/ResultOfPostList')
       // }
     },
-    openSearch() {
-      this.$refs.middle.style = 'display: flex'
-      this.$refs.close.style = 'display: inline-block'
-      this.$emit('closeSidebar')
-    },
-    closeSearch() {
-      this.$refs.middle.style = 'display: none'
-      this.$refs.close.style = 'display: none'
-    },
   },
 }
 </script>
 
 <style scoped lang="scss">
-.header-wrapper {
+@import '../styles/variables';
+
+.wrapper {
   position: fixed;
   width: 100%;
   height: $LG_HEADER_HEIGHT;
-  padding: 0 $HEADER_MARGIN;
-  @include flexbox($jc: between);
-  z-index: $HEADER_INDEX;
-  background-color: rgba($COLOR_WHITE, $OPACITY);
-  backdrop-filter: blur(10px);
+  border-bottom: 0.05px solid #cccccc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.9);
 
   .left {
-    @include flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 40px;
 
     img {
-      width: 40px;
       cursor: pointer;
     }
 
     .logo {
-      /* font-family: $FONT_LOGO; */
-      font-size: $HEADER_ICON_BASE;
+      font-size: 35px;
+      font-weight: 700;
       color: $KEY_COLOR;
-      margin-left: 10px;
+      margin-left: 20px;
     }
   }
 
   .middle {
-    @include pos-center-x;
-    @include flexbox;
+    display: flex;
+    justify-content: center;
+    margin-right: -20px;
     .search-address {
-      position: relative;
       form {
-        width: 100%;
+        position: relative;
         display: flex;
         align-items: center;
 
         select {
-          @include font($color: $COLOR_GRAY_DARKEN);
+          @include font;
           width: 150px;
-          margin: $INNER_PADDING_SMALL;
+          padding: 0px;
+          margin: 5px;
           padding: $INNER_PADDING_VERTICAL $INNER_PADDING_HORIZONTAL;
           border-radius: $BORDER_RADIOUS;
           border: 1px solid $COLOR_GRAY_DARKEN;
-          background: none;
+          font-weight: 700;
+          color: $COLOR_GRAY_DARKEN;
           .citylist {
             color: $COLOR_GRAY_DARKEN;
           }
           .countylist {
             color: $COLOR_GRAY_DARKEN;
           }
+
+          &::placeholder {
+            font-weight: 700;
+            color: $COLOR_GRAY_DARKEN;
+          }
         }
-        .search-detail {
+        input {
           @include font;
-          position: relative;
           width: 200px;
           height: 52px;
           margin: 5px;
@@ -369,12 +343,9 @@ export default {
           border-radius: $BORDER_RADIOUS;
           border: 1px solid $COLOR_GRAY_DARKEN;
 
-          &.sm {
-            display: none;
-          }
-
           &::placeholder {
-            color: $COLOR_GRAY_DARKEN;
+            font-weight: 700;
+            color: $COLOR_GRAY_LIGHTEN;
           }
         }
 
@@ -382,7 +353,7 @@ export default {
         //   width: 10%;
         //   padding: 13px;
         //   font-size: 20px;
-        //   border: 1px solid darken($KEY_xCOLOR, 0%);
+        //   border: 1px solid darken($KEY_COLOR, 0%);
         //   border-radius: 25px;
         //   &:focus {
         //     border-color: darken($KEY_COLOR, 10%);
@@ -390,52 +361,48 @@ export default {
         // }
 
         button {
-          display: inline-block;
           position: absolute;
           right: 10px;
-
-          &.sm-search-button {
-            display: none;
-          }
+          z-index: 1;
 
           i {
-            font-size: $HEADER_ICON_BASE;
+            color: darken($KEY_COLOR, 0%);
+            font-size: 35px;
           }
         }
       }
-    }
-
-    .cancel-button {
-      display: none;
     }
   }
 
   .right {
+    margin-right: 25px;
+
     button {
-      margin-left: $LG_PADDING_HORIZONTAL;
+      margin-left: 25px;
 
       .userprofile-image {
-        width: $LG_PROFILE_SIZE + $ACTIVE_BORDER;
-        height: $LG_PROFILE_SIZE + $ACTIVE_BORDER;
+        width: 35px;
+        height: 35px;
         border-radius: 30px;
-        border: 1px solid $COLOR_BORDER;
-
-        &.onToggle {
-          border: $ACTIVE_BORDER solid $KEY_COLOR;
-        }
       }
       i {
-        font-size: $LG_PROFILE_SIZE;
-        color: $COLOR_PRIMARY;
-        transition: color 300ms;
+        font-size: 35px;
+        color: darken($KEY_COLOR, 0%);
         &:hover {
-          color: $KEY_COLOR;
+          color: darken($KEY_COLOR, 30%);
         }
       }
+    }
 
-      &:first-child {
-        display: none;
-      }
+    button:first-child {
+      display: none;
+    }
+
+    .profile-image {
+      width: 35px;
+      height: 35p;
+      border-radius: 50%;
+      border: 1px solid $KEY_COLOR;
     }
   }
 
@@ -453,58 +420,10 @@ export default {
     }
 
     .middle {
-      width: 100%;
-      height: 100vh;
-      z-index: $SEARCH_INDEX;
-      position: absolute;
-      top: 10px;
-      background-color: $COLOR_WHITE;
       display: none;
-
-      .search-address {
-        form {
-          flex-wrap: wrap;
-          select,
-          .search-detail.sm {
-            display: block;
-            width: 100%;
-          }
-
-          .search-detail.lg {
-            display: none;
-          }
-          .lg-search-button {
-            display: none;
-          }
-
-          button.sm-search-button {
-            position: static;
-            display: block;
-            width: 100%;
-            padding: $INNER_PADDING_SMALL;
-            margin: $INNER_PADDING_SMALL;
-            border-radius: $BORDER_RADIOUS;
-            background-color: $KEY_COLOR;
-
-            i {
-              color: $COLOR_WHITE;
-            }
-          }
-        }
-      }
-      .cancel-button {
-        position: absolute;
-        top: $INNER_PADDING_SMALL;
-        right: $INNER_PADDING_SMALL;
-        width: $LG_PROFILE_SIZE;
-        height: $LG_PROFILE_SIZE;
-      }
     }
-
-    .right {
-      button:first-child {
-        display: inline-block;
-      }
+    .right button:first-child {
+      display: inline;
     }
   }
 }
