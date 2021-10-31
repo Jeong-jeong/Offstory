@@ -96,7 +96,6 @@ export default {
       })
       console.log('filteredPosts', filteredPosts)
     },
-    async changeLike(event, pos) {},
     doesUserLikePost(post) {
       return this.getOnlyLikeDataInPost(post).includes(
         this.$storage.getItem('userData').userId,
@@ -147,14 +146,15 @@ export default {
       const { userId: currentUserId } = this.$storage.getItem('userData')
       const { data } = await userDetailInfo(currentUserId)
       const likes = data.likes
-
+      const postsThatUserLike = []
+      console.log('userData는 어떻게 나옴?', data)
+      console.log('likes는 어떻게 나옴?', likes)
       for (let i = 0; i < likes.length; i += 1) {
         const { post: postId } = likes[i]
         const { data } = await getPost(postId)
-        likes[i] = data
+        postsThatUserLike[i] = data
       }
-
-      this.postsThatUserLike = likes
+      this.postsThatUserLike = postsThatUserLike
     },
     async getpostsThatUserLikeTest() {
       const { data } = await getPost('617b8a28c63ff72877a2277c')

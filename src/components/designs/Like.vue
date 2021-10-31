@@ -1,17 +1,38 @@
 <template>
   <div class="wrapper">
     <template v-if="doesUserLike">
-      <i class="material-icons" @click="cancleLike"> favorite </i>
+      <i
+        class="material-icons"
+        @click="cancleLike"
+        :style="{ fontSize: checkUnit(symbolSize) }"
+      >
+        favorite
+      </i>
     </template>
     <template v-else>
-      <i class="material-icons" @click="like"> favorite_border </i>
+      <i
+        class="material-icons"
+        @click="like"
+        :style="{ fontSize: checkUnit(symbolSize) }"
+      >
+        favorite_border
+      </i>
     </template>
-    <span class="like-number">{{ likeCount }}</span>
+    <span
+      class="like-number"
+      :style="{
+        marginLeft: checkUnit(marginBetween),
+        fontSize: checkUnit(fontSize),
+      }"
+      >{{ likeCount }}</span
+    >
   </div>
 </template>
 
 <script>
 import { likePost, cancleLikePost } from '~/api'
+import { checkUnit } from '~/utils/function'
+
 export default {
   data() {
     return {
@@ -25,11 +46,25 @@ export default {
       default: () => ({}),
       required: true,
     },
+    symbolSize: {
+      type: [Number, String],
+      default: '1.2rem',
+    },
+    fontSize: {
+      type: [Number, String],
+      default: '1.2rem',
+    },
+    marginBetween: {
+      type: [Number, String],
+      default: '10px',
+    },
   },
   computed: {},
   methods: {
     async like() {
       const res = await likePost(this.post._id)
+      console.log('res는 제대로 동작하나?', res)
+      console.log('this.post.Id는?', this.post._id)
       this.doesUserLike = !this.doesUserLike
       this.likeCount++
       const { userId: currentUserId } = this.$storage.getItem('userData')
@@ -37,7 +72,8 @@ export default {
     },
     async cancleLike() {
       const [likeId, index] = this.findLikeId()
-      await cancleLikePost(likeId)
+      const cancleLike = await cancleLikePost(likeId)
+      console.log('cancleLike는 제대로 동작하나?', cancleLike)
       this.doesUserLike = !this.doesUserLike
       this.likeCount--
       this.post.likes.splice(index, 1)
@@ -57,6 +93,7 @@ export default {
       this.doesUserLike = likeUserIds.includes(currentUserId)
       this.likeCount = likes.length
     },
+    checkUnit,
   },
   mounted() {
     this.likeUpdate()
