@@ -19,7 +19,6 @@ const getItem = (key, defaultValue) => {
 }
 
 const removeItem = key => {
-  console.log('실행여부')
   storage.removeItem(key)
 }
 

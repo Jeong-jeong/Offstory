@@ -140,6 +140,8 @@ export default {
         comment: commentValue,
         postId: this.postId,
       }
+
+      console.log('유저 데이터 잘 저장되는가?', commentValue)
       const res = await createComment(userData)
       console.log(res, 'createComment')
       await this.$emit('rerender')
