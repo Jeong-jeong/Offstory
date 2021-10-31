@@ -29,7 +29,6 @@
           :channel="channel"
           :userId="userId"
         />
-        <Like :post="postData" />
         <Comments
           @rerender="rePatch"
           :postId="postId"
@@ -48,7 +47,6 @@
 import Post from '~/components/pages/postContent/Post'
 import Comments from '~/components/pages/postContent/Comments'
 import Button from '~/components/designs/Button.vue'
-import Like from '~/components/designs/Like'
 import { readPost } from '~/api/postContent'
 import {
   getUserIdToCookie,
@@ -60,7 +58,6 @@ export default {
     Post,
     Comments,
     Button,
-    Like,
   },
   props: {
     postId: {

@@ -37,9 +37,10 @@ export default {
 
 <style lang="scss" scoped>
 .editor {
-  height: calc(100% - $LG_HEADER_HEIGHT);
+  position: relative;
   display: flex;
   flex-direction: column;
+  height: calc(100% - $LG_HEADER_HEIGHT);
 
   &__title {
     padding: $INNER_PADDING_VERTICAL 0;

@@ -13,9 +13,7 @@
           </div>
         </div>
         <div class="right">
-          <!-- <Button v-if="!checkHost" v-bind="{ width: '60px', height: '70px' }">
-            찜하기
-          </Button> -->
+          <Like v-if="isLogin && !checkHost" class="likes" :post="postData" />
           <div v-if="checkHost" class="edit-area">
             <button v-if="!isEdit" @click="changeToEdit" class="edit">
               편집
@@ -31,7 +29,6 @@
         <Editor :title="title" :content="content" :postImgUrl="postImgUrl" />
       </template>
       <template v-else>
-        <!-- TODO: 이벤트 올리기 -->
         <EditPage
           @rerender="rerender"
           @saveEdit="saveEdit"
@@ -53,6 +50,7 @@ import { mapGetters } from 'vuex'
 import { timeForToday } from '~/utils/function'
 import { deletePost } from '~/api/postContent'
 import Card from '~/components/designs/Card'
+import Like from '~/components/designs/Like'
 import Editor from '~/components/pages/postContent/Editor'
 import EditPage from '~/components/pages/postContent/EditPage'
 
@@ -61,6 +59,7 @@ export default {
     Card,
     Editor,
     EditPage,
+    Like,
   },
   props: ['postId', 'postData', 'author', 'channel', 'userId'],
   data() {
@@ -102,7 +101,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters('Login', ['getUserId']),
+    ...mapGetters('Login', ['isLogin']),
     title() {
       return this.postData.title.split('/')[0]
     },
