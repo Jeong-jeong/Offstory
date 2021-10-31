@@ -1,5 +1,9 @@
 <template>
-  <Header @toggleSidebar="onProfileClick" />
+  <Header
+    :isSidebarShowed="isSidebarShowed"
+    @toggleSidebar="onProfileClick"
+    @closeSidebar="offProfileClick"
+  />
   <Sidebar v-if="isSidebarShowed && isLogin" />
   <RouterView />
 </template>
@@ -27,6 +31,9 @@ export default {
     onProfileClick() {
       this.isSidebarShowed = !this.isSidebarShowed
     },
+    offProfileClick() {
+      this.isSidebarShowed = false
+    },
     async getChannelList() {
       const channelList = await this.$fetch(
         API_ENDPOINT_OF_DEVCOURSE + 'channels',
@@ -48,7 +55,8 @@ body {
   @include font;
 }
 
-input {
+input,
+button {
   font-family: $FONT_MAIN;
 }
 </style>

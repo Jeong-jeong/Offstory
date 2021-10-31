@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="sidebar-wrapper">
     <div class="header">
       <template v-if="getUserProfileImage === `undefined`">
         <img class="basicimage" :src="imageUrl" alt="" />
@@ -8,8 +8,11 @@
         <img class="userimage" :src="getUserProfileImage" alt="" />
       </template>
       <div class="message">
-        <div class="username">{{ getUsername }}</div>
-        <span>님, 우리 동행할까요?</span>
+        <div class="username">
+          {{ getUserName }}
+          <span class="sir">님</span>
+        </div>
+        <p>우리 동행할까요?</p>
       </div>
     </div>
     <div class="top">
@@ -31,13 +34,12 @@
       >
         내 활동목록
       </button>
-      <button class="option personal-activity" @click="$router.push('/chat')">
-        채팅
-      </button>
     </div>
     <div class="bottom">
-      <img @click="logout" :src="logoutImageUrl" alt="" class="logoutimg" />
-      <button class="optionlogout" @click="logout">로그아웃</button>
+      <button @click="logout" class="logout-wrapper">
+        <img :src="logoutImageUrl" alt="" class="logoutimg" />
+        <button class="optionlogout">로그아웃</button>
+      </button>
     </div>
   </div>
 </template>
@@ -47,8 +49,8 @@ import { deleteCookie, getImageFromCookie } from '~/utils/cookies'
 export default {
   data() {
     return {
-      imageUrl: require('../assets/images/user-profile__default.svg'),
-      logoutImageUrl: require('../assets/images/logout-black.svg'),
+      imageUrl: require('~/assets/images/user-profile__default.svg'),
+      logoutImageUrl: require('~/assets/images/logout-black.svg'),
     }
   },
   computed: {
@@ -62,7 +64,7 @@ export default {
       console.log(profileImage)
       return profileImage
     },
-    getUsername() {
+    getUserName() {
       //this.$store.state.Login.username
       const res = this.$storage.getItem('userData')
       const username = res.userFullName
@@ -78,6 +80,7 @@ export default {
       deleteCookie('off_user')
       deleteCookie('off_userId')
       deleteCookie('off_userprofileImage')
+      this.$storage.removeItem('userData')
       this.$router.push('/')
       return alert('logout!')
     },
@@ -86,17 +89,15 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../styles/variables';
-
-.wrapper {
+.sidebar-wrapper {
   transition: all 0.3s;
-  z-index: 100;
-  width: 20%;
+  z-index: $HEADER_INDEX;
+  width: 250px;
   position: fixed;
-  top: 70px; //($LG_HEADER_HEIGHT-(10px));;
-  right: 30px;
+  top: calc($LG_HEADER_HEIGHT - $INNER_PADDING_VERTICAL);
+  right: $HEADER_MARGIN;
   box-shadow: $BOX_SHADOW;
-  background-color: white;
+  background-color: $COLOR_WHITE;
   padding: 10px;
 
   .header {
@@ -106,23 +107,28 @@ export default {
     display: flex;
     flex-direction: column;
     padding: 10px;
-    border-bottom: solid $COLOR_GRAY_LIGHTEN;
+    border-bottom: 1px solid $COLOR_GRAY_LIGHTEN;
 
     .basicimage {
-      width: 40px;
-      height: 40px;
+      width: $LG_PROFILE_SIZE;
+      height: $LG_PROFILE_SIZE;
     }
     .userimage {
-      width: 40px;
-      height: 40px;
+      width: $LG_PROFILE_SIZE;
+      height: $LG_PROFILE_SIZE;
       border-radius: 20px;
+      border: 1px solid $COLOR_BORDER;
+      margin-bottom: $INNER_PADDING_SMALL;
     }
     .message {
       display: flex;
+      flex-direction: column;
       .username {
         color: $KEY_COLOR;
       }
-      display: flex;
+      .sir {
+        color: $COLOR_PRIMARY;
+      }
     }
   }
 
@@ -131,7 +137,6 @@ export default {
     flex-direction: column;
     margin-top: 10px;
     button {
-      font-family: 'Noto Sans KR', sans-serif;
       margin: 0 10px 10px 10px;
       font-size: $FONT_BASE;
       color: $COLOR_GRAY_DARKEN;
@@ -141,21 +146,21 @@ export default {
     }
   }
   .bottom {
-    text-align: right;
-
-    .logoutimg {
-      cursor: pointer;
-      width: 20px;
-      height: 20px;
-    }
-    .optionlogout {
-      color: $COLOR_GRAY_DARKEN;
-      font-family: 'Noto Sans KR', sans-serif;
-      font-size: $FONT_S;
-      margin-left: 2px;
-    }
-    &:hover {
-      opacity: 0.6;
+    @include flexbox($jc: end);
+    .logout-wrapper {
+      @include flexbox;
+      .logoutimg {
+        width: 20px;
+        height: 20px;
+      }
+      .optionlogout {
+        color: $COLOR_GRAY_DARKEN;
+        font-size: $FONT_S;
+        margin-left: 2px;
+      }
+      &:hover {
+        opacity: 0.6;
+      }
     }
   }
 }

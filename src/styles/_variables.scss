@@ -2,6 +2,7 @@ $LG_BREAKPOINT: 768px;
 
 // font
 $FONT_MAIN: 'Noto Sans KR', sans-serif; 
+$FONT_LOGO: 'SansationBold', sans-serif;
 $FONT_XXS: 10px;
 $FONT_XS: 12px;
 $FONT_S: 14px;
@@ -40,7 +41,11 @@ $INNER_PADDING_SMALL: 5px;
 // component
 $LG_HEADER_HEIGHT: 100px;
 $SM_HEADER_HEIGHT: 70PX;
+$HEADER_MARGIN: 25px;
+$HEADER_ICON_BASE: 35px;
+$ACTIVE_BORDER: 3px;
 
+$LG_PROFILE_SIZE: 40px;
 $SM_PROFILE_SIZE: 30px;
 
 $DEEMED: rgba($COLOR_BLACK, .2);
@@ -58,4 +63,5 @@ $EDIT_BASE_SIZE: 200px;
 // index
 $LOADING_INDEX: 1000;
 $HEADER_INDEX: 100;
+$SEARCH_INDEX: 110;
 $TAG_AREA_INDEX: 10;
