@@ -27,12 +27,16 @@
           :postData="postData"
           :author="author"
           :channel="channel"
+          :userId="userId"
         />
         <Comments
           @rerender="rePatch"
-          :initialPostId="postId"
-          :initialComments="comments"
-          :initialAuthor="author"
+          :postId="postId"
+          :comments="comments"
+          :author="author"
+          :userId="userId"
+          :userName="userName"
+          :userImage="userImage"
         />
       </div>
     </div>
@@ -44,6 +48,11 @@ import Post from '~/components/pages/postContent/Post'
 import Comments from '~/components/pages/postContent/Comments'
 import Button from '~/components/designs/Button.vue'
 import { readPost } from '~/api/postContent'
+import {
+  getUserIdToCookie,
+  getUserFromCookie,
+  getImageFromCookie,
+} from '~/utils/cookies'
 export default {
   components: {
     Post,
@@ -64,6 +73,9 @@ export default {
       author: {},
       comments: [],
       channel: {},
+      userId: '',
+      userName: '',
+      userImage: '',
     }
   },
   computed: {
@@ -79,6 +91,10 @@ export default {
         this.author = postData.author
         this.comments = postData.comments
         this.channel = postData.channel
+
+        this.userId = getUserIdToCookie()
+        this.userName = getUserFromCookie()
+        this.userImage = getImageFromCookie()
         console.log(postData, '데이터 초기화')
       } catch (error) {
         console.log(error.response.data)

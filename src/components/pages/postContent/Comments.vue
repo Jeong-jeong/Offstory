@@ -13,7 +13,10 @@
         >
           <div class="left">
             <button class="user__profile">
-              <img :src="profileUrl" alt="유저 프로필" />
+              <img
+                :src="commentList.author.coverImage || defaultProfileUrl"
+                alt="유저 프로필"
+              />
             </button>
             <div class="user__infos">
               <strong class="nickname"
@@ -31,34 +34,21 @@
                 삭제
               </button>
             </div>
-            <TagArea
-              :postId="postId"
-              :userId="userId"
-              :authorId="author._id"
-              :commentorId="commentList.author._id"
-              :commentorName="commentList.author.fullName"
-            />
           </div>
         </li>
-        <li class="item">
-          <div class="left etc">
+        <li class="item etc">
+          <div class="left">
             <button class="user__profile">
-              <img :src="profileUrl" alt="유저 프로필" />
+              <img :src="returnUserProfileImg" alt="유저 프로필" />
             </button>
             <div class="user__infos">
-              <strong class="nickname">
-                {{ loginedUserName }}
-              </strong>
               <template v-if="isLogin">
-                <!-- FIXME: getCheckReject 작동안됨-->
-                <template v-if="getCheckReject === true">
-                  <p class="reject" type="text">
-                    참가가 거절되어 댓글을 다실 수 없어요
-                  </p>
-                </template>
+                <strong class="nickname">
+                  {{ userName }}
+                </strong>
                 <textarea
-                  v-else
                   v-model="comment"
+                  @input="resizeContent($event)"
                   @keyup.enter.exact="submitComment"
                   ref="comment"
                   class="add__comment"
@@ -67,14 +57,12 @@
                 ></textarea>
               </template>
 
-              <div v-else class="logouted" @click="this.$router.push('/login')">
-                <button class="button--logouted" type="text">
-                  로그인 해주세요
-                </button>
-              </div>
+              <button v-else class="button--logouted" @click="recommendToLogin">
+                로그인 해주세요
+              </button>
             </div>
           </div>
-          <div v-show="getCheckReject" class="right">
+          <div v-if="isLogin" class="right">
             <Button
               v-if="isCommentLength"
               @click="submitComment"
@@ -105,11 +93,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getUserIdToCookie, getUserFromCookie } from '~/utils/cookies'
+
 import { timeForToday, putBr } from '~/utils/function'
-import { userDetailInfo } from '~/api'
 import { createComment, deleteComment } from '~/api/postContent'
-import TagArea from '~/components/pages/postContent/TagArea'
 import Card from '~/components/designs/Card.vue'
 import Button from '~/components/designs/Button.vue'
 
@@ -118,41 +104,28 @@ export default {
     return {
       comment: '',
       isSubmit: false,
-      userId: '',
-      loginedUserName: '',
     }
   },
   components: {
     Card,
     Button,
-    TagArea,
   },
-  props: ['initialPostId', 'initialComments', 'initialAuthor'],
+  props: ['postId', 'comments', 'author', 'userId', 'userName', 'userImage'],
   computed: {
     ...mapGetters('Login', ['isLogin']),
-    postId() {
-      return this.initialPostId
+    defaultProfileUrl() {
+      return require('~/assets/images/user-profile__default.svg')
     },
-    comments() {
-      return this.initialComments
-    },
-    author() {
-      return this.initialAuthor
-    },
-    profileUrl() {
-      return (
-        this.author.image ||
-        require('~/assets/images/user-profile__default.svg')
-      )
+    returnUserProfileImg() {
+      return this.userImage !== 'undefined'
+        ? this.userImage
+        : this.defaultProfileUrl
     },
     isCommentLength() {
       return this.comment.trim().length
     },
     checkHost() {
       return this.author._id === this.userId
-    },
-    getCheckReject() {
-      return this.checkReject()
     },
   },
   methods: {
@@ -173,35 +146,6 @@ export default {
       console.log(res, 'createComment')
       await this.$emit('rerender')
       this.comment = ''
-      // TODO: \n을 바꿔줘야 함
-
-      this.savePostInUsername() // User의 username에 참가한 post기록
-    },
-    async savePostInUsername() {
-      const { userId: currentUserId } = this.$storage.getItem('userData')
-      const { data: priorData } = await userDetailInfo(currentUserId)
-      const [key, priorPostsThatUserJoin] = priorData.username.split('/')
-      const dataToBeStored = {
-        postid: this.initialPostId,
-        state: '',
-      }
-      let username = null
-
-      console.log('priorPostsThatUserJoin', priorPostsThatUserJoin)
-      if (priorPostsThatUserJoin.length === 0) {
-        console.log('priorPostsThatUserJoin.length === 0')
-        username = key + '/' + JSON.stringify([dataToBeStored])
-      } else {
-        console.log('priorPostsThatUserJoin.length !== 0')
-        const postsThatUserJoin = JSON.parse(priorPostsThatUserJoin)
-        postsThatUserJoin.push(dataToBeStored)
-        username = key + '/' + JSON.stringify(postsThatUserJoin)
-      }
-
-      const data = {
-        fullName: priorData.fullName,
-        username,
-      }
     },
     async deleteComments(event) {
       if (window.confirm('댓글을 삭제하시겠어요?')) {
@@ -211,36 +155,17 @@ export default {
           id: commentId,
         }
         console.log(userData)
-        const res = await deleteComment({ data: userData })
+        await deleteComment({ data: userData })
         window.alert('댓글이 삭제되었어요')
         this.$emit('rerender')
       } else {
         return
       }
     },
-
     checkCommentor(event) {
       const li = event.target.closest('li')
       const commentorId = li.getAttribute('commentorId')
-      // // 댓글 작성자 _id, 로그인된 userId가 같은지 비교
       return commentorId === this.userId
-    },
-    async checkReject() {
-      const res = await userDetailInfo(this.userId) // 댓작성자의 정보 불러옴
-      const username = res.data.username.split('/')[1]
-      const array = JSON.parse(username)
-      const result = array.some(
-        v => v.postid === this.postId && v.state === 'reject',
-        // TODO: postId로 저장했는데 postid로 저장되는지 확인
-      )
-      console.log(array, result)
-      return result
-    },
-    getUserId() {
-      this.userId = getUserIdToCookie()
-    },
-    getUserName() {
-      this.loginedUserName = getUserFromCookie()
     },
     doubleSubmitCHeck() {
       if (this.isSubmit) {
@@ -250,11 +175,17 @@ export default {
         return false
       }
     },
+    resizeContent(event) {
+      event.target.style.height = '1px'
+      event.target.style.height = 20 + event.target.scrollHeight + 'px'
+    },
+    recommendToLogin() {
+      if (window.confirm('로그인 페이지로 이동하시겠어요?')) {
+        this.$router.push('/login')
+      }
+    },
     timeForToday,
     putBr,
-  },
-  created() {
-    this.getUserId(), this.getUserName()
   },
 }
 </script>
@@ -282,29 +213,33 @@ export default {
       & {
         border-bottom: 1px solid $COLOR_BORDER;
       }
-      .left {
-        @include flexbox($jc: start);
-        &.etc {
-          width: 100%;
-        }
 
-        .logouted {
+      &.etc {
+        .left {
           width: 100%;
 
-          .button--logouted {
-            width: 100%;
-            text-align: left;
+          .user__infos {
+            height: 100%;
           }
         }
 
-        .reject {
+        .right {
+          justify-content: center;
+        }
+      }
+
+      .left {
+        @include flexbox($jc: start);
+
+        .button--logouted {
           width: 100%;
-          border-radius: 10px;
-          color: $COLOR_RED;
+          height: 100%;
+          border-radius: $BORDER_RADIOUS;
+          text-align: left;
           transition: background-color 300ms;
 
           &:hover {
-            background-color: rgba($COLOR_GRAY_LIGHTEN, $OPACITY);
+            background-color: $COLOR_BORDER;
           }
         }
 
@@ -368,7 +303,7 @@ export default {
           @include flexbox;
           width: 35px;
           height: 35px;
-          object-fit: contain; // 일단은 contain으로 해놓음
+          object-fit: cover; // 일단은 contain으로 해놓음
         }
       }
     }
@@ -393,8 +328,7 @@ export default {
               }
               &__infos {
                 .content,
-                .add__comment,
-                .reject {
+                .add__comment {
                   font-size: $FONT_S;
                 }
               }
