@@ -34,9 +34,6 @@
       >
         내 활동목록
       </button>
-      <button class="option personal-activity" @click="$router.push('/chat')">
-        채팅
-      </button>
     </div>
     <div class="bottom">
       <button @click="logout" class="logout-wrapper">
