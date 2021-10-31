@@ -13,10 +13,7 @@
       </div>
     </div>
     <div class="top">
-      <button
-        class="option personal-info"
-        @click="$router.push('/personalinfo')"
-      >
+      <button class="option personal-info" @click="$router.push('/authcheck')">
         내 정보 변경
       </button>
       <button
