@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="header-wrapper">
     <div class="left" @click="$router.push('/')">
       <img src="../assets/images/symbol.svg" alt="OffStory 심볼" />
       <button class="logo">OffStory</button>
@@ -47,6 +47,7 @@
               {{ data }}
             </option>
           </select>
+          <!-- TODO: sm이랑 lg의 input, button 이벤트가 달라야 해서 2개씩 만듦 -->
           <input
             class="search-detail lg"
             v-model="detailAdress"
@@ -71,7 +72,7 @@
           </button>
         </form>
       </div>
-      <button ref="close" class="cancel-button" @click.stop="closeSearch">
+      <button ref="close" class="cancel-button" @click="closeSearch">
         <span class="material-icons"> close </span>
       </button>
     </div>
@@ -93,7 +94,7 @@
           <i class="material-icons"> notifications </i>
         </button> -->
 
-        <button @click="toggleSidebar">
+        <button @click.stop="toggleSidebar">
           <img
             ref="userProfile"
             class="userprofile-image onToggle"
@@ -127,7 +128,7 @@ import { getImageFromCookie } from '~/utils/cookies'
 export default {
   data() {
     return {
-      defaultImageUrl: require('../assets/images/user-profile__default.svg'),
+      defaultImageUrl: require('~/assets/images/user-profile__default.svg'),
       userImage: null,
       detailAdress: '',
       countyList: [],
@@ -206,6 +207,7 @@ export default {
 
     toggleSidebar() {
       if (this.isSidebarShowed === false) {
+        // FIXME: 실제 isSodebarShowed는 true인데 false일 때 작동;;
         this.$refs.userProfile.classList.add('onToggle')
       } else {
         this.$refs.userProfile.classList.remove('onToggle')
@@ -306,7 +308,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.wrapper {
+.header-wrapper {
   position: fixed;
   width: 100%;
   height: $LG_HEADER_HEIGHT;
@@ -325,7 +327,7 @@ export default {
     }
 
     .logo {
-      font-family: $FONT_LOGO;
+      /* font-family: $FONT_LOGO; */
       font-size: $HEADER_ICON_BASE;
       color: $KEY_COLOR;
       margin-left: 10px;
