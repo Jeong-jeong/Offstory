@@ -9,7 +9,7 @@
       </template>
       <div class="message">
         <div class="username">
-          {{ getUserName }} <span class="sir">님</span>
+          {{ getUserName }}
           <span class="sir">님</span>
         </div>
         <p>우리 동행할까요?</p>
