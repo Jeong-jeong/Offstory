@@ -439,13 +439,13 @@ export default {
     }
   }
 
-  @media (max-width: 1095px) {
+  @media (max-width: $FIRST_BREAPOINT) {
     .logo {
       display: none;
     }
   }
 
-  @media (max-width: 885px) {
+  @media (max-width: $SECOND_BREAPOINT) {
     .left {
       img {
         width: $LG_PROFILE_SIZE;
