@@ -114,7 +114,7 @@ export default {
       font-size: $FONT_XXL;
       flex-direction: row;
       span:first-child {
-        margin-right: $INNER_PADDING_HORIZONTAL:;
+        margin-right: $INNER_PADDING_HORIZONTAL;
       }
     }
 
