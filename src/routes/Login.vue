@@ -56,12 +56,7 @@ import { loginUser, userDetailInfo, updateNameField } from '../api/index'
 import { makeRandomKey } from '~/utils/function'
 import { validateEmail } from '../utils/validation'
 import { Field, Form, ErrorMessage } from 'vee-validate'
-import {
-  saveUserIdToCookie,
-  saveAuthToCookie,
-  saveUserToCookie,
-  saveUserImageToCookie,
-} from '../utils/cookies'
+import { saveUserImageToCookie } from '../utils/cookies'
 export default {
   data() {
     return {
@@ -90,10 +85,13 @@ export default {
         this.$store.commit('Login/setToken', data.token)
         this.$store.commit('Login/setUsername', data.user.fullName)
         this.$store.commit('Login/setUserId', data.user._id)
-        console.log('data.token', data.token)
-        saveUserIdToCookie(data.user._id)
-        saveAuthToCookie(data.token)
-        saveUserToCookie(data.user.fullName)
+        this.$storage.setItem('off_userId', data.user._id)
+        this.$storage.setItem('off_auth', data.token)
+        this.$storage.setItem('off_userName', data.user.fullName)
+
+        // saveUserIdToCookie(data.user._id)
+        // saveAuthToCookie(data.token)
+        // saveUserToCookie(data.user.fullName)
         saveUserImageToCookie(data.user.coverImage)
         let userDetaildata = await userDetailInfo(
           this.$store.getters['Login/getUserId'],
@@ -107,8 +105,6 @@ export default {
         )
         //console.log(this.$store.getters['Login/getUserProfileImage'])
         console.log(this.$store.state.Login.profileImage)
-
-
 
         // username을 랜덤키로 초기화
         if (!data.user.username) {

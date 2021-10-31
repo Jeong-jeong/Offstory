@@ -74,10 +74,15 @@ export default {
     logout() {
       this.$store.commit('Login/clearUsername')
       this.$store.commit('Login/clearToken')
-      deleteCookie('off_auth')
-      deleteCookie('off_user')
-      deleteCookie('off_userId')
-      deleteCookie('off_userprofileImage')
+      // deleteCookie('off_auth')
+      // deleteCookie('off_user')
+      // deleteCookie('off_userId')
+      // deleteCookie('off_userprofileImage')
+      this.$storage.removeItem('off_userName')
+      this.$storage.removeItem('off_auth')
+      this.$storage.removeItem('off_userId')
+      this.$storage.removeItem('userData')
+
       this.$router.push('/')
       return alert('logout!')
     },
