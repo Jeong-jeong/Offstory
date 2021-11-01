@@ -62,6 +62,7 @@ export default {
     Like,
   },
   props: ['postId', 'postData', 'author', 'channel', 'userId'],
+  emits: ['rerender'],
   data() {
     return {
       isEdit: false,
@@ -83,7 +84,7 @@ export default {
         const userData = {
           id: this.postId,
         }
-        const res = await deletePost({ data: userData })
+        await deletePost({ data: userData })
         await window.alert('포스트가 삭제되었어요')
         this.$router.push('/')
       }
@@ -103,10 +104,10 @@ export default {
   computed: {
     ...mapGetters('Login', ['isLogin']),
     title() {
-      return this.postData.title.split('/')[0]
+      return this.postData.title?.split('/')[0]
     },
     content() {
-      return this.postData.title.split('/')[1]
+      return this.postData.title?.split('/')[1]
     },
     HostProfileUrl() {
       return (
