@@ -67,20 +67,22 @@
                     </div>
                     <div class="resultlist-listcard-active">
                       <div class="resultlist-listcard-like">
-                        <img
+                        <Like :post="i" />
+                        <!-- <img
                           class="resultlist-listcard-likeimage"
                           :src="heartImageUrl"
                           alt=""
                         />
-                        +{{ i.likes.length }}
+                        +{{ i.likes.length }} -->
                       </div>
                       <div class="resultlist-listcardt-comment">
-                        <img
+                        <Comment :post="i" />
+                        <!-- <img
                           class="resultlist-listcard-commentimage"
                           :src="commentImageUrl"
                           alt=""
                         />
-                        +{{ i.comments.length }}
+                        +{{ i.comments.length }} -->
                       </div>
                     </div>
                     <div class="resultlist-listcard-userinfo">
@@ -128,6 +130,8 @@ import {
   channelPostList,
 } from '../api/index'
 import Button from '~/components/designs/Button'
+import Like from '~/components/designs/Like'
+import Comment from '~/components/designs/Comment'
 export default {
   data() {
     return {
@@ -142,7 +146,7 @@ export default {
       commentImageUrl: require('../assets/images/comment.svg'),
     }
   },
-  components: { Button },
+  components: { Button, Like, Comment },
   computed: {
     getUserCity() {
       return this.$store.getters['address/getUserCity']

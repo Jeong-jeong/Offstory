@@ -9,10 +9,7 @@
           <div>
             <h1 class="post-title">동행 구하기</h1>
           </div>
-          <br />
-          <br />
           <div class="post-Title">어디서 만날까요?</div>
-          <br />
           <div class="post-address">
             <select @change="selectedCity($event)" class="selectcity">
               <option value="undefined" class="option">시</option>
@@ -44,9 +41,8 @@
               required
             />
           </div>
-          <br /><br />
           <div class="post-titletext">제목을 작성하세요</div>
-          <br />
+
           <div class="titlearea">
             <input
               placeholder="제목"
@@ -56,17 +52,20 @@
               class="posttitle"
               required
             />
-            <template v-if="this.url === ''">
-              <img :src="this.url" ref="image" style="display: none" />
-            </template>
-            <template v-else>
-              <img :src="url" ref="image" @click="deleteImage" />
-              <button class="deletebutton" @click="deleteImage">x</button>
-            </template>
-            <div class="buttonwrapper">
-              <Button class="uploadbutton" @click.prevent="chooseFile"
-                >이미지 첨부하기</Button
-              >
+
+            <Button class="uploadbutton" @click.prevent="chooseFile"
+              >이미지 첨부하기</Button
+            >
+            <div class="imagearea">
+              <template v-if="this.url === ''">
+                <img :src="this.url" ref="image" style="display: none" />
+              </template>
+              <template v-else>
+                <img :src="url" ref="image" @click="deleteImage" />
+                <button class="deletebutton" @click="deleteImage">
+                  <span class="txt">x</span>
+                </button>
+              </template>
             </div>
             <input
               type="File"
@@ -76,15 +75,13 @@
               :style="{ display: 'none' }"
             />
           </div>
-          <br />
           <!-- <input type="file" id="input-file" style="display: none" /> -->
           <!-- <img style="width: 500px" id="preview-image" src="`${this.imgurl}`" /> -->
-          <br /><br />
           <div class="post-contenttext">내용</div>
-          <br />
           <textarea
             class="post-content"
             v-model="content"
+            @keyup="resizeContent($event)"
             placeholder="100자 이내로 입력하세요"
           ></textarea>
           <div class="buttonwrapper">
@@ -265,6 +262,10 @@ export default {
       }
       //this.$route.push('/')
     },
+    resizeContent(event) {
+      event.target.style.height = '1px'
+      event.target.style.height = 20 + event.target.scrollHeight + 'px'
+    },
   },
 }
 </script>
@@ -279,9 +280,10 @@ export default {
     .post {
       width: 100%;
       &-title {
+        margin: 30px 0;
         color: $COLOR_GRAY_DARKEN;
         font-size: $FONT_L;
-        font-weight: 1000;
+        font-weight: 700;
       }
       &-Title {
         color: $KEY_COLOR;
@@ -318,17 +320,20 @@ export default {
         box-shadow: $BOX_SHADOW;
         transform: translateY(-50%);
         .post-address {
+          @include flexbox;
           @include font;
-          width: 100%;
+          margin: $LG_PADDING_VERTICAL 0;
           select {
             @include font;
-            width: 20%;
-            margin: 5px;
+            width: 30%;
+            height: $BUTTON_HEIGHT;
+            margin-right: $INNER_PADDING_HORIZONTAL;
             padding: $INNER_PADDING_VERTICAL $INNER_PADDING_HORIZONTAL;
             border-radius: $BORDER_RADIOUS;
             border: 1px solid $COLOR_GRAY_DARKEN;
-            font-weight: 700;
             color: $COLOR_GRAY_DARKEN;
+            background: none;
+
             .citylist {
               color: $COLOR_GRAY_DARKEN;
             }
@@ -337,58 +342,38 @@ export default {
             }
 
             &::placeholder {
-              font-weight: 700;
               color: $COLOR_GRAY_DARKEN;
             }
           }
 
           input {
             @include font;
-            width: 50%;
-            margin: 5px;
+            width: 100%;
+            height: $BUTTON_HEIGHT;
             padding: $INNER_PADDING_VERTICAL $INNER_PADDING_HORIZONTAL;
             border-radius: $BORDER_RADIOUS;
             border: 1px solid $COLOR_GRAY_DARKEN;
 
             &::placeholder {
-              font-weight: 700;
               color: $COLOR_GRAY_LIGHTEN;
             }
           }
         }
         .titlearea {
-          img {
-            border: none;
-            margin-left: 135px;
-            width: 50px;
-            height: 30px;
-            cursor: pointer;
-            &:hover {
-              filter: brightness(30%);
-              //opacity: 0.3;
-            }
-          }
-          .deletebutton {
-            padding: 0px;
-            height: 13px;
-            color: white;
-            background-color: black;
-            opacity: 0.6;
-
-            &:hover {
-              opacity: 0.3;
-            }
-          }
+          position: relative;
+          @include flexbox;
           width: 100%;
+          margin: $LG_PADDING_VERTICAL 0;
+
           .posttitle {
             @include font;
-            width: 50%;
-            height: 10px;
+            width: 100%;
+            height: $BUTTON_HEIGHT;
             padding: $INNER_PADDING_VERTICAL $INNER_PADDING_HORIZONTAL;
+            margin-right: $INNER_PADDING_HORIZONTAL;
             border-radius: $BORDER_RADIOUS;
             border: 1px solid $COLOR_GRAY_DARKEN;
             &::placeholder {
-              font-weight: 700;
               color: $COLOR_GRAY_LIGHTEN;
             }
 
@@ -408,22 +393,46 @@ export default {
             cursor: pointer;
           }
         }
-        .post-contenttext {
-          margin-bottom: 13px;
+
+        .imagearea {
+          @include flexbox($ai: start);
+          position: absolute;
+          top: -35px;
+          right: 30px;
+          vertical-align: middle;
+          img {
+            width: $BUTTON_HEIGHT;
+            height: 30px;
+            cursor: pointer;
+            &:hover {
+              filter: brightness(30%);
+              //opacity: 0.3;
+            }
+          }
+          .deletebutton {
+            @include flexbox;
+            width: 13px;
+            height: 13px;
+            padding-bottom: 2px;
+            color: $COLOR_WHITE;
+            background-color: $COLOR_BLACK;
+            opacity: 0.6;
+
+            &:hover {
+              opacity: 0.3;
+            }
+          }
         }
         .post-content {
           @include font;
           width: 100%;
-          height: 100%;
-          margin-top: 20px;
+          min-height: 100px;
+          margin: $LG_PADDING_VERTICAL 0;
           background-color: $COLOR_WHITE;
           border-radius: $BORDER_RADIOUS;
           border: 1px solid $COLOR_GRAY_DARKEN;
-          box-shadow: $BOX_SHADOW;
-          transform: translateY(-50%);
 
           &::placeholder {
-            font-weight: 700;
             color: $COLOR_GRAY_LIGHTEN;
           }
         }
@@ -433,6 +442,48 @@ export default {
           .post-button {
             margin-top: 20px;
             margin-bottom: 10px;
+          }
+        }
+      }
+    }
+
+    @include responsive('sm') {
+      .post {
+        &-form {
+          .post {
+            &-address {
+              flex-direction: column;
+              select {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: $INNER_PADDING_SMALL;
+              }
+            }
+          }
+          .titlearea {
+            flex-direction: column;
+            align-items: flex-start;
+
+            .posttitle {
+              margin-right: 0;
+              margin-bottom: $INNER_PADDING_SMALL;
+            }
+
+            .uploadbutton {
+              width: 75%;
+              max-width: 400px;
+            }
+          }
+
+          .imagearea {
+            top: $BUTTON_HEIGHT + $INNER_PADDING_SMALL;
+            right: 0;
+          }
+
+          .buttonwrapper {
+            .post-button {
+              margin: 0;
+            }
           }
         }
       }
