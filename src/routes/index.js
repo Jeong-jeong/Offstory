@@ -10,6 +10,7 @@ import Chat from './Chat'
 import Example from '~/components/designs/Example'
 import PersonalInfo from './PersonalInfo'
 import ResultOfPostList from './ResultOfPostList'
+import Authcheck from './Authcheck'
 import Editor from '~/components/pages/postContent/Editor'
 import EditPage from '~/components/pages/postContent/EditPage'
 import NotFound from './NotFound'
@@ -85,6 +86,15 @@ export default createRouter({
       name: 'PersonalInfo',
       path: '/personalinfo',
       component: PersonalInfo,
+      meta: { auth: true },
+      beforeEnter: function (to, from, next) {
+        if (to.meta.auth && !store.getters['Login/isAuthCheck']) {
+          alert('인증이 필요한 페이지 입니다.')
+          next('/authcheck')
+          return
+        }
+        next()
+      },
     },
     {
       name: 'ResultOfPostList',
@@ -95,6 +105,11 @@ export default createRouter({
       name: 'Chat',
       path: '/chat',
       component: Chat,
+    },
+    {
+      name: 'authcheck',
+      path: '/authcheck',
+      component: Authcheck,
     },
 
     {

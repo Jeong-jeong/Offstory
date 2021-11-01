@@ -8,23 +8,9 @@
               <div class="logo-area">
                 <img src="../assets/images/logo.svg" alt="로고" />
               </div>
-              <h1 class="login-comment">
-                나의 오프라인 이야기, OffStory와 함께 시작해 보아요!
-              </h1>
-              <h1 class="login-title">Login</h1>
+              <h1 class="login-comment">비밀번호를 입력해주세요</h1>
+              <h1 class="login-title">내 정보 변경</h1>
             </header>
-            <Field
-              class="login-input"
-              v-model="email"
-              name="email"
-              type="text"
-              required
-              rules="required|email"
-              placeholder="이메일"
-            />
-            <div class="error-message-wrapper">
-              <ErrorMessage name="confirmation" class="error-message" />
-            </div>
             <input
               class="login-input"
               v-model="password"
@@ -38,10 +24,13 @@
               <ErrorMessage name="confirmation" class="error-message" />
             </div>
             <Button v-bind="{ width: '100%' }" class="login-button"
-              >로그인</Button
-            >
-            <Button v-bind="{ width: '100%' }" @click="isSignup"
-              >회원가입</Button
+              >내 정보 변경
+            </Button>
+            <Button
+              v-bind="{ width: '100%' }"
+              class="goback"
+              @click.prevent="gobackPage"
+              >뒤로가기</Button
             >
           </Form>
         </div>
@@ -52,11 +41,9 @@
 
 <script>
 import Button from '~/components/designs/Button'
-import { loginUser, userDetailInfo, updateNameField } from '../api/index'
-import { makeRandomKey } from '~/utils/function'
+import { loginUser } from '../api/index'
 import { validateEmail } from '../utils/validation'
-import { Field, Form, ErrorMessage } from 'vee-validate'
-import { saveUserImageToCookie } from '../utils/cookies'
+import { Form, ErrorMessage } from 'vee-validate'
 export default {
   data() {
     return {
@@ -65,7 +52,7 @@ export default {
       errorMessage: '',
     }
   },
-  components: { Button, Field, Form, ErrorMessage },
+  components: { Button, Form, ErrorMessage },
   computed: {
     isUserNameVaild() {
       return validateEmail(this.email)
@@ -74,81 +61,25 @@ export default {
   methods: {
     async submitForm() {
       //alert('f')
+      const res = this.$storage.getItem('userData')
+      this.email = res.userEmail
       try {
         const userData = {
           email: this.email,
           password: this.password,
         }
         const { data } = await loginUser(userData)
-        console.log('data.user', data.user)
-        this.$router.push('/')
-        this.$store.commit('Login/setToken', data.token)
-        this.$store.commit('Login/setUsername', data.user.fullName)
-        this.$store.commit('Login/setUserId', data.user._id)
-        this.$storage.setItem('off_userId', data.user._id)
-        this.$storage.setItem('off_auth', data.token)
-        this.$storage.setItem('off_userName', data.user.fullName)
-
-        // saveUserIdToCookie(data.user._id)
-        // saveAuthToCookie(data.token)
-        // saveUserToCookie(data.user.fullName)
-        saveUserImageToCookie(data.user.coverImage)
-        let userDetaildata = await userDetailInfo(
-          this.$store.getters['Login/getUserId'],
-        )
-
-        console.log(userDetaildata)
-        console.log(userDetaildata.data.coverImage)
-        this.$store.commit(
-          'Login/setprofileImage',
-          userDetaildata.data.coverImage,
-        )
-        //console.log(this.$store.getters['Login/getUserProfileImage'])
-        console.log(this.$store.state.Login.profileImage)
-
-        // username을 랜덤키로 초기화
-        if (!data.user.username) {
-          await this.initializeUsername(data)
-        }
-
-        // 초기화된 username 가져옴
-        userDetaildata = await userDetailInfo(
-          this.$store.getters['Login/getUserId'],
-        )
-
-        // 유저 데이터 storage에 저장
-        this.storageSetup(userDetaildata.data)
-        this.$router.go()
+        console.log(data)
+        this.$router.push('/personalinfo')
+        this.$store.commit('Login/setAuthCheck', true)
       } catch (error) {
         //에러 핸들링 코드
         console.log(error.response.data)
         alert(error.response.data)
       }
     },
-    async initializeUsername(userData) {
-      console.log('실행여부4')
-      const data = {
-        fullName: userData.user.fullName,
-        username: makeRandomKey() + '/',
-      }
-
-      await updateNameField(data)
-    },
-    storageSetup(userData) {
-      const dataToBeStored = {
-        userId: userData._id,
-        userCoverImage: userData.coverImage || null,
-        // userIntroduction은 추후 추가 예정
-        userIntroduction: userData.username,
-        userFullName: userData.fullName,
-        userEmail: userData.email,
-        userName: userData.username,
-      }
-
-      this.$storage.setItem('userData', dataToBeStored)
-    },
-    isSignup() {
-      this.$router.push('/signup')
+    gobackPage() {
+      this.$router.go(-1)
     },
   },
 }

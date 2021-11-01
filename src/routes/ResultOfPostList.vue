@@ -145,20 +145,22 @@ export default {
   components: { Button },
   computed: {
     getUserCity() {
-      return this.$store.getters['address/getUserCity']
+      //let userCity=this.$storage.getItem('userCity')
+      //this.$storage.removeItem('userCity')
+      return this.$storage.getItem('userCity')
     },
     getUserCounty() {
-      return this.$store.getters['address/getUserCounty']
+      return this.$storage.getItem('userCounty')
     },
     getdetailAddress() {
-      return this.$store.getters['address/getdetailAddress']
+      return this.$storage.getItem('userdetailAddress')
     },
     getSearchChannelId() {
-      return this.$store.getters['address/getSearchChannelId']
+      return this.$storage.getItem('channelId')
     },
     getPostListData() {
-      console.log(this.$store.getters['address/getPostListData'])
-      return this.$store.getters['address/getPostListData']
+      //console.log(this.$store.getters['address/getPostListData'])
+      return this.$storage.getItem('PostListData')
     },
     getLikeData() {
       let likeCount = this.$store.getters['address/getPostListData'].map(

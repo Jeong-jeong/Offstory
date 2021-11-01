@@ -1,4 +1,5 @@
 import { getAuthFromCookie, getUserFromCookie } from '../utils/cookies'
+import storage from '../utils/sessionStorage'
 export default {
   namespaced: true,
   state() {
@@ -8,9 +9,11 @@ export default {
       userIntroduction: '',
       userFullName: '',
       userEmail: '',
-      username: getUserFromCookie() || '',
-      token: getAuthFromCookie() || '',
+      username: storage.getItem('off_userName') || '',
+      token: JSON.parse(storage.getItem('off_auth')) || '',
       profileImage: '',
+      isLoading: false,
+      authCheck: false,
     }
   },
   getters: {
@@ -20,9 +23,15 @@ export default {
     isLogin(state) {
       return state.username !== ''
     },
+    isAuthCheck(state) {
+      return state.authCheck
+    },
     isEmptyProfileImage(state) {
       console.log('emptycheck', state.profileImage === undefined)
       return state.profileImage === undefined
+    },
+    isLoading(state) {
+      return state.isLoading
     },
     getUsername(state) {
       return state.username
@@ -55,6 +64,12 @@ export default {
     },
     setToken(state, token) {
       state.token = token
+    },
+    setAuthCheck(state, Auth) {
+      state.authCheck = Auth
+    },
+    setisLoading(state, bool) {
+      state.isLoading = bool
     },
   },
   actions: {},
