@@ -1,13 +1,18 @@
 <template>
-  <div class="comment">
-    <i class="material-icons" :style="{ fontSize: checkUnit(symbolSize) }">
-      chat
+  <div class="comment" :style="{ marginLeft: checkUnit(marginLeft) }">
+    <i
+      class="material-icons"
+      :style="{ fontSize: checkUnit(symbolSize), color }"
+    >
+      notes
     </i>
     <div
       class="comment-number"
       :style="{
         fontSize: checkUnit(fontSize),
-        marginLeft: checkUnit(marginBetween),
+        width: checkUnit(marginBetween),
+        textAlign: 'right',
+        color,
       }"
     >
       {{ commentCount }}
@@ -35,7 +40,15 @@ export default {
     },
     marginBetween: {
       type: [Number, String],
-      default: '10px',
+      default: '15px',
+    },
+    color: {
+      type: String,
+      default: 'black',
+    },
+    marginLeft: {
+      type: [Number, String],
+      default: '0px',
     },
   },
   computed: {
