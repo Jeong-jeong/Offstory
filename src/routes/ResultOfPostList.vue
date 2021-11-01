@@ -372,7 +372,7 @@ export default {
               }
             }
           }
-          .resultlist-listcard-active {
+          /* .resultlist-listcard-active {
             display: flex;
             width: 120px;
             padding-left: 5px;
@@ -397,6 +397,15 @@ export default {
                 opacity: 0.5;
               }
             }
+          } */
+          .resultlist-listcard-active {
+            position: absolute;
+            display: flex;
+            right: 27px;
+            bottom: 105px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 0 5px;
+            border-radius: 5px;
           }
           .resultlist-listcard-userinfo {
             position: relative;
@@ -559,6 +568,15 @@ export default {
                 -o-transform: scale(1.1);
               }
             }
+          }
+          .resultlist-listcard-active {
+            position: absolute;
+            display: flex;
+            right: 27px;
+            bottom: 123px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 0 5px;
+            border-radius: 5px;
           }
           /* .resultlist-listcard-active {
             display: flex;

@@ -4,7 +4,7 @@
       class="material-icons"
       :style="{ fontSize: checkUnit(symbolSize), color }"
     >
-      notes
+      chat_bubble_outline
     </i>
     <div
       class="comment-number"
