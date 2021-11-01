@@ -1,10 +1,10 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" :style="{ marginLeft: checkUnit(marginLeft) }">
     <template v-if="doesUserLike">
       <i
         class="material-icons"
         @click="cancleLike"
-        :style="{ fontSize: checkUnit(symbolSize) }"
+        :style="{ fontSize: checkUnit(symbolSize), color }"
       >
         favorite
       </i>
@@ -13,7 +13,7 @@
       <i
         class="material-icons"
         @click="like"
-        :style="{ fontSize: checkUnit(symbolSize) }"
+        :style="{ fontSize: checkUnit(symbolSize), color }"
       >
         favorite_border
       </i>
@@ -21,8 +21,10 @@
     <span
       class="like-number"
       :style="{
-        marginLeft: checkUnit(marginBetween),
+        width: checkUnit(marginBetween),
         fontSize: checkUnit(fontSize),
+        textAlign: 'right',
+        color,
       }"
       >{{ likeCount }}</span
     >
@@ -56,7 +58,15 @@ export default {
     },
     marginBetween: {
       type: [Number, String],
-      default: '10px',
+      default: '15px',
+    },
+    color: {
+      type: String,
+      default: 'black',
+    },
+    marginLeft: {
+      type: [Number, String],
+      default: '0px',
     },
   },
   computed: {},

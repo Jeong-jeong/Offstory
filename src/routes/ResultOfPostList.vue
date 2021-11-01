@@ -55,33 +55,47 @@
                     </div>
                     <div class="postimage">
                       <template v-if="i.image === undefined">
-                        <img
+                        <!-- <img
                           class="postimage-default"
                           src="../assets/images/non_postimage.png"
                           alt=""
-                        />
+                        /> -->
+                        <div class="postimage-default" alt=""></div>
                       </template>
                       <template v-else>
                         <img class="postimage-user" :src="`${i.image}`" />
                       </template>
                     </div>
                     <div class="resultlist-listcard-active">
-                      <div class="resultlist-listcard-like">
-                        <img
+                      <Like
+                        :post="i"
+                        :color="`white`"
+                        :symbolSize="`18px`"
+                        :fontSize="`18px`"
+                      />
+                      <Comment
+                        :post="i"
+                        :marginLeft="`10px`"
+                        :color="`white`"
+                        :symbolSize="`18px`"
+                        :fontSize="`18px`"
+                      />
+                      <!-- <div class="resultlist-listcard-like"> -->
+                      <!-- <img
                           class="resultlist-listcard-likeimage"
                           :src="heartImageUrl"
                           alt=""
-                        />
-                        +{{ i.likes.length }}
-                      </div>
-                      <div class="resultlist-listcardt-comment">
-                        <img
+                        /> -->
+                      <!-- +{{ i.likes.length }} -->
+                      <!-- </div> -->
+                      <!-- <div class="resultlist-listcardt-comment"> -->
+                      <!-- <img
                           class="resultlist-listcard-commentimage"
                           :src="commentImageUrl"
                           alt=""
-                        />
-                        +{{ i.comments.length }}
-                      </div>
+                        /> -->
+                      <!-- +{{ i.comments.length }} -->
+                      <!-- </div> -->
                     </div>
                     <div class="resultlist-listcard-userinfo">
                       <div class="resultlist-listcard-userprofile">
@@ -128,6 +142,9 @@ import {
   channelPostList,
 } from '../api/index'
 import Button from '~/components/designs/Button'
+import Like from '~/components/designs/Like'
+import Comment from '~/components/designs/Comment'
+
 export default {
   data() {
     return {
@@ -142,7 +159,7 @@ export default {
       commentImageUrl: require('../assets/images/comment.svg'),
     }
   },
-  components: { Button },
+  components: { Button, Like, Comment },
   computed: {
     getUserCity() {
       //let userCity=this.$storage.getItem('userCity')
@@ -286,6 +303,7 @@ export default {
         align-items: center;
 
         .resultlist-listcard {
+          position: relative;
           cursor: pointer;
           margin: 30px 10px 0px 10px;
           width: 300px;
@@ -328,7 +346,8 @@ export default {
             overflow: hidden;
 
             .postimage-default {
-              border-radius: 30px;
+              border-radius: 10px;
+              background-color: lighten(rgb(243, 237, 191), 10%);
               width: 100%;
               height: 200px;
             }
@@ -353,7 +372,7 @@ export default {
               }
             }
           }
-          .resultlist-listcard-active {
+          /* .resultlist-listcard-active {
             display: flex;
             width: 120px;
             padding-left: 5px;
@@ -378,10 +397,19 @@ export default {
                 opacity: 0.5;
               }
             }
+          } */
+          .resultlist-listcard-active {
+            position: absolute;
+            display: flex;
+            right: 27px;
+            bottom: 105px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 0 5px;
+            border-radius: 5px;
           }
           .resultlist-listcard-userinfo {
             position: relative;
-            top: -50px;
+            top: -20px;
             display: flex;
             justify-self: center;
             //   align-content: center;
@@ -473,6 +501,7 @@ export default {
         width: 100%;
 
         .resultlist-listcard {
+          position: relative;
           cursor: pointer;
           margin: 30px 8px 0px 10px;
           width: 355px;
@@ -514,7 +543,8 @@ export default {
             overflow: hidden;
 
             .postimage-default {
-              border-radius: 30px;
+              background-color: lighten(rgb(243, 237, 191), 10%);
+              border-radius: 10px;
               width: 100%;
               height: 200px;
             }
@@ -540,6 +570,15 @@ export default {
             }
           }
           .resultlist-listcard-active {
+            position: absolute;
+            display: flex;
+            right: 27px;
+            bottom: 123px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 0 5px;
+            border-radius: 5px;
+          }
+          /* .resultlist-listcard-active {
             display: flex;
             width: 120px;
             padding-left: 5px;
@@ -562,10 +601,10 @@ export default {
                 opacity: 0.5;
               }
             }
-          }
+          } */
           .resultlist-listcard-userinfo {
             position: relative;
-            top: -50px;
+            top: -20px;
             display: flex;
             justify-self: center;
             //   align-content: center;
@@ -606,6 +645,16 @@ export default {
         }
       }
     }
+  }
+
+  .resultlist-listcard-active {
+    position: absolute;
+    display: flex;
+    right: 27px;
+    bottom: 123px;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 0 5px;
+    border-radius: 5px;
   }
 }
 </style>
