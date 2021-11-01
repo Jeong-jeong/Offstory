@@ -13,6 +13,7 @@ export default {
       token: JSON.parse(storage.getItem('off_auth')) || '',
       profileImage: '',
       isLoading: false,
+      authCheck: false,
     }
   },
   getters: {
@@ -21,6 +22,9 @@ export default {
     },
     isLogin(state) {
       return state.username !== ''
+    },
+    isAuthCheck(state) {
+      return state.authCheck
     },
     isEmptyProfileImage(state) {
       console.log('emptycheck', state.profileImage === undefined)
@@ -60,6 +64,9 @@ export default {
     },
     setToken(state, token) {
       state.token = token
+    },
+    setAuthCheck(state, Auth) {
+      state.authCheck = Auth
     },
     setisLoading(state, bool) {
       state.isLoading = bool
