@@ -37,7 +37,7 @@
             </option>
           </select>
           <select @change="selectedCounty($event)" class="selectcounty">
-            <option value="undefined" class="option">군,구</option>
+            <option selected value="undefined" class="option">군,구</option>
             <option
               class="countylist"
               :key="i"
@@ -117,18 +117,28 @@
       </template>
     </div>
   </div>
+  <div class="isLoading">
+    <div v-if="this.isLoading === true">
+      <LoadingSpinner />
+    </div>
+    <div v-else></div>
+  </div>
 </template>
 
 <script>
 import { channelsList, channelPostList } from '../api/index'
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import Button from '~/components/designs/Button'
+import LoadingSpinner from '~/components/designs/LoadingSpinner'
 import { getImageFromCookie } from '~/utils/cookies'
+import { reactive } from 'vue'
 
 export default {
   data() {
     return {
-      defaultImageUrl: require('~/assets/images/user-profile__default.svg'),
+      selected: '',
+      isLoading: false,
+      defaultImageUrl: require('../assets/images/user-profile__default.svg'),
       userImage: null,
       detailAdress: '',
       countyList: [],
@@ -178,6 +188,16 @@ export default {
       const profileImage = getImageFromCookie()
       return profileImage === 'undefined' ? this.defaultImageUrl : profileImage
     },
+    keepSearchDatas() {
+      let targetCity = document.getElementsByClassName('selectcity')[0]
+      console.log(targetCity)
+      console.log(targetCity.value)
+      console.log(this.$storage.getItem('userCity'))
+      //${this.$storage.getItem('userCity')}
+      targetCity.value = `${this.$storage.getItem('userCity')}`
+      let targetCounty = document.getElementsByClassName('selectcounty')[0]
+      targetCounty.value = `${this.$storage.getItem('userCounty')}`
+    },
   },
   methods: {
     ...mapMutations('address', [
@@ -214,17 +234,20 @@ export default {
       }
       this.$emit('toggleSidebar')
     },
+    //시를 선택했을때
     async selectedCity(event) {
       console.log(event.target.value)
       this.selectuserCity = event.target.value
+      //시만을 선택했을때를 위한 예외처리
       if (this.selectuserCity === 'undefined') {
         this.selectuserCity = ''
       }
       const userCity = event.target.value //선택한 도시 넘겨줌
+      //선택되었던 군/구 초기화
       let target = document.getElementsByClassName('selectcounty')[0]
-      console.log(target.value)
       target.value = undefined
       this.setUserCounty('')
+      this.$storage.setItem('userCounty', '')
       const channelsListData = await channelsList() //채널리스트를 불러옴
 
       //선택한 city와 같은 name의 채널을 찾음
@@ -243,55 +266,85 @@ export default {
       console.log(selectChannelId)
       this.channelId = selectChannelId
       this.setSearchChannelId(this.channelId)
+      this.$storage.setItem('channelId', this.channelId)
+
       this.setUserCity(this.selectuserCity)
+      this.$storage.setItem('userCity', this.selectuserCity)
     },
-    initSelectcounty(event) {
-      if (event) {
-        let target = document.getElementsByClassName('selectcounty')[0]
-        this.selectuserCounty = ''
-        target.value = undefined
-        this.setUserCounty('')
-        console.log('도시선택했을때 구', this.setUserCounty)
-        console.log(this.selectuserCounty)
-      }
-    },
+    // initSelectcounty(event) {
+    //   if (event) {
+    //     let target = document.getElementsByClassName('selectcounty')[0]
+    //     this.selectuserCounty = ''
+    //     target.value = undefined
+    //     this.setUserCounty('')
+    //     this.$storage.setItem('userCounty', '')
+    //     console.log('도시선택했을때 구', this.setUserCounty)
+    //     console.log(this.selectuserCounty)
+    //   }
+    // },
     selectedCounty(event) {
       let valueCheck = event.target.value
       console.log(valueCheck)
       if (valueCheck === 'undefined') {
         this.selectuserCounty = ''
         this.setUserCounty('')
+        this.$storage.setItem('userCounty', '')
         return
       } else {
         this.selectuserCounty = event.target.value
         this.setUserCounty(this.selectuserCounty)
+        this.$storage.setItem('userCounty', this.selectuserCounty)
       }
     },
+    keepSearchData() {
+      let targetCity = document.getElementsByClassName('selectcity')[0]
+      console.log(targetCity)
+      console.log(targetCity.value)
+      console.log(this.$storage.getItem('userCity'))
+      //${this.$storage.getItem('userCity')}
+      targetCity.value = '경기'
+      let targetCounty = document.getElementsByClassName('selectcounty')[0]
+      targetCounty.value = `${this.$storage.getItem('userCounty')}`
+    },
     async searchPost() {
-      console.log(this.detailAdress)
-      this.setdetailAddress(this.detailAdress)
-      const postListdata = await channelPostList(this.channelId)
-      // if (this.selectuserCounty === undefined) {
-      //   console.log('시만 선택 했을때', postListdata.data)
-      //   this.setPostListData(this.postListdata.data)
-      //   this.$router.push('/ResultOfPostList')
-      // } else {
-      this.CountydataList = []
-      console.log(postListdata.data)
-      console.log('county', this.selectuserCounty)
-      const filteredDataOfCounty = postListdata.data.map(x =>
-        x.location.includes(`/${this.selectuserCounty}`),
-      )
+      //this.isLoading = true
+      //this.setisLoading(true)
+      // console.log(this.isLoading)
+      // console.log(this.detailAdress)
+      if (this.selectuserCity === '') {
+        alert(' 시 를 선택해주세요')
+        this.$storage.removeItem('userCity')
+        this.$storage.removeItem('userCounty')
+        this.$storage.removeItem('PostListData')
+        return
+      } else {
+        this.setdetailAddress(this.detailAdress)
+        this.$storage.setItem('userdetailAddress', this.detailAdress)
 
-      for (let i in filteredDataOfCounty) {
-        if (filteredDataOfCounty[i]) {
-          this.CountydataList.push(postListdata.data[i])
+        const postListdata = await channelPostList(this.channelId)
+        this.CountydataList = []
+        console.log(postListdata.data)
+        console.log('county', this.selectuserCounty)
+        const filteredDataOfCounty = postListdata.data.map(x =>
+          x.location.includes(`/${this.selectuserCounty}`),
+        )
+
+        for (let i in filteredDataOfCounty) {
+          if (filteredDataOfCounty[i]) {
+            this.CountydataList.push(postListdata.data[i])
+          }
         }
+        console.log('군까지 선택했을때', this.CountydataList)
+        console.log(filteredDataOfCounty)
+        this.setPostListData(this.CountydataList)
+        this.$storage.setItem('PostListData', this.CountydataList)
+        this.isLoading = false
+        console.log(this.isLoading)
+        //this.setisLoading(false)
+        this.$router.go(0)
+        this.$router.push('/ResultOfPostList')
       }
-      console.log('군까지 선택했을때', this.CountydataList)
-      console.log(filteredDataOfCounty)
-      this.setPostListData(this.CountydataList)
-      this.$router.push('/ResultOfPostList')
+
       // }
     },
     openSearch() {
