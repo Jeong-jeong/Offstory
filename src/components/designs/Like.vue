@@ -61,7 +61,8 @@ export default {
   },
   computed: {},
   methods: {
-    async like() {
+    async like(event) {
+      event.stopPropagation()
       const res = await likePost(this.post._id)
       console.log('res는 제대로 동작하나?', res)
       console.log('this.post.Id는?', this.post._id)
@@ -70,7 +71,8 @@ export default {
       const { userId: currentUserId } = this.$storage.getItem('userData')
       this.post.likes.push({ _id: res.data._id, user: currentUserId })
     },
-    async cancleLike() {
+    async cancleLike(event) {
+      event.stopPropagation()
       const [likeId, index] = this.findLikeId()
       const cancleLike = await cancleLikePost(likeId)
       console.log('cancleLike는 제대로 동작하나?', cancleLike)

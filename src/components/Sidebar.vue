@@ -26,10 +26,10 @@
         동행글 쓰기
       </button>
       <button
-        class="option personal-activity"
-        @click="$router.push('/personalactivity')"
+        class="option posts-user-like"
+        @click="$router.push('/poststhatuserlike')"
       >
-        내 활동목록
+        좋아요한 동행목록
       </button>
     </div>
     <div class="bottom">
