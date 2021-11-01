@@ -5,9 +5,6 @@
         <div class="col-lg-6">
           <Form class="sign-form" @submit="submitSignup">
             <header class="sign-header">
-              <div class="logo-area">
-                <img src="../assets/images/logo.svg" alt="로고" />
-              </div>
               <h1 class="sign-title">이메일로 가입하기</h1>
             </header>
             <Field
@@ -97,6 +94,15 @@ export default {
         const { data } = await registerUser(userData)
         console.log(data)
         await this.initForm() // submit 후 input 초기화
+        if (
+          window.confirm(
+            '회원가입이 완료되었습니다 👏👏. 로그인 페이지로 이동할까요?',
+          )
+        ) {
+          this.$router.push({ name: 'Login' })
+        } else {
+          this.$router.push('/')
+        }
       } catch (error) {
         console.log(error.response.data)
         alert(error.response.data)
@@ -127,14 +133,6 @@ export default {
         .sign-title {
           font-size: $FONT_L;
           font-weight: 700;
-        }
-
-        .logo-area {
-          display: flex;
-          justify-content: right;
-          img {
-            width: 120px;
-          }
         }
         margin-bottom: $LG_PADDING_VERTICAL;
       }
@@ -170,7 +168,7 @@ export default {
 
     .error-message {
       &-wrapper {
-        height: $FONT_XS;
+        height: $FONT_BASE;
         display: block;
         width: 100%;
         font-size: $FONT_XS;

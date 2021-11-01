@@ -14,7 +14,7 @@ function updatePost(formData) {
 
 function deletePost(userData) {
   const deletePostUrl = 'posts/delete'
-  return instance.put(deletePostUrl, userData)
+  return instance.delete(deletePostUrl, userData)
 }
 
 function createComment(userData) {

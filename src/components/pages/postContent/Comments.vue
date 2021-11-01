@@ -13,7 +13,10 @@
         >
           <div class="left">
             <button class="user__profile">
-              <img :src="profileUrl" alt="유저 프로필" />
+              <img
+                :src="commentList.author.coverImage || defaultProfileUrl"
+                alt="유저 프로필"
+              />
             </button>
             <div class="user__infos">
               <strong class="nickname"
@@ -22,9 +25,7 @@
                   timeForToday(commentList.updatedAt)
                 }}</span></strong
               >
-              <p class="content">
-                {{ commentList.comment }}
-              </p>
+              <p v-html="putBr(commentList.comment)" class="content"></p>
             </div>
           </div>
           <div class="right">
@@ -33,63 +34,56 @@
                 삭제
               </button>
             </div>
-            <TagArea
-              :postId="postId"
-              :userId="userId"
-              :authorId="author._id"
-              :commentorId="commentList.author._id"
-              :commentorName="commentList.author.fullName"
-            />
           </div>
         </li>
-        <li class="item">
-          <div class="left etc">
+        <li class="item etc">
+          <div class="left">
             <button class="user__profile">
-              <img :src="profileUrl" alt="유저 프로필" />
+              <img :src="returnUserProfileImg" alt="유저 프로필" />
             </button>
-            <template v-if="isLogin">
-              <template v-if="checkReject() === true">
-                <p class="reject" type="text">
-                  참가가 거절되어 댓글을 다실 수 없어요
-                </p>
+            <div class="user__infos">
+              <template v-if="isLogin">
+                <strong class="nickname">
+                  {{ userName }}
+                </strong>
+                <textarea
+                  v-model="comment"
+                  @input="resizeContent($event)"
+                  @keyup.enter.exact="submitComment"
+                  ref="comment"
+                  class="add__comment"
+                  type="text"
+                  placeholder="댓글 달기"
+                ></textarea>
               </template>
-              <textarea
-                v-else
-                v-model="comment"
-                @keyup.enter.exact="submitComment"
-                ref="comment"
-                class="add__comment"
-                type="text"
-                placeholder="댓글 달기"
-              ></textarea>
-              <Button
-                v-if="isCommentLength"
-                @click="submitComment"
-                v-bind="{
-                  width: '80px',
-                  height: '40px',
-                  boxShadow: 'none',
-                }"
-                ><i class="material-icons">arrow_forward</i></Button
-              >
-              <Button
-                v-else
-                v-bind="{
-                  width: '80px',
-                  height: '40px',
-                  backgroundColor: '#CCCCCC',
-                  boxShadow: 'none',
-                }"
-                disabled
-                ><i class="material-icons">arrow_forward</i></Button
-              >
-            </template>
 
-            <div v-else class="logouted" @click="this.$router.push('/login')">
-              <button class="button--logouted" type="text">
+              <button v-else class="button--logouted" @click="recommendToLogin">
                 로그인 해주세요
               </button>
             </div>
+          </div>
+          <div v-if="isLogin" class="right">
+            <Button
+              v-if="isCommentLength"
+              @click="submitComment"
+              v-bind="{
+                width: '80px',
+                height: '40px',
+                boxShadow: 'none',
+              }"
+              ><i class="material-icons">arrow_forward</i></Button
+            >
+            <Button
+              v-else
+              v-bind="{
+                width: '80px',
+                height: '40px',
+                backgroundColor: '#CCCCCC',
+                boxShadow: 'none',
+              }"
+              disabled
+              ><i class="material-icons">arrow_forward</i></Button
+            >
           </div>
         </li>
       </ul>
@@ -99,11 +93,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getUserIdToCookie } from '~/utils/cookies'
-import { timeForToday } from '~/utils/function'
-import { userDetailInfo } from '~/api'
+
+import { timeForToday, putBr } from '~/utils/function'
 import { createComment, deleteComment } from '~/api/postContent'
-import TagArea from '~/components/pages/postContent/TagArea'
 import Card from '~/components/designs/Card.vue'
 import Button from '~/components/designs/Button.vue'
 
@@ -112,31 +104,22 @@ export default {
     return {
       comment: '',
       isSubmit: false,
-      userId: '',
     }
   },
   components: {
     Card,
     Button,
-    TagArea,
   },
-  props: ['initialPostId', 'initialComments', 'initialAuthor'],
+  props: ['postId', 'comments', 'author', 'userId', 'userName', 'userImage'],
   computed: {
     ...mapGetters('Login', ['isLogin']),
-    postId() {
-      return this.initialPostId
+    defaultProfileUrl() {
+      return require('~/assets/images/user-profile__default.svg')
     },
-    comments() {
-      return this.initialComments
-    },
-    author() {
-      return this.initialAuthor
-    },
-    profileUrl() {
-      return (
-        this.author.image ||
-        require('~/assets/images/user-profile__default.svg')
-      )
+    returnUserProfileImg() {
+      return this.userImage !== 'undefined'
+        ? this.userImage
+        : this.defaultProfileUrl
     },
     isCommentLength() {
       return this.comment.trim().length
@@ -157,45 +140,32 @@ export default {
         comment: commentValue,
         postId: this.postId,
       }
+
+      console.log('유저 데이터 잘 저장되는가?', commentValue)
       const res = await createComment(userData)
       console.log(res, 'createComment')
       await this.$emit('rerender')
       this.comment = ''
-      // TODO: \n을 바꿔줘야 함
     },
     async deleteComments(event) {
-      const li = event.target.closest('li')
-      const commentId = li.getAttribute('commentId')
-      const userData = {
-        id: commentId,
+      if (window.confirm('댓글을 삭제하시겠어요?')) {
+        const li = event.target.closest('li')
+        const commentId = li.getAttribute('commentId')
+        const userData = {
+          id: commentId,
+        }
+        console.log(userData)
+        await deleteComment({ data: userData })
+        window.alert('댓글이 삭제되었어요')
+        this.$emit('rerender')
+      } else {
+        return
       }
-      console.log(userData)
-      const res = await deleteComment({ data: userData })
-      console.log(res, 'deleteComment')
-      this.$emit('rerender')
     },
-
     checkCommentor(event) {
       const li = event.target.closest('li')
       const commentorId = li.getAttribute('commentorId')
-      // // 댓글 작성자 _id, 로그인된 userId가 같은지 비교
       return commentorId === this.userId
-    },
-
-    async checkReject() {
-      const res = await userDetailInfo(this.userId) // 댓작성자의 정보 불러옴
-      const username = res.data.username.split('/')[1]
-      const array = JSON.parse(username)
-      const result = array.some(
-        // username: { postId, state }
-        v => v.postid === this.postId && v.state === 'reject',
-        // TODO: postId로 저장했는데 postid로 저장되는지 확인
-      )
-      console.log(result, 'checkReject')
-      return result
-    },
-    getUserId() {
-      this.userId = getUserIdToCookie()
     },
     doubleSubmitCHeck() {
       if (this.isSubmit) {
@@ -205,10 +175,17 @@ export default {
         return false
       }
     },
+    resizeContent(event) {
+      event.target.style.height = '1px'
+      event.target.style.height = 20 + event.target.scrollHeight + 'px'
+    },
+    recommendToLogin() {
+      if (window.confirm('로그인 페이지로 이동하시겠어요?')) {
+        this.$router.push('/login')
+      }
+    },
     timeForToday,
-  },
-  created() {
-    this.getUserId()
+    putBr,
   },
 }
 </script>
@@ -236,27 +213,41 @@ export default {
       & {
         border-bottom: 1px solid $COLOR_BORDER;
       }
-      .left {
-        @include flexbox($jc: between);
-        &.etc {
+
+      &.etc {
+        .left {
           width: 100%;
+
+          .user__infos {
+            height: 100%;
+          }
         }
 
-        .reject {
+        .right {
+          justify-content: center;
+        }
+      }
+
+      .left {
+        @include flexbox($jc: start);
+
+        .button--logouted {
           width: 100%;
-          border-radius: 10px;
-          color: $COLOR_RED;
+          height: 100%;
+          border-radius: $BORDER_RADIOUS;
+          text-align: left;
           transition: background-color 300ms;
 
           &:hover {
-            background-color: rgba($COLOR_GRAY_LIGHTEN, $OPACITY);
+            background-color: $COLOR_BORDER;
           }
         }
 
         .user__infos {
+          flex-grow: 1;
           .nickname {
             word-break: keep-all;
-            @include flexbox;
+            @include flexbox($jc: start);
             flex-grow: 1;
             flex-wrap: nowrap;
             margin-bottom: $INNER_PADDING_SMALL;
@@ -274,20 +265,20 @@ export default {
           .content {
             line-height: 1.3em;
           }
+
+          .add__comment {
+            font-family: inherit;
+            width: 100%;
+            border: none;
+            font-size: inherit;
+            resize: none;
+          }
         }
       }
 
       .right {
-        @include flexbox($jc: start);
+        @include flexbox($jc: between);
         flex-direction: column;
-      }
-
-      .add__comment {
-        font-family: inherit;
-        width: 100%;
-        border: none;
-        font-size: inherit;
-        resize: none;
       }
 
       .edit-area {
@@ -312,7 +303,44 @@ export default {
           @include flexbox;
           width: 35px;
           height: 35px;
-          object-fit: contain; // 일단은 contain으로 해놓음
+          object-fit: cover; // 일단은 contain으로 해놓음
+        }
+      }
+    }
+  }
+
+  @include responsive('sm') {
+    .comments {
+      &__header {
+        font-size: $FONT_L;
+      }
+
+      /* depth가 너무 길어짐 3depth 이상 들어가지 않게 이후 수정... */
+      &__list {
+        .item {
+          .left {
+            .user {
+              &__profile {
+                img {
+                  width: $SM_PROFILE_SIZE;
+                  height: $SM_PROFILE_SIZE;
+                }
+              }
+              &__infos {
+                .content,
+                .add__comment {
+                  font-size: $FONT_S;
+                }
+              }
+            }
+          }
+
+          .right {
+            justify-content: center;
+            .button {
+              width: 50px !important;
+            }
+          }
         }
       }
     }

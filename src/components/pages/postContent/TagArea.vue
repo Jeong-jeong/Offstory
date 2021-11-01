@@ -113,43 +113,46 @@ export default {
       }
       const res = await userDetailInfo(this.commentorId) // 댓작성자의 정보 불러옴
       console.log(res.data.username, '댓작성자 정보')
-      const [dummyData, username] = res.data.username.split('/')
-      console.log(username.length) // 2 ""
-      let updateUserName = ''
+      const [dummyData, priorPostsThatUserJoin] = res.data.username.split('/')
+      console.log(priorPostsThatUserJoin.length) // 2 ""
+      const postsThatUserJoin = JSON.parse(priorPostsThatUserJoin)
 
-      if (username.length > 2) {
-        // username이 있으면
-        console.log('username이 있음')
-        const array = JSON.parse(username) // 배열로 변환
-        console.log(array, 'array')
-        const index = this.checkHasSamePostId(array) // 같은 포스트ID인지 찾음
-        if (index === -1) {
-          // 같은게 없다면 추가
-          updateUserName = [...array, stateData]
-          console.log(updateUserName, 'different postId')
-        } else {
-          // 같은게 있다면 state만 변경
-          array[index].state = state
-          const changeValue = array[index]
-          const changeArray = array.slice(index, index + 1, changeValue)
-          console.log(changeArray, 'same postId')
-          updateUserName = changeArray
-        }
-      } else {
-        updateUserName = [stateData]
-        console.log(updateUserName, 'username이 비었음')
-      }
+      console.log('priorPostsThatUserJoin', priorPostsThatUserJoin)
+      postsThatUserJoin.forEach(post => {
+        post.postid === this.postId && (post.state = state)
+      })
+      // if (username.length > 2) {
+      // username이 있으면
+      // console.log('username이 있음')
+      // const array = JSON.parse(username) // 배열로 변환
+      // console.log(array, 'array')
+      // const index = this.checkHasSamePostId(array) // 같은 포스트ID인지 찾음
+      // if (index === -1) {
+      //   // 같은게 없다면 추가
+      //   updateUserName = [...array, stateData]
+      //   console.log(updateUserName, 'different postId')
+      // } else {
+      //   // 같은게 있다면 state만 변경
+      //   array[index].state = state
+      //   const changeValue = array[index]
+      //   const changeArray = array.slice(index, index + 1, changeValue)
+      //   console.log(changeArray, 'same postId')
+      //   updateUserName = changeArray
+      // }
+      // } else {
+      //   updateUserName = [stateData]
+      //   console.log(updateUserName, 'username이 비었음')
+      // }
 
-      const updateData = dummyData + '/' + JSON.stringify(updateUserName)
+      const username = dummyData + '/' + JSON.stringify(postsThatUserJoin)
 
       const updateUserInfo = {
         // 유저 정보 update에 필요한 request body
         fullName: this.commentorName,
-        username: updateData,
+        username,
       }
       const userInfo = await updateNameField(updateUserInfo) // username 업데이트
-      console.log(userInfo.data.username, '업데이트완료')
-
+      console.log('업데이트 완료됨222222222', userInfo.data.username)
       this.changeTag(state)
     },
   },
@@ -177,6 +180,13 @@ export default {
   .button-wrapper {
     @include flexbox($jc: around);
     width: 100%;
+  }
+}
+
+@include responsive('sm') {
+  .tag {
+    width: $SM_TAG_WIDTH !important;
+    font-size: $FONT_XXS !important;
   }
 }
 </style>

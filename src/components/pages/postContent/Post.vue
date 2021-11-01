@@ -4,7 +4,7 @@
       <header class="post__header">
         <div class="left">
           <button class="user__profile">
-            <img :src="profileUrl" alt="유저 프로필" />
+            <img :src="HostProfileUrl" alt="유저 프로필" />
           </button>
           <div class="user__infos">
             <strong class="nickname">{{ author.fullName }}</strong>
@@ -13,9 +13,7 @@
           </div>
         </div>
         <div class="right">
-          <!-- <Button v-if="!checkHost" v-bind="{ width: '60px', height: '70px' }">
-            찜하기
-          </Button> -->
+          <Like v-if="isLogin && !checkHost" class="likes" :post="postData" />
           <div v-if="checkHost" class="edit-area">
             <button v-if="!isEdit" @click="changeToEdit" class="edit">
               편집
@@ -31,7 +29,6 @@
         <Editor :title="title" :content="content" :postImgUrl="postImgUrl" />
       </template>
       <template v-else>
-        <!-- TODO: 이벤트 올리기 -->
         <EditPage
           @rerender="rerender"
           @saveEdit="saveEdit"
@@ -51,36 +48,22 @@
 <script>
 import { mapGetters } from 'vuex'
 import { timeForToday } from '~/utils/function'
-import { getUserIdToCookie } from '~/utils/cookies'
 import { deletePost } from '~/api/postContent'
 import Card from '~/components/designs/Card'
-import Button from '~/components/designs/Button'
+import Like from '~/components/designs/Like'
 import Editor from '~/components/pages/postContent/Editor'
 import EditPage from '~/components/pages/postContent/EditPage'
 
 export default {
   components: {
     Card,
-    Button,
     Editor,
     EditPage,
+    Like,
   },
-  props: ['postId', 'postData', 'author', 'channel'],
-  watch: {
-    postData: {
-      deep: true,
-      handler(newValue, oldValue) {
-        console.log(newValue, 'postData watch')
-      },
-    },
-  },
+  props: ['postId', 'postData', 'author', 'channel', 'userId'],
   data() {
     return {
-      userId: this.getUserIdToCookie(),
-      // postId: this.initialPostId,
-      // postData: this.initialPostData,
-      // author: this.author,
-      // channel: this.initialChannel,
       isEdit: false,
     }
   },
@@ -95,13 +78,17 @@ export default {
     cancelEdit() {
       this.isEdit = false
     },
-    submitDelete() {
-      const userData = {
-        id: this.postId,
+    async submitDelete() {
+      if (window.confirm('포스트를 삭제하시겠어요?')) {
+        const userData = {
+          id: this.postId,
+        }
+        const res = await deletePost({ data: userData })
+        await window.alert('포스트가 삭제되었어요')
+        this.$router.push('/')
       }
-      // deletePost(userData)
     },
-    getProfileImg() {
+    getHostProfileImg() {
       const result = Object.keys(this.author).some(v => v === 'coverImage')
       return result ? this.author.coverImage : ''
     },
@@ -112,19 +99,18 @@ export default {
     async rerender() {
       await this.$emit('rerender')
     },
-    getUserIdToCookie,
   },
   computed: {
-    ...mapGetters('Login', ['getUserId']),
+    ...mapGetters('Login', ['isLogin']),
     title() {
       return this.postData.title.split('/')[0]
     },
     content() {
       return this.postData.title.split('/')[1]
     },
-    profileUrl() {
+    HostProfileUrl() {
       return (
-        this.getProfileImg() ||
+        this.getHostProfileImg() ||
         require('~/assets/images/user-profile__default.svg')
       )
     },
@@ -133,7 +119,7 @@ export default {
     },
     checkHost() {
       return this.author._id === this.userId
-    }, // 글 작성자 _id, 로그인된 userId 같은지 비교
+    },
   },
 }
 </script>
@@ -160,7 +146,7 @@ export default {
             @include flexbox;
             width: 40px;
             height: 40px;
-            object-fit: cover; // 일단은 contain으로 해놓음
+            object-fit: cover;
           }
         }
 
@@ -194,6 +180,32 @@ export default {
         }
         .edit {
           margin-right: $INNER_PADDING_HORIZONTAL;
+        }
+      }
+    }
+  }
+}
+
+@include responsive('sm') {
+  .post {
+    &__header {
+      .left {
+        .user {
+          &__profile {
+            img {
+              width: 30px;
+              height: 30px;
+            }
+          }
+          &__infos {
+            .nickname {
+              font-size: $FONT_BASE;
+            }
+            .uploadDate,
+            .location {
+              font-size: $FONT_XS;
+            }
+          }
         }
       }
     }
