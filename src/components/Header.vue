@@ -77,10 +77,10 @@
       </button>
     </div>
     <div class="right">
+      <button @click="openSearch" aria-label="검색 버튼">
+        <i class="material-icons"> search </i>
+      </button>
       <template v-if="isLogin">
-        <button @click="openSearch" aria-label="검색 버튼">
-          <i class="material-icons"> search </i>
-        </button>
         <button
           aria-label="글쓰기 버튼"
           @click="this.$router.push({ name: 'CreateNewPost' })"
@@ -555,6 +555,7 @@ export default {
     }
 
     .right {
+      @include flexbox;
       button:first-child {
         display: inline-block;
       }
