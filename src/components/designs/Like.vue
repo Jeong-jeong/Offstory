@@ -1,9 +1,9 @@
 <template>
-  <div class="like">
+  <div class="wrapper">
     <template v-if="doesUserLike">
       <i
         class="material-icons"
-        @click.prevent="cancleLike"
+        @click="cancleLike"
         :style="{ fontSize: checkUnit(symbolSize) }"
       >
         favorite
@@ -12,7 +12,7 @@
     <template v-else>
       <i
         class="material-icons"
-        @click.prevent="like"
+        @click="like"
         :style="{ fontSize: checkUnit(symbolSize) }"
       >
         favorite_border
@@ -61,18 +61,19 @@ export default {
   },
   computed: {},
   methods: {
-    async like(event) {
-      event.stopPropagation()
+    async like() {
       const res = await likePost(this.post._id)
+      console.log('res는 제대로 동작하나?', res)
+      console.log('this.post.Id는?', this.post._id)
       this.doesUserLike = !this.doesUserLike
       this.likeCount++
       const { userId: currentUserId } = this.$storage.getItem('userData')
       this.post.likes.push({ _id: res.data._id, user: currentUserId })
     },
-    async cancleLike(event) {
-      event.stopPropagation()
+    async cancleLike() {
       const [likeId, index] = this.findLikeId()
-      await cancleLikePost(likeId)
+      const cancleLike = await cancleLikePost(likeId)
+      console.log('cancleLike는 제대로 동작하나?', cancleLike)
       this.doesUserLike = !this.doesUserLike
       this.likeCount--
       this.post.likes.splice(index, 1)
@@ -101,7 +102,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.like {
+.wrapper {
   display: flex;
   align-items: center;
   justify-content: center;

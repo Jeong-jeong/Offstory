@@ -5,7 +5,7 @@ import Signup from './Signup'
 import PostContent from './PostContent'
 import Login from './Login'
 import CreateNewPost from './CreateNewPost'
-import PostsThatUserLike from './PostsThatUserLike'
+import PersonalActivity from './PersonalActivity'
 import Chat from './Chat'
 import Example from '~/components/designs/Example'
 import PersonalInfo from './PersonalInfo'
@@ -77,9 +77,9 @@ export default createRouter({
       component: Example,
     },
     {
-      name: 'PostsThatUserLike',
-      path: '/poststhatuserlike',
-      component: PostsThatUserLike,
+      name: 'PersonalActivity',
+      path: '/personalactivity',
+      component: PersonalActivity,
     },
     {
       name: 'PersonalInfo',

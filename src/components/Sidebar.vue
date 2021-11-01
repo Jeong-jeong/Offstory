@@ -30,9 +30,9 @@
       </button>
       <button
         class="option personal-activity"
-        @click="$router.push('/poststhatuserlike')"
+        @click="$router.push('/personalactivity')"
       >
-        관심있는 동행글
+        내 활동목록
       </button>
     </div>
     <div class="bottom">
