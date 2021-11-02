@@ -14,16 +14,15 @@
     />
     <input
       v-focus
-      ref="title"
       class="editor__title"
       :value="title"
-      @input="changeTitle"
+      @input="changeTitle($event)"
       @keyup.enter="submitInfo"
     />
     <img v-if="postImgUrl" class="postImg" :src="postImgUrl" alt="" />
     <textarea
+      @input="changeContent($event)"
       @keyup="resizeContent($event)"
-      ref="content"
       class="content"
       type="text"
       :value="content"
@@ -81,13 +80,10 @@ export default {
     changeTitle(event) {
       this.title = event.target.value
     },
-    changeContent() {
-      const result = this.$refs.content.value
-      this.content = result
+    changeContent(event) {
+      this.content = event.target.value
     },
     async submitInfo() {
-      this.changeContent()
-
       const userData = new FormData()
       userData.append('postId', this.postId)
       userData.append('title', `${this.title}/${this.content}`)
