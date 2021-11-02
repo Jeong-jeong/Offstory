@@ -80,6 +80,17 @@ export default {
       this.likeCount++
       const { userId: currentUserId } = this.$storage.getItem('userData')
       this.post.likes.push({ _id: res.data._id, user: currentUserId })
+      //낙관적 업데이트
+      const Listdata = this.$storage.getItem('PostListData')
+      for (let i in Listdata) {
+        console.log(Listdata[i]._id)
+        if (Listdata[i]._id === this.post._id) {
+          Listdata[i].likes.push('dummy')
+        }
+      }
+      console.log(Listdata)
+      // this.$storage.removeItem('PostListData')
+      this.$storage.setItem('PostListData', Listdata)
     },
     async cancleLike(event) {
       event.stopPropagation()
@@ -89,6 +100,17 @@ export default {
       this.doesUserLike = !this.doesUserLike
       this.likeCount--
       this.post.likes.splice(index, 1)
+      const Listdata = this.$storage.getItem('PostListData')
+      //낙관적 업데이트
+      for (let i in Listdata) {
+        console.log(Listdata[i]._id)
+        if (Listdata[i]._id === this.post._id) {
+          console.log(Listdata[i].likes.length)
+          Listdata[i].likes.splice(Listdata[i].likes.length - 1, 1)
+          console.log(Listdata[i].likes)
+        }
+      }
+      this.$storage.setItem('PostListData', Listdata)
     },
     findLikeId() {
       const index = this.post.likes.findIndex(like => {
