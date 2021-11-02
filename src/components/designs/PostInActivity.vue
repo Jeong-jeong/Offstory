@@ -31,7 +31,7 @@
           :post="post"
           :doesUserLike="doesUserLike"
         />
-        <Comment :post="post" />
+        <Comment :post="post" :marginLeft="`10px`" />
       </div>
       <div class="time">
         <div class="day">{{ getTime(post.createdAt)[0] }}</div>
@@ -199,6 +199,7 @@ export default {
 
     .text-profile {
       margin-left: 15px;
+      overflow: hidden;
 
       .address {
         overflow: hidden;
@@ -212,7 +213,7 @@ export default {
         white-space: nowrap;
         font-weight: 700;
         font-size: 1.1rem;
-        line-height: 0.95rem;
+        line-height: 1rem;
       }
     }
   }
