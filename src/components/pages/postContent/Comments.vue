@@ -111,13 +111,14 @@ export default {
     Button,
   },
   props: ['postId', 'comments', 'author', 'userId', 'userName', 'userImage'],
+  emits: ['rerender'],
   computed: {
     ...mapGetters('Login', ['isLogin']),
     defaultProfileUrl() {
       return require('~/assets/images/user-profile__default.svg')
     },
     returnUserProfileImg() {
-      return this.userImage !== 'undefined'
+      return this.userImage !== undefined
         ? this.userImage
         : this.defaultProfileUrl
     },
@@ -140,10 +141,7 @@ export default {
         comment: commentValue,
         postId: this.postId,
       }
-
-      console.log('유저 데이터 잘 저장되는가?', commentValue)
       const res = await createComment(userData)
-      console.log(res, 'createComment')
       await this.$emit('rerender')
       this.comment = ''
     },
@@ -154,7 +152,6 @@ export default {
         const userData = {
           id: commentId,
         }
-        console.log(userData)
         await deleteComment({ data: userData })
         window.alert('댓글이 삭제되었어요')
         this.$emit('rerender')
@@ -224,7 +221,12 @@ export default {
         }
 
         .right {
+          position: relative;
           justify-content: center;
+
+          .button {
+            margin-top: $LG_PADDING_VERTICAL;
+          }
         }
       }
 
