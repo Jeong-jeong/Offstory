@@ -1,8 +1,8 @@
 <template>
   <div class="editor">
-    <h1 class="editor__title">{{ title }}</h1>
+    <h1 class="editor__title">{{ title || '제목 없음' }}</h1>
     <img v-if="postImgUrl" class="postImg" :src="postImgUrl" alt="" />
-    <p v-html="replacedContent" class="content" type="text"></p>
+    <p v-html="replacedContent || '내용 없음'" class="content" type="text"></p>
   </div>
 </template>
 

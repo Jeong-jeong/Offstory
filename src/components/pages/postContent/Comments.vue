@@ -20,7 +20,7 @@
             </button>
             <div class="user__infos">
               <strong class="nickname"
-                >{{ commentList.author.fullName }}
+                ><span class="txt">{{ commentList.author.fullName }}</span>
                 <span class="uploadDate">{{
                   timeForToday(commentList.updatedAt)
                 }}</span></strong
@@ -119,9 +119,7 @@ export default {
       return require('~/assets/images/user-profile__default.svg')
     },
     returnUserProfileImg() {
-      return this.userImage !== undefined
-        ? this.userImage
-        : this.defaultProfileUrl
+      return !this.userImage ? this.defaultProfileUrl : this.userImage
     },
     isCommentLength() {
       return this.comment.trim().length
@@ -246,6 +244,7 @@ export default {
           width: 100%;
 
           .user__infos {
+            /* width: 350px; */
             height: 100%;
           }
         }
@@ -278,15 +277,15 @@ export default {
         .user__infos {
           flex-grow: 1;
           .nickname {
-            word-break: keep-all;
             @include flexbox($jc: start);
-            flex-grow: 1;
-            flex-wrap: nowrap;
+            .txt {
+              display: inline-block;
+            }
             margin-bottom: $INNER_PADDING_SMALL;
           }
 
           .uploadDate {
-            width: 100%;
+            flex-shrink: 0;
             color: $KEY_COLOR;
             font-size: $FONT_XS;
             font-weight: 400;
@@ -311,6 +310,7 @@ export default {
       .right {
         @include flexbox($jc: between);
         flex-direction: column;
+        flex-shrink: 0;
       }
 
       .edit-area {
