@@ -101,7 +101,6 @@ export default {
         const { data } = await registerUser(userData)
         console.log(data)
         await this.initForm() // submit 후 input 초기화
-        this.endLoading()
         if (
           window.confirm(
             '회원가입이 완료되었습니다 👏👏. 로그인 페이지로 이동할까요?',
@@ -115,6 +114,7 @@ export default {
         console.log(error.response.data)
         alert(error.response.data)
       }
+      this.endLoading()
     },
     initForm() {
       this.email = ''
