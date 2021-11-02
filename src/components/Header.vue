@@ -135,7 +135,7 @@ export default {
     return {
       selected: '',
       isLoading: false,
-      defaultImageUrl: require('../assets/images/user-profile__default.svg'),
+      defaultImageUrl: require('../assets/images/user-profile.svg'),
       userImage: null,
       detailAdress: '',
       countyList: [],
@@ -179,12 +179,24 @@ export default {
     ...mapGetters('Login', [
       'isLogin',
       'isEmptyProfileImage',
-      'getUserProfileImage',
+      'getUserProfileImageFromStore',
     ]),
     ...mapMutations('Loading', ['startLoading', 'endLoading']),
     getUserProfileImage() {
-      const profileImage = getImageFromCookie()
-      return profileImage === 'undefined' ? this.defaultImageUrl : profileImage
+      const profileImage =
+        this.getUserProfileImageFromStore ||
+        (getImageFromCookie() !== 'null' && getImageFromCookie()) ||
+        this.defaultImageUrl
+
+      // Debugging: 개인 정보 수정 후, Header profile 업데이트 체크
+      console.log(
+        'this.getUserProfileImageFromStore',
+        this.getUserProfileImageFromStore,
+      )
+      console.log('getImageFromCookie()', getImageFromCookie())
+      console.log('this.defaultImageUrl', this.defaultImageUrl)
+      console.log('profileImage', profileImage)
+      return profileImage
     },
     keepSearchDatas() {
       let targetCity = document.getElementsByClassName('selectcity')[0]

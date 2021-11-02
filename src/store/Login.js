@@ -11,7 +11,7 @@ export default {
       userEmail: '',
       username: storage.getItem('off_userName') || '',
       token: JSON.parse(storage.getItem('off_auth')) || '',
-      profileImage: '',
+      profileImage: null,
       isLoading: false,
       authCheck: false,
     }
@@ -39,7 +39,7 @@ export default {
     getUserId(state) {
       return state.userId
     },
-    getUserProfileImage(state) {
+    getUserProfileImageFromStore(state) {
       return state.profileImage
     },
     getToken(state) {
@@ -53,7 +53,7 @@ export default {
     setUserId(state, userId) {
       state.userId = userId
     },
-    setprofileImage(state, profileImage) {
+    setProfileImage(state, profileImage) {
       state.profileImage = profileImage
     },
     clearUsername(state) {
