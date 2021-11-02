@@ -98,6 +98,7 @@ import { timeForToday, putBr } from '~/utils/function'
 import { createComment, deleteComment } from '~/api/postContent'
 import Card from '~/components/designs/Card.vue'
 import Button from '~/components/designs/Button.vue'
+import LoadingSpinner from '~/components/designs/LoadingSpinner'
 
 export default {
   data() {
@@ -141,9 +142,11 @@ export default {
         comment: commentValue,
         postId: this.postId,
       }
+      this.isLoading = true
       const res = await createComment(userData)
       await this.$emit('rerender')
       this.comment = ''
+      this.isLoading = false
     },
     async deleteComments(event) {
       if (window.confirm('댓글을 삭제하시겠어요?')) {
@@ -152,12 +155,14 @@ export default {
         const userData = {
           id: commentId,
         }
+        this.isLoading = true
         await deleteComment({ data: userData })
         window.alert('댓글이 삭제되었어요')
         this.$emit('rerender')
       } else {
         return
       }
+      this.isLoading = false
     },
     checkCommentor(event) {
       const li = event.target.closest('li')

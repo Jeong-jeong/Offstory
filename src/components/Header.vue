@@ -1,4 +1,5 @@
 <template>
+  <LoadingSpinner v-if="this.$store.getters['Loading/loading']" />
   <div class="header-wrapper">
     <div class="left" @click="$router.push('/')">
       <img src="../assets/images/symbol.svg" alt="OffStory 심볼" />
@@ -117,12 +118,6 @@
       </template>
     </div>
   </div>
-  <div class="isLoading">
-    <div v-if="this.isLoading === true">
-      <LoadingSpinner />
-    </div>
-    <div v-else></div>
-  </div>
 </template>
 
 <script>
@@ -131,7 +126,6 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import Button from '~/components/designs/Button'
 import LoadingSpinner from '~/components/designs/LoadingSpinner'
 import { getImageFromCookie } from '~/utils/cookies'
-import { reactive } from 'vue'
 
 export default {
   data() {
@@ -175,15 +169,16 @@ export default {
   },
   components: {
     Button,
+    LoadingSpinner,
   },
   computed: {
     ...mapState('address', ['cityList', 'countyList']),
-
     ...mapGetters('Login', [
       'isLogin',
       'isEmptyProfileImage',
       'getUserProfileImage',
     ]),
+    ...mapMutations('Loading', ['startLoading', 'endLoading']),
     getUserProfileImage() {
       const profileImage = getImageFromCookie()
       return profileImage === 'undefined' ? this.defaultImageUrl : profileImage
@@ -338,9 +333,7 @@ export default {
         console.log(filteredDataOfCounty)
         this.setPostListData(this.CountydataList)
         this.$storage.setItem('PostListData', this.CountydataList)
-        this.isLoading = false
         console.log(this.isLoading)
-        //this.setisLoading(false)
         this.$router.go(0)
         this.$router.push('/ResultOfPostList')
       }

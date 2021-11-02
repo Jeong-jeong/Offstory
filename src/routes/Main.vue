@@ -15,14 +15,22 @@
             </div>
           </div>
           <div class="right">
-            <img class="main-image--1" :src="mainImageOne" alt="" />
-            <img class="main-image--2" :src="mainImageTwo" alt="" />
-            <img class="main-image--3" :src="mainImageThree" alt="" />
+            <img class="main-image--1 default" :src="mainImageOne" alt="" />
+            <BoxSkeleton
+              v-bind="{ width: '250px', height: '360px' }"
+              class="main-image--1 skeleton"
+            />
+            <img class="main-image--2 default" :src="mainImageTwo" alt="" />
+            <BoxSkeleton
+              v-bind="{ width: '500px', height: '300px' }"
+              class="main-image--2 skeleton"
+            />
+            <img class="main-image--3 default" :src="mainImageThree" alt="" />
+            <BoxSkeleton
+              v-bind="{ width: '300px', height: '370px' }"
+              class="main-image--3 skeleton"
+            />
           </div>
-
-          <!-- <BoxSkeleton />
-    <CircleSkeleton />
-    <ParagraphSkeleton /> -->
         </main>
       </div>
     </div>
@@ -34,7 +42,12 @@ import BoxSkeleton from '~/components/designs/BoxSkeleton'
 import CircleSkeleton from '~/components/designs/CircleSkeleton'
 import ParagraphSkeleton from '~/components/designs/ParagraphSkeleton'
 export default {
-  // components: { BoxSkeleton, CircleSkeleton, ParagraphSkeleton },
+  components: { BoxSkeleton, CircleSkeleton, ParagraphSkeleton },
+  data() {
+    return {
+      isLoading: false,
+    }
+  },
   computed: {
     mainImageOne() {
       return require('~/assets/images/main_1.png')
@@ -45,6 +58,14 @@ export default {
     mainImageThree() {
       return require('~/assets/images/main_3.png')
     },
+  },
+  mounted() {
+    const defaultImages = document.querySelectorAll('[class*="default"]')
+    const skeletons = document.querySelectorAll('[class*="skeleton"]')
+    skeletons.forEach(skeleton => {
+      skeleton.style = 'display:none'
+    })
+    // skeletons.style = 'display: none'
   },
 }
 </script>
