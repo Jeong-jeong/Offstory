@@ -89,7 +89,8 @@ export default {
     },
     findLikeId() {
       const index = this.post.likes.findIndex(like => {
-        const { userId: currentUserId } = this.$storage.getItem('userData')
+        const { userId: currentUserId } =
+          this.$storage.getItem('userData') || {}
         return like.user === currentUserId
       })
       const likeId = this.post.likes[index]._id

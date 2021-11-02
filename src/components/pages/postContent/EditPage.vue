@@ -86,7 +86,6 @@ export default {
       this.content = result
     },
     async submitInfo() {
-      console.log('submit')
       this.changeContent()
 
       const userData = new FormData()
@@ -96,7 +95,6 @@ export default {
       userData.append('channelId', this.channel._id)
 
       const res = await updatePost(userData)
-      console.log(res, 'update 완료')
       await this.$emit('rerender')
       this.$emit('saveEdit')
     },
@@ -104,7 +102,6 @@ export default {
       const file = event.target.files[0]
 
       const newImageSrc = URL.createObjectURL(file)
-      console.log(newImageSrc, 'changeImg')
       this.postImgUrl = newImageSrc
       this.image = file
     },
