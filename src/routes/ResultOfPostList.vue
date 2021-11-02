@@ -67,12 +67,14 @@
                       </template>
                     </div>
                     <div class="resultlist-listcard-active">
+                      <span class="hidden">1 </span>
                       <Like
                         :post="i"
                         :color="`white`"
                         :symbolSize="`18px`"
                         :fontSize="`18px`"
                       />
+
                       <Comment
                         :post="i"
                         :marginLeft="`10px`"
@@ -399,6 +401,14 @@ export default {
             }
           } */
           .resultlist-listcard-active {
+            .hidden {
+              opacity: 0;
+              position: absolute;
+              display: inline-block;
+              width: 34px;
+              height: 30px;
+              background-color: red;
+            }
             position: absolute;
             display: flex;
             right: 27px;
@@ -570,6 +580,14 @@ export default {
             }
           }
           .resultlist-listcard-active {
+            .hidden {
+              opacity: 0;
+              position: absolute;
+              display: inline-block;
+              width: 34px;
+              height: 30px;
+              background-color: red;
+            }
             position: absolute;
             display: flex;
             right: 27px;
@@ -645,16 +663,6 @@ export default {
         }
       }
     }
-  }
-
-  .resultlist-listcard-active {
-    position: absolute;
-    display: flex;
-    right: 27px;
-    bottom: 123px;
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 0 5px;
-    border-radius: 5px;
   }
 }
 </style>
