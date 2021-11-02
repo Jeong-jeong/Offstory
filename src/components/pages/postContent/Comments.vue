@@ -147,6 +147,17 @@ export default {
       await this.$emit('rerender')
       this.comment = ''
       this.isLoading = false
+      //낙관적 업데이트
+      const Listdata = this.$storage.getItem('PostListData')
+      for (let i in Listdata) {
+        console.log(Listdata[i]._id)
+        if (Listdata[i]._id === this.postId) {
+          Listdata[i].comments.push('dummy')
+        }
+      }
+      console.log(Listdata)
+      // this.$storage.removeItem('PostListData')
+      this.$storage.setItem('PostListData', Listdata)
     },
     async deleteComments(event) {
       if (window.confirm('댓글을 삭제하시겠어요?')) {
@@ -156,7 +167,21 @@ export default {
           id: commentId,
         }
         this.isLoading = true
+        console.log('삭제')
+        const Listdata = this.$storage.getItem('PostListData')
+        console.log('삭제시', Listdata)
+        //낙관적 업데이트
+        for (let i in Listdata) {
+          console.log(Listdata[i]._id)
+          if (Listdata[i]._id === this.postId) {
+            console.log(Listdata[i].comments.length)
+            Listdata[i].comments.splice(Listdata[i].comments.length - 1, 1)
+            console.log(Listdata[i].comments)
+          }
+        }
+        this.$storage.setItem('PostListData', Listdata)
         await deleteComment({ data: userData })
+
         window.alert('댓글이 삭제되었어요')
         this.$emit('rerender')
       } else {
