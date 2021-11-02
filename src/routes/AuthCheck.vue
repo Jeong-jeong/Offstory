@@ -75,7 +75,7 @@ export default {
       } catch (error) {
         //에러 핸들링 코드
         console.log(error.response.data)
-        alert(error.response.data)
+        alert('비밀번호가 맞지 않습니다.')
       }
     },
     gobackPage() {
