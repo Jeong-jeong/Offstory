@@ -41,7 +41,7 @@
             <input
               type="password"
               v-model="password"
-              placeholder="비밀번호 (영문, 숫자, 특수문자 8 ~ 30자)"
+              placeholder="영문, 숫자, 특수문자 8 ~ 30자"
               ref="firstPassword"
               @focus="initializeClassname"
               @blur="checkPassword"
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import {
   updateCoverImage,
   updateNameField,
@@ -82,7 +82,6 @@ import {
   userDetailInfo,
 } from '../api/index'
 import Button from '../components/designs/Button'
-import { makeRandomKey } from '~/utils/function'
 import { deleteCookie, saveUserImageToCookie } from '../utils/cookies'
 export default {
   components: { Button },
@@ -101,16 +100,17 @@ export default {
     ...mapGetters('Login', ['getToken']),
   },
   methods: {
+    ...mapMutations('Login', ['setProfileImage']),
     // 화면으로 접속시에 적색 박스와 녹색 박스 화면에 표시
     initialValidCheck() {
       setSuccessFor(this.$refs.nickname)
       setErrorFor(
         this.$refs.firstPassword,
-        '비밀번호는 (영문, 숫자, 특수문자) 조합이어야 합니다.',
+        '비밀번호는 (영문, 숫자, 특수문자) 조합이어야 합니다',
       )
       setErrorFor(
         this.$refs.secondPassword,
-        '비밀번호는 (영문, 숫자, 특수문자) 조합이어야 합니다.',
+        '비밀번호는 (영문, 숫자, 특수문자) 조합이어야 합니다',
       )
     },
     // 유저의 현재 정보 데이터를 화면에 표시
@@ -243,7 +243,7 @@ export default {
       const userPriorData = this.$storage.getItem('userData')
       const username =
         !isEqual(this.nickname, userPriorData.userFullName) &&
-        (await changeNickname(this.nickname, userPriorData))
+        (await changeNickname(this.nickname))
 
       // 패스워드 변경 로직
       await changePassword(this.password)
@@ -257,11 +257,13 @@ export default {
       )
 
       deleteCookie('off_userprofileImage')
-      saveUserImageToCookie(updatedUserData.userCoverImage)
+      saveUserImageToCookie(updatedUserData.userCoverImage || undefined)
+      this.setProfileImage(updatedUserData.userCoverImage || undefined)
       this.$storage.setItem('userData', updatedUserData)
 
-      // this.setUserInfo()
-      location.reload(true)
+      this.setUserInfo()
+      alert('정보가 수정되었습니다!')
+      this.$router.push('/authcheck')
     },
   },
   mounted() {
@@ -338,13 +340,10 @@ async function changePassword(password) {
   await updatePassword(data)
 }
 
-async function changeNickname(nickname, userPriorData) {
-  const newKey = makeRandomKey()
-  const [_, joinState] = userPriorData.userName.split('/')
-
+async function changeNickname(nickname) {
   const data = {
     fullName: nickname,
-    username: newKey + joinState || '',
+    username: 'false',
   }
 
   await updateNameField(data)
@@ -358,7 +357,7 @@ async function changeNickname(nickname, userPriorData) {
 
 .container {
   position: relative;
-  top: 140px;
+  top: 110px;
 
   .row {
     @include flexbox;
@@ -366,6 +365,9 @@ async function changeNickname(nickname, userPriorData) {
 
   .form {
     position: relative;
+    padding: $LG_PADDING_VERTICAL $LG_PADDING_HORIZONTAL;
+    box-shadow: $BOX_SHADOW;
+    margin-bottom: 20px;
   }
 
   .form-control {
@@ -389,7 +391,7 @@ async function changeNickname(nickname, userPriorData) {
     }
     i {
       position: absolute;
-      top: 41px;
+      top: 44px;
       right: 10px;
       visibility: hidden;
     }
@@ -460,25 +462,24 @@ async function changeNickname(nickname, userPriorData) {
   }
 
   .button-container {
-    position: absolute;
+    /* position: absolute; */
     display: flex;
-    right: 0;
+    flex-direction: column;
 
     button {
-      margin-left: 20px;
+      width: 100%;
+    }
+    button:last-child {
+      margin-top: 10px;
     }
   }
 
   @media (max-width: 590px) {
-    .button-container {
-      display: block;
-      position: relative;
-
-      button {
-        width: 100%;
-        margin-left: 0;
-        margin-bottom: 15px;
-      }
+    small {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
     }
   }
 }

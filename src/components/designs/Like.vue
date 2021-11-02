@@ -74,8 +74,6 @@ export default {
     async like(event) {
       event.stopPropagation()
       const res = await likePost(this.post._id)
-      console.log('res는 제대로 동작하나?', res)
-      console.log('this.post.Id는?', this.post._id)
       this.doesUserLike = !this.doesUserLike
       this.likeCount++
       const { userId: currentUserId } = this.$storage.getItem('userData')
@@ -85,7 +83,6 @@ export default {
       event.stopPropagation()
       const [likeId, index] = this.findLikeId()
       const cancleLike = await cancleLikePost(likeId)
-      console.log('cancleLike는 제대로 동작하나?', cancleLike)
       this.doesUserLike = !this.doesUserLike
       this.likeCount--
       this.post.likes.splice(index, 1)
@@ -99,11 +96,14 @@ export default {
       return [likeId, index]
     },
     likeUpdate() {
-      const { userId: currentUserId } = this.$storage.getItem('userData')
-      const likes = this.post.likes
-      const likeUserIds = likes.map(like => like.user) // user is userId
-      this.doesUserLike = likeUserIds.includes(currentUserId)
-      this.likeCount = likes.length
+      const userData = this.$storage.getItem('userData')
+      if (userData) {
+        const { userId: currentUserId } = userData
+        const likes = this.post.likes
+        const likeUserIds = likes.map(like => like.user) // user is userId
+        this.doesUserLike = likeUserIds.includes(currentUserId)
+        this.likeCount = likes.length
+      }
     },
     checkUnit,
   },

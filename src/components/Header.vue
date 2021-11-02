@@ -182,11 +182,14 @@ export default {
     ...mapGetters('Login', [
       'isLogin',
       'isEmptyProfileImage',
-      'getUserProfileImage',
+      'getUserProfileImageFromStore',
     ]),
     getUserProfileImage() {
-      const profileImage = getImageFromCookie()
-      return profileImage === 'undefined' ? this.defaultImageUrl : profileImage
+      const profileImage =
+        this.getUserProfileImageFromStore ||
+        getImageFromCookie() ||
+        this.defaultImageUrl
+      return profileImage
     },
     keepSearchDatas() {
       let targetCity = document.getElementsByClassName('selectcity')[0]
