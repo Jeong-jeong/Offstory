@@ -1,4 +1,5 @@
 <template>
+  <LoadingSpinner v-if="this.$store.getters['Loading/loading']" />
   <div class="container">
     <div class="row">
       <div class="col-lg-6">
@@ -93,7 +94,8 @@
   </div>
 </template>
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
+import LoadingSpinner from '~/components/designs/LoadingSpinner'
 import { getAuth, createPost, channelsList, createChannel } from '../api/index'
 import Button from '~/components/designs/Button'
 import Input from '../components/designs/Input.vue'
@@ -133,7 +135,7 @@ export default {
       selectuserCounty: '',
     }
   },
-  components: { Button },
+  components: { Button, LoadingSpinner },
   async mounted() {
     const auth = await getAuth()
     console.log(auth)
@@ -142,6 +144,7 @@ export default {
     //...mapState('address', ['cityList', 'countyList']),
   },
   methods: {
+    ...mapMutations('Loading', ['startLoading', 'endLoading']),
     ...mapActions('address', ['fetchCounty']),
 
     async selectedCity(event) {
@@ -249,6 +252,7 @@ export default {
         //   meta: '', //만일을 위해 아껴두자!
         // }
         console.log(userData)
+        this.startLoading()
         const postData = await createPost(userData)
         console.log('postData afer write', postData)
         alert(
@@ -260,6 +264,7 @@ export default {
         console.log(error.response.data)
         alert(error.response.data)
       }
+      this.endLoading()
       //this.$route.push('/')
     },
     resizeContent(event) {

@@ -1,4 +1,5 @@
 <template>
+  <LoadingSpinner v-if="this.$store.getters['Loading/loading']" />
   <div class="container">
     <div class="row">
       <div class="col-lg-10">
@@ -44,6 +45,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+import LoadingSpinner from '~/components/designs/LoadingSpinner'
 import Post from '~/components/pages/postContent/Post'
 import Comments from '~/components/pages/postContent/Comments'
 import Button from '~/components/designs/Button.vue'
@@ -53,6 +56,7 @@ export default {
     Post,
     Comments,
     Button,
+    LoadingSpinner,
   },
   props: {
     postId: {
@@ -69,6 +73,7 @@ export default {
       comments: [],
       channel: {},
       userData: {},
+      isLoading: false,
     }
   },
   computed: {
@@ -77,20 +82,22 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('Loading', ['startLoading', 'endLoading']),
     async initPostdata() {
       try {
+        this.startLoading()
         const { data: postData } = await readPost(this.initialPostId)
         this.postData = postData
         this.author = postData.author
         this.comments = postData.comments
         this.channel = postData.channel
         this.userData = this.$storage.getItem('userData') || {}
-
         console.log(postData, '데이터 초기화')
       } catch (error) {
         console.log(error.response.data)
         alert(error.response.data)
       }
+      this.endLoading()
     },
     async rePatch() {
       this.initPostdata()

@@ -96,7 +96,7 @@ export default {
 
       const res = await updatePost(userData)
       await this.$emit('rerender')
-      this.$emit('saveEdit')
+      await this.$emit('saveEdit')
     },
     loadFile(event) {
       const file = event.target.files[0]

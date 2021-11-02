@@ -1,4 +1,5 @@
 <template>
+  <LoadingSpinner v-if="this.$store.getters['Loading/loading']" />
   <div class="container">
     <div class="login-page">
       <div class="row">
@@ -51,6 +52,8 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+import LoadingSpinner from '~/components/designs/LoadingSpinner'
 import Button from '~/components/designs/Button'
 import { loginUser, userDetailInfo, updateNameField } from '../api/index'
 import { makeRandomKey } from '~/utils/function'
@@ -65,13 +68,14 @@ export default {
       errorMessage: '',
     }
   },
-  components: { Button, Field, Form, ErrorMessage },
+  components: { Button, Field, Form, ErrorMessage, LoadingSpinner },
   computed: {
     isUserNameVaild() {
       return validateEmail(this.email)
     },
   },
   methods: {
+    ...mapMutations('Loading', ['startLoading', 'endLoading']),
     async submitForm() {
       //alert('f')
       try {
@@ -79,6 +83,7 @@ export default {
           email: this.email,
           password: this.password,
         }
+        await this.startLoading()
         const { data } = await loginUser(userData)
         console.log('data.user', data.user)
         this.$router.push('/')
@@ -115,7 +120,6 @@ export default {
         userDetaildata = await userDetailInfo(
           this.$store.getters['Login/getUserId'],
         )
-
         // 유저 데이터 storage에 저장
         this.storageSetup(userDetaildata.data)
         this.$router.go()
@@ -124,6 +128,7 @@ export default {
         console.log(error.response.data)
         alert(error.response.data)
       }
+      this.endLoading()
     },
     async initializeUsername(userData) {
       console.log('실행여부4')
@@ -131,8 +136,9 @@ export default {
         fullName: userData.user.fullName,
         username: makeRandomKey() + '/',
       }
-
+      this.startLoading()
       await updateNameField(data)
+      this.endLoading()
     },
     storageSetup(userData) {
       const dataToBeStored = {
@@ -144,7 +150,6 @@ export default {
         userEmail: userData.email,
         userName: userData.username,
       }
-
       this.$storage.setItem('userData', dataToBeStored)
     },
     isSignup() {

@@ -1,4 +1,5 @@
 <template>
+  <LoadingSpinner v-if="this.$store.getters['Loading/loading']" />
   <div class="sidebar-wrapper">
     <div class="header">
       <template v-if="getUserProfileImage === `undefined`">
@@ -42,8 +43,13 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+import LoadingSpinner from '~/components/designs/LoadingSpinner'
 import { deleteCookie, getImageFromCookie } from '~/utils/cookies'
 export default {
+  components: {
+    LoadingSpinner,
+  },
   data() {
     return {
       imageUrl: require('~/assets/images/user-profile__default.svg'),
@@ -70,6 +76,7 @@ export default {
     },
   },
   methods: {
+    ...mapMutations('Loading', ['startLoading', 'endLoading']),
     logout() {
       this.$store.commit('Login/clearUsername')
       this.$store.commit('Login/clearToken')

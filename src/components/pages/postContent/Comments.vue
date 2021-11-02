@@ -98,6 +98,7 @@ import { timeForToday, putBr } from '~/utils/function'
 import { createComment, deleteComment } from '~/api/postContent'
 import Card from '~/components/designs/Card.vue'
 import Button from '~/components/designs/Button.vue'
+import LoadingSpinner from '~/components/designs/LoadingSpinner'
 
 export default {
   data() {
@@ -141,9 +142,11 @@ export default {
         comment: commentValue,
         postId: this.postId,
       }
+      this.isLoading = true
       const res = await createComment(userData)
       await this.$emit('rerender')
       this.comment = ''
+      this.isLoading = false
       //낙관적 업데이트
       const Listdata = this.$storage.getItem('PostListData')
       for (let i in Listdata) {
@@ -163,6 +166,7 @@ export default {
         const userData = {
           id: commentId,
         }
+        this.isLoading = true
         console.log('삭제')
         const Listdata = this.$storage.getItem('PostListData')
         console.log('삭제시', Listdata)
@@ -183,6 +187,7 @@ export default {
       } else {
         return
       }
+      this.isLoading = false
     },
     checkCommentor(event) {
       const li = event.target.closest('li')

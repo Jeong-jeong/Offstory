@@ -1,4 +1,6 @@
 <template>
+  <LoadingSpinner v-if="this.$store.getters['Loading/loading']" />
+
   <div class="container">
     <div class="searchresult-page">
       <div class="row">
@@ -135,7 +137,9 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { timeForToday } from '~/utils/function'
+import { mapState, mapActions, mapMutations } from 'vuex'
+import LoadingSpinner from '~/components/designs/LoadingSpinner'
 import {
   getAuth,
   createPost,
@@ -161,7 +165,7 @@ export default {
       commentImageUrl: require('../assets/images/comment.svg'),
     }
   },
-  components: { Button, Like, Comment },
+  components: { Button, Like, Comment, LoadingSpinner },
   computed: {
     getUserCity() {
       //let userCity=this.$storage.getItem('userCity')
@@ -221,30 +225,7 @@ export default {
 
       return titleList[0]
     },
-    timeForToday(value) {
-      const today = new Date()
-      const timeValue = new Date(value)
-
-      const betweenTime = Math.floor(
-        (today.getTime() - timeValue.getTime()) / 1000 / 60,
-      )
-      if (betweenTime < 1) return '방금전'
-      if (betweenTime < 60) {
-        return `${betweenTime}분전`
-      }
-
-      const betweenTimeHour = Math.floor(betweenTime / 60)
-      if (betweenTimeHour < 24) {
-        return `${betweenTimeHour}시간전`
-      }
-
-      const betweenTimeDay = Math.floor(betweenTime / 60 / 24)
-      if (betweenTimeDay < 365) {
-        return `${betweenTimeDay}일전`
-      }
-
-      return `${Math.floor(betweenTimeDay / 365)}년전`
-    },
+    timeForToday,
   },
 }
 </script>

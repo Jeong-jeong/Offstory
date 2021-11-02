@@ -1,4 +1,5 @@
 <template>
+  <LoadingSpinner v-if="this.$store.getters['Loading/loading']" />
   <div class="container">
     <div class="sign-page">
       <div class="row">
@@ -63,9 +64,11 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import { registerUser, updateNameField } from '~/api/index'
 import { Field, Form, ErrorMessage } from 'vee-validate'
 import Button from '~/components/designs/Button'
+import LoadingSpinner from '~/components/designs/LoadingSpinner'
 
 export default {
   components: {
@@ -73,6 +76,7 @@ export default {
     Form,
     ErrorMessage,
     Button,
+    LoadingSpinner,
   },
   data() {
     return {
@@ -80,10 +84,12 @@ export default {
       fullName: '',
       password: '',
       confirmation: '',
+      isLoading: false,
     }
   },
 
   methods: {
+    ...mapMutations('Loading', ['startLoading', 'endLoading']),
     async submitSignup() {
       try {
         const userData = {
@@ -91,9 +97,11 @@ export default {
           fullName: this.fullName,
           password: this.password,
         }
+        this.startLoading()
         const { data } = await registerUser(userData)
         console.log(data)
         await this.initForm() // submit 후 input 초기화
+        this.endLoading()
         if (
           window.confirm(
             '회원가입이 완료되었습니다 👏👏. 로그인 페이지로 이동할까요?',

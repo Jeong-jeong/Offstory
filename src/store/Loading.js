@@ -3,20 +3,20 @@ export default {
   namespaced: true,
   state() {
     return {
-      loadings: [],
+      isLoading: false,
     }
   },
   getters: {
     loading(state) {
-      return state.loadings.some(loading => loading)
+      return state.isLoading
     },
   },
   mutations: {
     startLoading(state) {
-      state.loadings.push(true)
+      state.isLoading = true
     },
     endLoading(state) {
-      state.loadings.splice(0, 1)
+      state.isLoading = false
     },
   },
 }

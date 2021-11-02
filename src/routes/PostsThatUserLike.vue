@@ -1,4 +1,6 @@
 <template>
+  <LoadingSpinner v-if="this.$store.getters['Loading/loading']" />
+
   <div class="container">
     <div id="date-filter" class="row">
       <div class="col col-sm-4 col-lg-8">
@@ -63,15 +65,17 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
+import LoadingSpinner from '~/components/designs/LoadingSpinner'
 import Divider from '../components/designs/Divider'
 import Post from '../components/designs/PostInActivity'
 import { userDetailInfo, getPost } from '../api/index'
-import { mapGetters } from 'vuex'
 
 export default {
   components: {
     Post,
     Divider,
+    LoadingSpinner,
   },
   data() {
     return {
@@ -109,6 +113,8 @@ export default {
     this.getPostsThatUserLike()
   },
   methods: {
+    ...mapMutations('Loading', ['startLoading', 'endLoading']),
+
     getOnlyLikeDataInPost(postData) {
       const res = []
 
@@ -122,6 +128,7 @@ export default {
       const { data } = await userDetailInfo(currentUserId)
       const likes = data.likes
 
+      await this.startLoading()
       const postsThatUserLike = []
       for (let i = 0; i < likes.length; i += 1) {
         const { post: postId } = likes[i]
@@ -130,6 +137,7 @@ export default {
       }
 
       this.postsThatUserLike = postsThatUserLike
+      this.endLoading()
     },
   },
 }

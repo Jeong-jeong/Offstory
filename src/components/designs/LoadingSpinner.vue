@@ -11,8 +11,8 @@
   top: 0;
   width: 100%;
   height: 100vh;
-  background-color: rgba($COLOR_WHITE, $OPACITY);
-  backdrop-filter: blur(2px);
+  background-color: rgba($COLOR_WHITE, 0.6);
+  backdrop-filter: blur(1px);
   z-index: $LOADING_INDEX;
 }
 .spinner {
