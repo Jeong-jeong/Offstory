@@ -136,6 +136,9 @@ export default {
 
     .left {
       @include flexbox($jc: start);
+      flex-grow: 0;
+      flex-shrink: 1;
+      min-width: 0;
 
       .user {
         &__profile {
@@ -152,10 +155,13 @@ export default {
         }
 
         &__infos {
+          width: 100%;
+          overflow-x: hidden;
           & > * {
             margin-bottom: $INNER_PADDING_SMALL;
           }
           .nickname {
+            @include ellipsis($line: 2);
             display: inline-block;
             font-size: $FONT_L;
             cursor: pointer;
@@ -170,13 +176,20 @@ export default {
           .uploadDate {
             color: $KEY_COLOR;
           }
+
+          .location {
+            display: block;
+            width: 100%;
+          }
         }
       }
     }
 
     .right {
       .edit-area {
+        display: flex;
         button {
+          flex-shrink: 0;
           color: $COLOR_GRAY_DARKEN;
         }
         .edit {
