@@ -167,6 +167,8 @@ export default {
   },
   components: { Button, Like, Comment, LoadingSpinner },
   computed: {
+    ...mapMutations('Loading', ['startLoading', 'endLoading']),
+
     getUserCity() {
       //let userCity=this.$storage.getItem('userCity')
       //this.$storage.removeItem('userCity')
@@ -200,6 +202,7 @@ export default {
     // this.channelId = this.$store.getters['address/getSearchChannelId']
     // this.deatailAddress = this.$store.getters['address/getdetailAddress']
     // const poaslist = this.$store.getters['address/getPostListData']
+    this.endLoading
   },
   async created() {
     // this.searchCity = this.$store.getters['address/getUserCity']
@@ -290,7 +293,7 @@ export default {
           cursor: pointer;
           margin: 30px 10px 0px 10px;
           width: 300px;
-          height: 350px;
+          height: 365px;
           // border: solid 1px $COLOR_GRAY_LIGHTEN;
           // border-radius: 30px;
           padding: 20px;
@@ -335,6 +338,7 @@ export default {
               height: 200px;
             }
             .postimage-user {
+              object-fit: cover;
               border-radius: 10px;
               width: 100%;
               height: 200px;
@@ -421,6 +425,8 @@ export default {
                 border-radius: 40px;
               }
               .movie-result-author {
+                @include ellipsis($line: 1); //   text-overflow: ellipsis;
+                font-size: 14px;
               }
               .resultlist-listcard-title {
                 width: 300px;
@@ -429,8 +435,7 @@ export default {
                 font-size: $FONT_BASE;
                 //   white-space: nowrap;
                 //   overflow: hidden;
-                @include ellipsis($line: 2) //   text-overflow: ellipsis;
-;
+                @include ellipsis($line: 2); //   text-overflow: ellipsis;
               }
             }
           }
@@ -490,13 +495,14 @@ export default {
         flex-flow: wrap;
         height: 100%;
         width: 100%;
+        justify-content: center;
 
         .resultlist-listcard {
           position: relative;
           cursor: pointer;
           margin: 30px 8px 0px 10px;
           width: 355px;
-          height: 370px;
+          height: 380px;
           // border: solid 1px $COLOR_GRAY_LIGHTEN;
           // border-radius: 30px;
           padding: 20px;
@@ -540,6 +546,7 @@ export default {
               height: 200px;
             }
             .postimage-user {
+              object-fit: cover;
               border-radius: 10px;
               width: 100%;
               height: 200px;
@@ -624,6 +631,8 @@ export default {
                 border-radius: 40px;
               }
               .movie-result-author {
+                @include ellipsis($line: 1) //   text-overflow: ellipsis;
+;
               }
               .resultlist-listcard-title {
                 width: 300px;
