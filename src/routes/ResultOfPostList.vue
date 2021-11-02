@@ -67,40 +67,41 @@
                       <template v-else>
                         <img class="postimage-user" :src="`${i.image}`" />
                       </template>
-                    </div>
-                    <div class="resultlist-listcard-active">
-                      <span class="hidden">1 </span>
-                      <Like
-                        :post="i"
-                        :color="`white`"
-                        :symbolSize="`18px`"
-                        :fontSize="`18px`"
-                      />
+                      <div class="resultlist-listcard-active">
+                        <span class="hidden">1 </span>
+                        <Like
+                          :post="i"
+                          :color="`white`"
+                          :symbolSize="`18px`"
+                          :fontSize="`18px`"
+                        />
 
-                      <Comment
-                        :post="i"
-                        :marginLeft="`10px`"
-                        :color="`white`"
-                        :symbolSize="`18px`"
-                        :fontSize="`18px`"
-                      />
-                      <!-- <div class="resultlist-listcard-like"> -->
-                      <!-- <img
+                        <Comment
+                          :post="i"
+                          :marginLeft="`10px`"
+                          :color="`white`"
+                          :symbolSize="`18px`"
+                          :fontSize="`18px`"
+                        />
+                        <!-- <div class="resultlist-listcard-like"> -->
+                        <!-- <img
                           class="resultlist-listcard-likeimage"
                           :src="heartImageUrl"
                           alt=""
                         /> -->
-                      <!-- +{{ i.likes.length }} -->
-                      <!-- </div> -->
-                      <!-- <div class="resultlist-listcardt-comment"> -->
-                      <!-- <img
+                        <!-- +{{ i.likes.length }} -->
+                        <!-- </div> -->
+                        <!-- <div class="resultlist-listcardt-comment"> -->
+                        <!-- <img
                           class="resultlist-listcard-commentimage"
                           :src="commentImageUrl"
                           alt=""
                         /> -->
-                      <!-- +{{ i.comments.length }} -->
-                      <!-- </div> -->
+                        <!-- +{{ i.comments.length }} -->
+                        <!-- </div> -->
+                      </div>
                     </div>
+
                     <div class="resultlist-listcard-userinfo">
                       <div class="resultlist-listcard-userprofile">
                         <template v-if="i.author.coverImage === undefined">
@@ -330,18 +331,19 @@ export default {
           .postimage {
             border-radius: 10px;
             overflow: hidden;
-
+            position: relative;
+            height: $EDIT_BASE_SIZE;
             .postimage-default {
               border-radius: 10px;
               background-color: lighten(rgb(243, 237, 191), 10%);
               width: 100%;
-              height: 200px;
+              height: $EDIT_BASE_SIZE;
             }
             .postimage-user {
               object-fit: cover;
               border-radius: 10px;
               width: 100%;
-              height: 200px;
+              height: $EDIT_BASE_SIZE;
               filter: brightness(65%);
               transform: scale(1);
               -webkit-transform: scale(1);
@@ -359,32 +361,6 @@ export default {
               }
             }
           }
-          /* .resultlist-listcard-active {
-            display: flex;
-            width: 120px;
-            padding-left: 5px;
-            .resultlist-listcard-like {
-              color: $COLOR_GRAY_LIGHTEN;
-              font-size: 12px;
-              .resultlist-listcard-likeimage {
-                color: $COLOR_GRAY_LIGHTEN;
-                width: 12px;
-                height: 12px;
-                opacity: 0.6;
-              }
-            }
-            .resultlist-listcardt-comment {
-              margin-left: 10px;
-              font-size: 12px;
-              color: $COLOR_GRAY_LIGHTEN;
-              .resultlist-listcard-commentimage {
-                color: $COLOR_GRAY_LIGHTEN;
-                width: 10px;
-                height: 10px;
-                opacity: 0.5;
-              }
-            }
-          } */
           .resultlist-listcard-active {
             .hidden {
               opacity: 0;
@@ -396,8 +372,8 @@ export default {
             }
             position: absolute;
             display: flex;
-            right: 27px;
-            bottom: 105px;
+            right: 0;
+            bottom: 0;
             background-color: rgba(0, 0, 0, 0.6);
             padding: 0 5px;
             border-radius: 5px;
@@ -538,18 +514,20 @@ export default {
           .postimage {
             border-radius: 10px;
             overflow: hidden;
+            height: $EDIT_BASE_SIZE;
+            position: relative;
 
             .postimage-default {
               background-color: lighten(rgb(243, 237, 191), 10%);
               border-radius: 10px;
               width: 100%;
-              height: 200px;
+              height: $EDIT_BASE_SIZE;
             }
             .postimage-user {
               object-fit: cover;
               border-radius: 10px;
               width: 100%;
-              height: 200px;
+              height: $EDIT_BASE_SIZE;
               filter: brightness(65%);
               transform: scale(1);
               -webkit-transform: scale(1);
@@ -578,8 +556,8 @@ export default {
             }
             position: absolute;
             display: flex;
-            right: 27px;
-            bottom: 123px;
+            right: 0;
+            bottom: 0;
             background-color: rgba(0, 0, 0, 0.6);
             padding: 0 5px;
             border-radius: 5px;
