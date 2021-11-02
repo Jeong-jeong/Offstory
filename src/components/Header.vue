@@ -138,7 +138,7 @@ export default {
     return {
       selected: '',
       isLoading: false,
-      defaultImageUrl: require('../assets/images/user-profile__default.svg'),
+      defaultImageUrl: require('../assets/images/user-profile.svg'),
       userImage: null,
       detailAdress: '',
       countyList: [],
@@ -187,8 +187,17 @@ export default {
     getUserProfileImage() {
       const profileImage =
         this.getUserProfileImageFromStore ||
-        getImageFromCookie() ||
+        (getImageFromCookie() !== 'null' && getImageFromCookie()) ||
         this.defaultImageUrl
+
+      // Debugging: 개인 정보 수정 후, Header profile 업데이트 체크
+      console.log(
+        'this.getUserProfileImageFromStore',
+        this.getUserProfileImageFromStore,
+      )
+      console.log('getImageFromCookie()', getImageFromCookie())
+      console.log('this.defaultImageUrl', this.defaultImageUrl)
+      console.log('profileImage', profileImage)
       return profileImage
     },
     keepSearchDatas() {

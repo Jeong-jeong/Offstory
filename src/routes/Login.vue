@@ -111,6 +111,8 @@ export default {
           await this.initializeUsername(data)
         }
 
+        console.log('이미지 파일이 어떻게 저장되었을까?', data)
+
         // 초기화된 username 가져옴
         userDetaildata = await userDetailInfo(
           this.$store.getters['Login/getUserId'],

@@ -11,7 +11,7 @@ export default {
       userEmail: '',
       username: storage.getItem('off_userName') || '',
       token: JSON.parse(storage.getItem('off_auth')) || '',
-      profileImage: '',
+      profileImage: null,
       isLoading: false,
       authCheck: false,
     }

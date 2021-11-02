@@ -8,7 +8,7 @@
               <img :src="url" alt="유저 프로필 사진" ref="image" />
               <div
                 class="upload-container"
-                @click="chooseFile"
+                @click="isImageChangeModalShown = !isImageChangeModalShown"
                 aria-label="이미지 변경"
               >
                 <i class="material-icons"> settings </i>
@@ -20,6 +20,12 @@
                   :style="{ display: 'none' }"
                 />
               </div>
+              <template v-if="isImageChangeModalShown">
+                <div class="image-choice">
+                  <Button @click="chooseFile">이미지 파일 선택</Button>
+                  <Button @click="setDefaultImage">기본 이미지 설정</Button>
+                </div>
+              </template>
             </div>
           </div>
           <div class="form-control">
@@ -74,7 +80,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import {
   updateCoverImage,
   updateNameField,
@@ -90,10 +96,13 @@ export default {
       url: '',
       nickname: '',
       password: '',
+      isDefaultImageChosen: false,
       uploadedFile: null,
+      defaultProfileImage: require('../assets/images/user-profile.svg'),
       isNicknameValid: true,
       isFirstPasswordValid: false,
       isSecondPasswordValid: false,
+      isImageChangeModalShown: false,
     }
   },
   computed: {
@@ -116,12 +125,12 @@ export default {
     // 유저의 현재 정보 데이터를 화면에 표시
     setUserInfo() {
       const res = this.$storage.getItem('userData')
-      this.url =
-        res.userCoverImage || require('../assets/images/user-profile.svg')
+      this.url = res.userCoverImage || this.defaultProfileImage
       this.nickname = res.userFullName
     },
     // 파일 선택 아이콘을 클릭하는 경우, input태그를 클릭함.
     chooseFile() {
+      this.isDefaultImageChosen = false
       this.$refs.imageInput.click()
     },
     // 유저가 올린 이미지 화면에 표시
@@ -236,8 +245,19 @@ export default {
       event.preventDefault()
 
       // 프로필 사진 업데이트 로직
-      const userInfo =
+      // (1) 새로운 이미지를 선택한 경우,
+      const userInfoUpdatedByNewImage =
         this.uploadedFile && (await changeCoverImage(this.uploadedFile))
+
+      // (2) 기본 이미지를 선택한 경우,
+      const fileObjectOfDefaultImage = this.dataURLtoFile(
+        this.defaultProfileImage,
+        'default-profile.svg',
+      )
+
+      const userInfoUpdatedByDefaultImage =
+        this.isDefaultImageChosen &&
+        (await changeCoverImage(fileObjectOfDefaultImage))
 
       // fullName 및 usernmae 업데이트 로직
       const userPriorData = this.$storage.getItem('userData')
@@ -248,22 +268,52 @@ export default {
       // 패스워드 변경 로직
       await changePassword(this.password)
 
-      // Storage 업데이트
       const updatedUserData = updateUserData(
         userPriorData,
-        userInfo,
+        userInfoUpdatedByNewImage
+          ? userInfoUpdatedByNewImage
+          : userInfoUpdatedByDefaultImage,
         this.nickname,
         username,
       )
 
       deleteCookie('off_userprofileImage')
-      saveUserImageToCookie(updatedUserData.userCoverImage || undefined)
-      this.setProfileImage(updatedUserData.userCoverImage || undefined)
+      saveUserImageToCookie(
+        (this.uploadedFile && updatedUserData.userCoverImage) ||
+          (this.isDefaultImageChosen &&
+            userInfoUpdatedByDefaultImage.data.coverImage) ||
+          null,
+      )
+      this.setProfileImage(
+        (this.uploadedFile && updatedUserData.userCoverImage) ||
+          (this.isDefaultImageChosen &&
+            userInfoUpdatedByDefaultImage.data.coverImage) ||
+          null,
+      )
       this.$storage.setItem('userData', updatedUserData)
 
       this.setUserInfo()
       alert('정보가 수정되었습니다!')
       this.$router.push('/authcheck')
+    },
+    setDefaultImage() {
+      this.uploadedFile = null
+      this.isDefaultImageChosen = true
+      const img = this.$refs.image
+      const defaultImage = this.defaultProfileImage
+      img.setAttribute('src', defaultImage)
+      this.isImageChangeModalShown = false
+    },
+    dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n)
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+      }
+      return new File([u8arr], filename, { type: mime })
     },
   },
   mounted() {
@@ -481,6 +531,24 @@ async function changeNickname(nickname) {
       text-overflow: ellipsis;
       width: 100%;
     }
+  }
+}
+.image-choice {
+  padding: 10px 20px;
+  border: 1px solid #d6d6d6;
+  border-radius: 10px;
+  position: absolute;
+  transform: translate(0, 110%);
+  bottom: 0;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 1);
+
+  button {
+    background-color: #344e68;
+  }
+
+  button:last-child {
+    margin-top: 10px;
   }
 }
 </style>
