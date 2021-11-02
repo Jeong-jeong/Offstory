@@ -1,5 +1,8 @@
 <template>
-  <LoadingSpinner v-if="this.$store.getters['Loading/loading']" />
+  <LoadingSpinner
+    v-if="this.$store.getters['Loading/loading']"
+    class="loading"
+  />
   <div class="header-wrapper">
     <div class="left" @click="$router.push('/')">
       <img src="../assets/images/symbol.svg" alt="OffStory 심볼" />
@@ -302,7 +305,7 @@ export default {
       targetCounty.value = `${this.$storage.getItem('userCounty')}`
     },
     async searchPost() {
-      //this.isLoading = true
+      // this.isLoading = true
       //this.setisLoading(true)
       // console.log(this.isLoading)
       // console.log(this.detailAdress)
@@ -313,6 +316,9 @@ export default {
         this.$storage.removeItem('PostListData')
         return
       } else {
+        // this.$storage.removeItem('userCity')
+        // this.$storage.removeItem('userCounty')
+        // this.$storage.removeItem('PostListData')
         this.setdetailAddress(this.detailAdress)
         this.$storage.setItem('userdetailAddress', this.detailAdress)
 
@@ -332,8 +338,8 @@ export default {
         console.log('군까지 선택했을때', this.CountydataList)
         console.log(filteredDataOfCounty)
         this.setPostListData(this.CountydataList)
+        this.startLoading
         this.$storage.setItem('PostListData', this.CountydataList)
-        console.log(this.isLoading)
         this.$router.go(0)
         this.$router.push('/ResultOfPostList')
       }
@@ -554,5 +560,7 @@ export default {
       }
     }
   }
+}
+.loading {
 }
 </style>

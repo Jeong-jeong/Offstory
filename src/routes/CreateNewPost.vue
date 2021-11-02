@@ -42,7 +42,7 @@
               required
             />
           </div>
-          <div class="post-titletext">제목을 작성하세요</div>
+          <div class="post-titletext">제목을 작성하세요.</div>
 
           <div class="titlearea">
             <input
@@ -78,12 +78,13 @@
           </div>
           <!-- <input type="file" id="input-file" style="display: none" /> -->
           <!-- <img style="width: 500px" id="preview-image" src="`${this.imgurl}`" /> -->
-          <div class="post-contenttext">내용</div>
+          <div class="post-contenttext">내용을 입력하세요.</div>
           <textarea
             class="post-content"
             v-model="content"
             @keyup="resizeContent($event)"
-            placeholder="100자 이내로 입력하세요"
+            placeholder="내용"
+            required
           ></textarea>
           <div class="buttonwrapper">
             <Button class="post-button">글 작성하기</Button>
