@@ -24,7 +24,7 @@
               placeholder="이메일"
             />
             <div class="error-message-wrapper">
-              <ErrorMessage name="confirmation" class="error-message" />
+              <ErrorMessage name="email" class="error-message" />
             </div>
             <input
               class="login-input"
@@ -225,15 +225,17 @@ export default {
         margin-bottom: 10px;
       }
     }
-    .error-message {
-      &-wrapper {
-        height: $FONT_XS;
-        display: block;
-        width: 100%;
-        font-size: $FONT_XS;
-        color: $COLOR_RED;
-      }
-    }
+  }
+}
+.error-message {
+  &-wrapper {
+    margin-bottom: 5px;
+    height: $FONT_XS;
+    display: block;
+    width: 100%;
+    font-size: $FONT_XS;
+    color: $COLOR_RED;
+    z-index: 10;
   }
 }
 </style>

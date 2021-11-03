@@ -12,8 +12,8 @@
           </div>
           <div class="post-Title">어디서 만날까요?</div>
           <div class="post-address">
-            <select @change="selectedCity($event)" class="selectcity">
-              <option value="undefined" class="option">시</option>
+            <select @change="selectedCity($event)" class="selectcity" required>
+              <option value="" class="option">시</option>
               <option
                 class="citylist"
                 :key="i"
@@ -23,8 +23,12 @@
                 {{ city }}
               </option>
             </select>
-            <select @change="selectedCounty($event)" class="selectcounty">
-              <option value="undefined" class="option">군,구</option>
+            <select
+              @change="selectedCounty($event)"
+              class="selectcounty"
+              required
+            >
+              <option value="" class="option">군,구</option>
               <option
                 class="countylist"
                 :key="i"
@@ -149,6 +153,10 @@ export default {
     ...mapActions('address', ['fetchCounty']),
 
     async selectedCity(event) {
+      let target = document.getElementsByClassName('selectcounty')[0]
+      console.log(target.value)
+
+      target.value = ''
       console.log(event.target.value)
       this.selectuserCity = event.target.value
       const userCity = event.target.value //선택한 도시 넘겨줌
@@ -156,7 +164,7 @@ export default {
 
       //선택한 city와 같은 name의 채널을 찾음
       const selectChannelData = channelsListData.data.filter(x => {
-        return x.name === `${userCity}b`
+        return x.name === `${userCity}c`
       })
 
       //찾은 채널의 description을 기반으로 문자열 처리해주어 군/구 데이터 뽑아내기
@@ -216,57 +224,71 @@ export default {
       element.setAttribute('src', 'http://dummyimage.com/100x100/000/fff')
     },
     async createPost() {
-      try {
-        // const channelsListData = await channelsList()
-        // const selectChannelId = channelsListData.data
-        //   .filter(x => {
-        //     return x.name === this.selectuserCity
-        //   })
-        //   .map(x => x._id)
-        // console.log(selectChannelId)
-        // if (selectChannelId.length === 0) {
-        //   //채널을 새로 생성해야 되는 경우
-        //   const channelData = {
-        //     name: this.selectuserCity,
-        //     description: `${this.selectuserCity}의 채널입니다.`,
-        //   }
-        //   const newChannelData = await createChannel(channelData)
-        //   this.channelId = newChannelData._id
-        // } else {
-        //   this.channelId = selectChannelId[0]
-        // }
-        const userData = new FormData()
-        userData.append('title', `${this.title}/${this.content}`)
-        userData.append('image', this.image)
-        userData.append('channelId', this.channelId)
-        userData.append(
-          'location',
-          `${this.selectuserCity}/${this.selectuserCounty}/${this.detailAdress}`,
-        )
-        userData.append('meta', '')
+      if (
+        this.selectuserCity === 'undefined' ||
+        this.selectuserCounty === 'undefined'
+      ) {
+        alert(this.selectuserCity)
+        alert(this.selectuserCounty)
 
-        // const userData = {
-        //   title: `${this.title}/${this.content}`,
-        //   image: this.image,
-        //   channelId: this.channelId,
-        //   location: `${this.selectuserCity}/${this.selectuserCounty}/${this.detailAdress}`,
-        //   meta: '', //만일을 위해 아껴두자!
-        // }
-        console.log(userData)
-        this.startLoading()
-        const postData = await createPost(userData)
-        console.log('postData afer write', postData)
-        alert(
-          `${this.selectuserCity}시 ${this.selectuserCounty} 카테고리에 등록되었습니다.`,
-        )
-        this.$router.push('/')
-      } catch (error) {
-        //에러 핸들링 코드
-        console.log(error.response.data)
-        alert(error.response.data)
+        alert('시 와 군/구 를 선택해주세요 ')
+        return
+      } else {
+        console.log(this.selectuserCity)
+        console.log(this.selectuserCounty)
+
+        try {
+          // const channelsListData = await channelsList()
+          // const selectChannelId = channelsListData.data
+          //   .filter(x => {
+          //     return x.name === this.selectuserCity
+          //   })
+          //   .map(x => x._id)
+          // console.log(selectChannelId)
+          // if (selectChannelId.length === 0) {
+          //   //채널을 새로 생성해야 되는 경우
+          //   const channelData = {
+          //     name: this.selectuserCity,
+          //     description: `${this.selectuserCity}의 채널입니다.`,
+          //   }
+          //   const newChannelData = await createChannel(channelData)
+          //   this.channelId = newChannelData._id
+          // } else {
+          //   this.channelId = selectChannelId[0]
+          // }
+          const userData = new FormData()
+          userData.append('title', `${this.title}/${this.content}`)
+          userData.append('image', this.image)
+          userData.append('channelId', this.channelId)
+          userData.append(
+            'location',
+            `${this.selectuserCity}/${this.selectuserCounty}/${this.detailAdress}`,
+          )
+          userData.append('meta', '')
+
+          // const userData = {
+          //   title: `${this.title}/${this.content}`,
+          //   image: this.image,
+          //   channelId: this.channelId,
+          //   location: `${this.selectuserCity}/${this.selectuserCounty}/${this.detailAdress}`,
+          //   meta: '', //만일을 위해 아껴두자!
+          // }
+          console.log(userData)
+          this.startLoading()
+          const postData = await createPost(userData)
+          console.log('postData afer write', postData)
+          alert(
+            `${this.selectuserCity}시 ${this.selectuserCounty} 카테고리에 등록되었습니다.`,
+          )
+          this.$router.push('/')
+        } catch (error) {
+          //에러 핸들링 코드
+          console.log(error.response.data)
+          alert(error.response.data)
+        }
+        this.endLoading()
+        //this.$route.push('/')
       }
-      this.endLoading()
-      //this.$route.push('/')
     },
     resizeContent(event) {
       event.target.style.height = '1px'
