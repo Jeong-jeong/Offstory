@@ -607,7 +607,8 @@ export default {
               .resultlist-listcard-userprofile-userimage {
                 width: 40px;
                 height: 40px;
-                border-radius: 40px;
+                background: white;
+                border-radius: 30px;
               }
               .movie-result-author {
                 @include ellipsis($line: 1) //   text-overflow: ellipsis;
