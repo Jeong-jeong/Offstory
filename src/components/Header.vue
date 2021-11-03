@@ -16,11 +16,12 @@
           @submit="$router.push('/ResultOfPostList')"
         >
           <select
+            required
             @change="selectedCity($event)"
             @change.prevent="initSelectcounty"
             class="selectcity"
           >
-            <option value="undefined" class="option">시</option>
+            <option value="" class="option">시</option>
             <option
               class="citylist"
               :key="i"
@@ -254,7 +255,7 @@ export default {
 
       //선택한 city와 같은 name의 채널을 찾음
       const selectChannelData = channelsListData.data.filter(x => {
-        return x.name === `${userCity}b`
+        return x.name === `${userCity}c`
       })
 
       //찾은 채널의 description을 기반으로 문자열 처리해주어 군/구 데이터 뽑아내기
