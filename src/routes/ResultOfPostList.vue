@@ -161,7 +161,7 @@ export default {
       channelId: '',
       postList: [],
       Title: '',
-      imageUrl: require('../assets/images/user-profile__default.svg'),
+      imageUrl: require('~/assets/images/user-profile.svg'),
       heartImageUrl: require('../assets/images/postlist_cil_heart.svg'),
       commentImageUrl: require('../assets/images/comment.svg'),
     }
@@ -398,7 +398,8 @@ export default {
               .resultlist-listcard-userprofile-userimage {
                 width: 40px;
                 height: 40px;
-                border-radius: 40px;
+                background: white;
+                border-radius: 30px;
               }
               .movie-result-author {
                 @include ellipsis($line: 1); //   text-overflow: ellipsis;
@@ -606,7 +607,8 @@ export default {
               .resultlist-listcard-userprofile-userimage {
                 width: 40px;
                 height: 40px;
-                border-radius: 40px;
+                background: white;
+                border-radius: 30px;
               }
               .movie-result-author {
                 @include ellipsis($line: 1) //   text-overflow: ellipsis;

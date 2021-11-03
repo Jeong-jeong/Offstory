@@ -101,7 +101,7 @@ export default {
       password: '',
       isDefaultImageChosen: false,
       uploadedFile: null,
-      defaultProfileImage: require('../assets/images/user-profile.svg'),
+      defaultImage: require('~/assets/images/user-profile.svg'),
       isNicknameValid: true,
       isFirstPasswordValid: false,
       isSecondPasswordValid: false,
@@ -130,7 +130,7 @@ export default {
     // 유저의 현재 정보 데이터를 화면에 표시
     setUserInfo() {
       const res = this.$storage.getItem('userData')
-      this.url = res.userCoverImage || this.defaultProfileImage
+      this.url = res.userCoverImage || this.defaultImage
       this.nickname = res.userFullName
     },
     // 파일 선택 아이콘을 클릭하는 경우, input태그를 클릭함.
@@ -256,7 +256,7 @@ export default {
 
       // (2) 기본 이미지를 선택한 경우,
       const fileObjectOfDefaultImage = this.dataURLtoFile(
-        this.defaultProfileImage,
+        this.defaultImage,
         'default-profile.svg',
       )
 
@@ -310,7 +310,7 @@ export default {
       this.uploadedFile = null
       this.isDefaultImageChosen = true
       const img = this.$refs.image
-      const defaultImage = this.defaultProfileImage
+      const defaultImage = this.defaultImage
       img.setAttribute('src', defaultImage)
       this.isImageChangeModalShown = false
     },
