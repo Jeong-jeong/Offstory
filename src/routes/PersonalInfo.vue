@@ -1,4 +1,5 @@
 <template>
+  <LoadingSpinner v-if="this.$store.getters['Loading/loading']" />
   <div class="container">
     <div id="user-info" class="row">
       <div class="col col-sm-4 col-lg-7">
@@ -71,7 +72,7 @@
           </div>
           <div class="button-container">
             <Button @click="submit">제출하기</Button>
-            <Button>취소하기</Button>
+            <Button @click="$router.push('/authcheck')">취소하기</Button>
           </div>
         </form>
       </div>
@@ -89,8 +90,10 @@ import {
 } from '../api/index'
 import Button from '../components/designs/Button'
 import { deleteCookie, saveUserImageToCookie } from '../utils/cookies'
+import LoadingSpinner from '~/components/designs/LoadingSpinner'
+
 export default {
-  components: { Button },
+  components: { Button, LoadingSpinner },
   data() {
     return {
       url: '',
@@ -108,7 +111,9 @@ export default {
   computed: {
     ...mapGetters('Login', ['getToken']),
   },
+  inject: ['toggleSidebar'],
   methods: {
+    ...mapMutations('Loading', ['startLoading', 'endLoading']),
     ...mapMutations('Login', ['setProfileImage']),
     // 화면으로 접속시에 적색 박스와 녹색 박스 화면에 표시
     initialValidCheck() {
@@ -243,7 +248,7 @@ export default {
       }
 
       event.preventDefault()
-
+      this.startLoading()
       // 프로필 사진 업데이트 로직
       // (1) 새로운 이미지를 선택한 경우,
       const userInfoUpdatedByNewImage =
@@ -277,22 +282,27 @@ export default {
         username,
       )
 
-      deleteCookie('off_userprofileImage')
-      saveUserImageToCookie(
-        (this.uploadedFile && updatedUserData.userCoverImage) ||
-          (this.isDefaultImageChosen &&
-            userInfoUpdatedByDefaultImage.data.coverImage) ||
-          null,
-      )
-      this.setProfileImage(
-        (this.uploadedFile && updatedUserData.userCoverImage) ||
-          (this.isDefaultImageChosen &&
-            userInfoUpdatedByDefaultImage.data.coverImage) ||
-          null,
-      )
+      if (this.uploadedFile || this.isDefaultImageChosen) {
+        saveUserImageToCookie(
+          (this.uploadedFile && updatedUserData.userCoverImage) ||
+            (this.isDefaultImageChosen &&
+              userInfoUpdatedByDefaultImage.data.coverImage) ||
+            null,
+        )
+
+        this.setProfileImage(
+          (this.uploadedFile && updatedUserData.userCoverImage) ||
+            (this.isDefaultImageChosen &&
+              userInfoUpdatedByDefaultImage.data.coverImage) ||
+            null,
+        )
+      }
       this.$storage.setItem('userData', updatedUserData)
 
+      this.toggleSidebar()
+
       this.setUserInfo()
+      this.endLoading()
       alert('정보가 수정되었습니다!')
       this.$router.push('/authcheck')
     },
@@ -361,10 +371,10 @@ function isOutOfRange(string, lower, upper) {
 
 function updateUserData(userPriorData, userInfo, nickname, username) {
   const updatedUserData = { ...userPriorData }
-
+  console.log('userInfo는 어떻게 나올까?', userInfo)
   updatedUserData.userFullName = nickname
   updatedUserData.userCoverImage =
-    userInfo?.data.coverImage || updatedUserData.userCoverImage
+    userInfo?.data?.coverImage || updatedUserData.userCoverImage
   updatedUserData.userName = username
   return updatedUserData
 }
@@ -515,6 +525,8 @@ async function changeNickname(nickname) {
     /* position: absolute; */
     display: flex;
     flex-direction: column;
+    width: 100%;
+    cursor: default;
 
     button {
       width: 100%;

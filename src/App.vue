@@ -31,6 +31,12 @@ export default {
       this.isSidebarShowed = false
     },
   },
+  provide() {
+    return {
+      toggleSidebar: () =>
+        (this.isSidebarShowed = this.isSidebarShowed ? false : false),
+    }
+  },
 }
 </script>
 

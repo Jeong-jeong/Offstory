@@ -43,28 +43,36 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import LoadingSpinner from '~/components/designs/LoadingSpinner'
 import { deleteCookie, getImageFromCookie } from '~/utils/cookies'
+import { mapState, mapGetters, mapMutations } from 'vuex'
+
 export default {
   components: {
     LoadingSpinner,
   },
   data() {
     return {
-      imageUrl: require('~/assets/images/user-profile__default.svg'),
+      imageUrl: require('../assets/images/user-profile.svg'),
       logoutImageUrl: require('~/assets/images/logout-black.svg'),
     }
   },
   computed: {
+    ...mapGetters('Login', ['getUserProfileImageFromStore']),
     getUserProfileImage() {
       // this.$store.state.Login.username
       // const res = this.$storage.getItem('userData')
       // const profileImage = res.userCoverImage
       // const profileImage = this.$store.state.Login.profileImage
       // console.log(profileImage)
-      const profileImage = getImageFromCookie()
-      console.log(profileImage)
+      // const profileImage = getImageFromCookie()
+      const profileImage =
+        this.getUserProfileImageFromStore ||
+        (getImageFromCookie() !== 'null' &&
+          getImageFromCookie() !== 'undefined' &&
+          getImageFromCookie()) ||
+        this.imageUrl
+
       return profileImage
     },
     getUserName() {
