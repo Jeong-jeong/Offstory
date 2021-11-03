@@ -86,7 +86,19 @@ export default {
         }
         await deletePost({ data: userData })
         await window.alert('포스트가 삭제되었어요')
-        this.$router.push('/')
+        //낙관적
+        const Listdata = this.$storage.getItem('PostListData')
+        console.log(Listdata)
+        for (let i in Listdata) {
+          console.log(Listdata[i]._id)
+          if (Listdata[i]._id === this.postId) {
+            console.log(Listdata[i])
+            Listdata.splice(i, 1)
+            // console.log(Listdata[i].comments)
+          }
+        }
+        this.$router.push('/ResultOfPostList')
+        this.$storage.setItem('PostListData', Listdata)
       }
     },
     getHostProfileImg() {

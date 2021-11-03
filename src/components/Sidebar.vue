@@ -97,7 +97,7 @@ export default {
       this.$storage.removeItem('off_userId')
       this.$storage.removeItem('userData')
       this.$router.push('/')
-      return alert('logout!')
+      return alert('로그아웃 되었습니다.')
     },
   },
 }
