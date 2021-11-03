@@ -86,6 +86,7 @@ export default {
         }
         await deletePost({ data: userData })
         await window.alert('포스트가 삭제되었어요')
+        //낙관적
         const Listdata = this.$storage.getItem('PostListData')
         console.log(Listdata)
         for (let i in Listdata) {
