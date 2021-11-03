@@ -171,8 +171,6 @@ export default {
         setErrorFor(nickname, '닉네임은 2자 이상, 30자 미만이어야 합니다')
       } else if (isSpecialExist(nickname.value)) {
         setErrorFor(nickname, '닉네임을 입력해야 합니다')
-      } else if (isSpaceExist(nickname.value)) {
-        setErrorFor(nickname, '닉네임은 공백이 포함될 수 없습니다')
       } else {
         setSuccessFor(nickname)
         this.isNicknameValid = true
