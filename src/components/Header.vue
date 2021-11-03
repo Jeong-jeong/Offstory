@@ -391,7 +391,7 @@ export default {
     }
 
     .logo {
-      /* font-family: $FONT_LOGO; */
+      font-family: 'Poppins', sans-serif;
       font-size: $HEADER_ICON_BASE;
       color: $KEY_COLOR;
       margin-left: 10px;

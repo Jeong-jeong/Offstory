@@ -6,12 +6,3 @@
 	color: $color
 }
 
-@mixin font-face($name, $file) {
-	@font-face {
-	font-family: '#{$name}';
-		src: local('#{$file}'),
-		url('/src/assets/fonts/#{$file}.eot') format('embedded-opentype'),
-		url('/src/assets/fonts/#{$file}.ttf') format('truetype'),
-		url('/src/assets/fonts/#{$file}.woff') format('woff'),
-	}
-}

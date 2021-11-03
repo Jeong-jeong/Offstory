@@ -36,13 +36,13 @@ module.exports = {
           esModule: false, // url([object Module]) 오류 해결용
         },
       },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        loader: 'file-loader',
-        options: {
-          name: 'assets/fonts/[name].[hash:8].[ext]',
-        },
-      },
+      // {
+      //   test: /\.(woff|woff2|eot|ttf|otf)$/i,
+      //   loader: 'file-loader',
+      //   options: {
+      //     name: 'assets/fonts/[name].[hash:8].[ext]',
+      //   },
+      // },
       {
         test: /\.s?css$/,
         use: [
