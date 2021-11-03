@@ -9,16 +9,6 @@
       <button class="logo">OffStory</button>
     </div>
     <div ref="middle" class="middle">
-      <!-- <form @submit.prevent="">
-        <input
-          :value="userAddress"
-          placeholder="'서울 강남'을 입력해 보세요"
-          ref="input"
-          @keyup.enter="parseAddress"
-        />
-        <button><i class="material-icons"> search </i></button>
-      </form> -->
-      <!-- <div class="search-Title">어디서 만날까요?</div> -->
       <br />
       <div class="search-address">
         <form
@@ -185,17 +175,19 @@ export default {
     getUserProfileImage() {
       const profileImage =
         this.getUserProfileImageFromStore ||
-        (getImageFromCookie() !== 'null' && getImageFromCookie()) ||
+        (getImageFromCookie() !== 'null' &&
+          getImageFromCookie() !== 'undefined' &&
+          getImageFromCookie()) ||
         this.defaultImageUrl
 
       // Debugging: 개인 정보 수정 후, Header profile 업데이트 체크
-      console.log(
-        'this.getUserProfileImageFromStore',
-        this.getUserProfileImageFromStore,
-      )
-      console.log('getImageFromCookie()', getImageFromCookie())
-      console.log('this.defaultImageUrl', this.defaultImageUrl)
-      console.log('profileImage', profileImage)
+      // console.log(
+      //   'this.getUserProfileImageFromStore',
+      //   this.getUserProfileImageFromStore,
+      // )
+      // console.log('getImageFromCookie()', getImageFromCookie())
+      // console.log('this.defaultImageUrl', this.defaultImageUrl)
+      // console.log('profileImage', profileImage)
       return profileImage
     },
     keepSearchDatas() {
