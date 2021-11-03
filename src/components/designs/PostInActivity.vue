@@ -31,11 +31,10 @@
           :post="post"
           :doesUserLike="doesUserLike"
         />
-        <Comment :post="post" :marginLeft="`10px`" />
+        <Comment :post="post" :marginLeft="`30px`" />
       </div>
       <div class="time">
         <div class="day">{{ getTime(post.createdAt)[0] }}</div>
-        <div class="seperator">/</div>
         <div class="before">
           {{ pastTimeFrom(post.createdAt) }}
         </div>
@@ -99,19 +98,19 @@ export default {
       const betweenTime = Math.floor(
         (today.getTime() - timeValue.getTime()) / 1000 / 60,
       )
-      if (betweenTime < 1) return '방금전'
+      if (betweenTime < 1) return '방금 전'
       if (betweenTime < 60) {
         return `${betweenTime}분전`
       }
 
       const betweenTimeHour = Math.floor(betweenTime / 60)
       if (betweenTimeHour < 24) {
-        return `${betweenTimeHour}시간전`
+        return `${betweenTimeHour}시간 전`
       }
 
       const betweenTimeDay = Math.floor(betweenTime / 60 / 24)
       if (betweenTimeDay < 365) {
-        return `${betweenTimeDay}일전`
+        return `${betweenTimeDay}일 전`
       }
 
       return `${Math.floor(betweenTimeDay / 365)}년전`
@@ -281,12 +280,12 @@ export default {
       margin-left: 10px;
     }
 
+    .before {
+      color: $KEY_COLOR;
+    }
+
     @media (max-width: 430px) {
       .before {
-        display: none;
-      }
-
-      .seperator {
         display: none;
       }
     }
