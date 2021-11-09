@@ -8,6 +8,9 @@
 - [git project](https://github.com/prgrms-fe-devcourse/FEDC_OffStory_OFF1/projects/1)
 - [notion](https://www.notion.so/1-SNS-60f13d07d4d54066a8456731baee30c4)
 
+## 배포주소
+[Offstory 주소](https://offstory.netlify.app/)
+
 ## 개요
 여행을 외롭지 않게 도와주는 동행 찾기 서비스
 
