@@ -24,10 +24,9 @@
 유용하게 쓰일 수 있음.
 
 ## 폴더구조
-⚠️ 수정 예정
+
 ```
-.
-├── README.md
+── README.md
 ├── babel.config.json
 ├── functions
 │   └── api.js
@@ -38,14 +37,10 @@
 ├── src
 │   ├── App.vue
 │   ├── api
-│   │   ├── chat.js
 │   │   ├── common
 │   │   ├── index.js
-│   │   ├── postContent.js
-│   │   ├── requestLogin.js
-│   │   └── requestSignup.js
+│   │   └── postContent.js
 │   ├── assets
-│   │   ├── fonts
 │   │   └── images
 │   ├── components
 │   │   ├── Header.vue
@@ -56,11 +51,9 @@
 │   ├── index.html
 │   ├── main.js
 │   ├── plugins
-│   │   ├── axios.js
-│   │   ├── fetch.js
 │   │   └── storage.js
 │   ├── routes
-│   │   ├── Chat.vue
+│   │   ├── AuthCheck.vue
 │   │   ├── CreateNewPost.vue
 │   │   ├── Login.vue
 │   │   ├── Main.vue
@@ -68,6 +61,7 @@
 │   │   ├── PersonalActivity.vue
 │   │   ├── PersonalInfo.vue
 │   │   ├── PostContent.vue
+│   │   ├── PostsThatUserLike.vue
 │   │   ├── ResultOfPostList.vue
 │   │   ├── Signup.vue
 │   │   └── index.js
@@ -85,6 +79,7 @@
 │       ├── cookies.js
 │       ├── formValidation.js
 │       ├── function.js
+│       ├── sessionStorage.js
 │       ├── validation.js
 │       └── variables.js
 ├── static
@@ -96,6 +91,7 @@
 - Open API  
 [한국관광공사_국문 관광정보 서비스 - 지역코드 조회](https://www.data.go.kr/data/15057787/openapi.do)  
 👉🏻 주소 정보를 select 태그로 받아오기 위해 사용
+<br/>
 
 - 사용한 API
 	- 인증
