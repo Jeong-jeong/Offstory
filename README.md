@@ -1,8 +1,7 @@
 # 📆 오프라인에서 만드는 우리들의 이야기, Offstory
 ## 팀원
-- 김영후 🙆‍♀️
-- 조주영 🙆‍♀️
-- 김지영 🙆‍♀️
+<img width="1425" alt="image" src="https://user-images.githubusercontent.com/68528752/141981679-1f2ccadd-71d6-4dea-b3cd-c712c70f0f31.png">
+
 
 ## 협업 도구
 - [git project](https://github.com/prgrms-fe-devcourse/FEDC_OffStory_OFF1/projects/1)
