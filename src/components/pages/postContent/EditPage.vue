@@ -40,6 +40,7 @@ export default {
       },
     },
   },
+  emits: ['rerender'],
   props: {
     postId: {
       type: String,

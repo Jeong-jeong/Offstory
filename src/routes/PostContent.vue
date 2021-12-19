@@ -92,16 +92,13 @@ export default {
         this.comments = postData.comments
         this.channel = postData.channel
         this.userData = this.$storage.getItem('userData') || {}
-        console.log(postData, '데이터 초기화')
       } catch (error) {
-        console.log(error.response.data)
         alert(error.response.data)
       }
       this.endLoading()
     },
     async rePatch() {
       this.initPostdata()
-      console.log('댓글 업데이트됨. rerender')
     },
   },
   created() {

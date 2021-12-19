@@ -57,20 +57,20 @@ export default createRouter({
       name: 'PostContent',
       component: PostContent,
       props: true,
-      // children: [
-      //   {
-      //     path: '/',
-      //     name: 'default',
-      //     component: Editor,
-      //     props: true,
-      //   },
-      //   {
-      //     path: 'edit',
-      //     name: 'edit',
-      //     component: EditPage,
-      //     props: true,
-      //   },
-      // ],
+      children: [
+        {
+          path: '/',
+          name: 'default',
+          component: Editor,
+          props: true,
+        },
+        {
+          path: 'edit',
+          name: 'edit',
+          component: EditPage,
+          props: true,
+        },
+      ],
     },
     {
       path: '/example',
