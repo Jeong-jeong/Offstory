@@ -1,32 +1,29 @@
 # 📆 오프라인에서 만드는 우리들의 이야기, Offstory
+Offstory는 여행을 외롭지 않게 도와주는 동행 찾기 서비스입니다.
+
+## 기대효과
+대부분의 모임이나 동행관련 정보들이 카페에 존재하며 서비스 이용을 위해 카페를 가입해 승인 절차를 받아야 합니다.
+오프 스토리는 가입 없이 동행 관련 정보를 살펴볼 수 있으며, 데이팅의 목적이 아닌 여행과 관련한 동행 정보를 쉽고 간편하게 찾을 수 있도록 설계되었습니다.
+
 ## 팀원
-- 김영후 🙆‍♀️
-- 조주영 🙆‍♀️
-- 김지영 🙆‍♀️
+<img width="1425" alt="image" src="https://user-images.githubusercontent.com/68528752/141981679-1f2ccadd-71d6-4dea-b3cd-c712c70f0f31.png">
+
+## 배포주소
+[Offstory 주소](https://offstory.netlify.app/)
+
+
+## 기술 스택
+<img width="1414" alt="image" src="https://user-images.githubusercontent.com/68528752/141982899-af256e1a-db97-4c48-9475-779c654f140d.png">
 
 ## 협업 도구
 - [git project](https://github.com/prgrms-fe-devcourse/FEDC_OffStory_OFF1/projects/1)
 - [notion](https://www.notion.so/1-SNS-60f13d07d4d54066a8456731baee30c4)
 
-## 배포주소
-[Offstory 주소](https://offstory.netlify.app/)
+## Flowchart
+<img width="1427" alt="image" src="https://user-images.githubusercontent.com/68528752/141982631-50f14b8e-02e4-4d71-8b16-e31d87529487.png">
 
-## 개요
-여행을 외롭지 않게 도와주는 동행 찾기 서비스
 
-## 타겟
-<!-- 부랑자, 방랑자, 혼동족(혼잔데 동행을 구하는 족) -->
-동행을 원하는 분 🙋‍♀️
-## 기대효과
-- 대부분의 모임이나 동행 관련 정보들은 카페에 존재하며  
-이를 위해서는 카페 가입 후 승인을 받아야 하는 번거로운 작업을 거쳐야 함.  
-👉🏻 가입할 필요없이 동행 관련 정보를 쉽고 간편하게 찾을 수 있음.
-<br/>
-
-- 데이팅이 주 목적이 아닌 친구나 동행을 필요로 하는 사람들을 위해  
-유용하게 쓰일 수 있음.
-
-## 폴더구조
+## 디렉토리 구조
 
 ```
 ── README.md
